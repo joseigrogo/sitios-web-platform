@@ -51,6 +51,7 @@ Si hace falta un `if`, la base está rota.
 | `keywords.fuente_validacion` | default `'semrush_co'` | Colombia es config de cliente, no default de plataforma |
 | n8n, nodo Code de `Aplicar Labels` | `MAPA_LABELS` con los 4 refs de Estarter hardcodeados | Tabla en Supabase |
 | n8n, mismo nodo | `PLACEHOLDER_INBOX_ID = "63"`, cuenta `23` de `chatio.lat` | Config de cliente |
+| OpenSEO, único proyecto ("Default") | `languageCode: 'es'` sin que nadie lo decidiera para Capital Window (Londres, inglés) | `locationCode`/`languageCode` explícitos por sitio, nunca el default de un proyecto — ver `db/scripts/fase1_research_keywords.md`. A diferencia de `fuente_validacion`, esta sí se corrigió antes de guardar ningún dato mal etiquetado |
 
 **Actualización (Capital Window, 2026-08-05):** primer caso real que no es
 Estarter, y la base pasó la prueba — pero no gratis. Expuso dos supuestos
@@ -299,9 +300,18 @@ medias.
 
 | Bloqueado | Por qué | Desbloquea |
 |---|---|---|
-| Fase 1 completa | Semrush MCP sin unidades de API (`semrush.com/mcp-access`) | Investigación automatizada → `keywords` |
 | Ads API | Developer token, aprobación con demora | Objetivo de conversión por sitio, CPA/ROAS |
 | `ids_recursos` poblado | Depende de qué sitio — para Capital Window, acceso a su GTM/GA4 propio | Todas las assertions de medición |
+
+> **Fase 1 ya no está en esta tabla — dejó de estar bloqueada (2026-08-05).**
+> Semrush específicamente sigue sin unidades de API, sin resolver. Pero
+> `research_keywords` de OpenSEO/DataForSEO (conectado vía Custom Connectors,
+> plan hosted) devolvió datos reales y completos para Capital Window —
+> `usedFallback: false`, ~25 créditos por seed. Ver
+> `db/scripts/fase1_research_keywords.md` para la receta completa y la
+> trampa del `languageCode` por default. Faltan probar `get_serp_results`,
+> `get_domain_overview` y las preguntas — no se hizo a propósito, para no
+> gastar de más antes de necesitarlo de verdad.
 
 > Nota: **Ads Scripts no necesitan developer token** — corren dentro de la cuenta
 > de Ads. Por eso la ingesta a `metricas_ads` sigue siendo de baja fricción
@@ -339,6 +349,13 @@ medias.
   pero solo vive en el historial de chat y como comentario en
   `db/scripts/alta_cliente_y_sitio.sql` — todavía no tiene una sección propia
   en este documento.
+- **115 keywords reales de Capital Window** (`db/research/capital-window-cleaning_2026-08-05_openseo.json`,
+  vía OpenSEO) están investigadas pero no clasificadas — falta decidir `rol`
+  (`pilar`/`secundaria`/`long_tail`) para las que importan, a propósito no
+  hecho todavía (juicio, no mecánica — Base 4). Incluye un hallazgo real sin
+  resolver: `commercial window cleaning london` (el segmento que el cliente
+  declaró como foco principal) trae 210 búsquedas/mes contra 18,100 de
+  `window cleaning near me`, mismo intent comercial.
 - **Estarter salió de este proyecto de Supabase** (cuenta personal del
   usuario) el 2026-08-05. Backup completo de sus 5 filas (`clientes` + 4
   `sitios`) guardado fuera del repo, en el scratchpad de la sesión que lo

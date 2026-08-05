@@ -1,0 +1,8073 @@
+{
+  "_nota": "Resultado real de research_keywords (OpenSEO/DataForSEO), Capital Window Cleaning. locationCode 2826 (United Kingdom), languageCode en -- ambos forzados explicitamente porque el proyecto Default de OpenSEO tenia languageCode es por defecto.",
+  "_fecha": "2026-08-05",
+  "_costo_real_creditos": 50,
+  "seeds": [
+    {
+      "seed": "window cleaning london",
+      "rowCount": 50,
+      "source": "related",
+      "usedFallback": false,
+      "rows": [
+        {
+          "keyword": "window cleaning near me",
+          "searchVolume": 18100,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 14800
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 22200
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 8100
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 27100
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 22200
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 18100
+            }
+          ],
+          "cpc": 2.92,
+          "competition": 0.58,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaners near me",
+          "searchVolume": 18100,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 14800
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 22200
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 8100
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 27100
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 22200
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 18100
+            }
+          ],
+          "cpc": 2.92,
+          "competition": 0.58,
+          "keywordDifficulty": 1,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning london",
+          "searchVolume": 1900,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 1900
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 1900
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 2900
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 1900
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 1900
+            }
+          ],
+          "cpc": 3.76,
+          "competition": 0.63,
+          "keywordDifficulty": 12,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning near me prices",
+          "searchVolume": 880,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 880
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 590
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 880
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 880
+            }
+          ],
+          "cpc": 2.34,
+          "competition": 0.61,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaners near me prices",
+          "searchVolume": 880,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 880
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 590
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 880
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 880
+            }
+          ],
+          "cpc": 2.34,
+          "competition": 0.61,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning jobs london",
+          "searchVolume": 390,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 590
+            }
+          ],
+          "cpc": 1.38,
+          "competition": 0.06,
+          "keywordDifficulty": 0,
+          "intent": "informational"
+        },
+        {
+          "keyword": "jb window cleaning",
+          "searchVolume": 260,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 320
+            }
+          ],
+          "cpc": 1.21,
+          "competition": 0.09,
+          "keywordDifficulty": 0,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "cheap window cleaning near me",
+          "searchVolume": 260,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 260
+            }
+          ],
+          "cpc": 3.09,
+          "competition": 0.73,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "old fashioned window cleaners near me",
+          "searchVolume": 260,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 480
+            }
+          ],
+          "cpc": 1.72,
+          "competition": 0.48,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "residential window cleaners near me",
+          "searchVolume": 260,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 260
+            }
+          ],
+          "cpc": 3.16,
+          "competition": 0.63,
+          "keywordDifficulty": 1,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "cheapest window cleaners near me",
+          "searchVolume": 260,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 260
+            }
+          ],
+          "cpc": 3.09,
+          "competition": 0.73,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "commercial window cleaning london",
+          "searchVolume": 210,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 590
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 4.8,
+          "competition": 0.51,
+          "keywordDifficulty": 10,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning east london",
+          "searchVolume": 210,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 140
+            }
+          ],
+          "cpc": 3.9,
+          "competition": 0.65,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning islington",
+          "searchVolume": 210,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 110
+            }
+          ],
+          "cpc": 4.06,
+          "competition": 0.88,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "independent window cleaners near me",
+          "searchVolume": 210,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 390
+            }
+          ],
+          "cpc": 2.51,
+          "competition": 0.59,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning pricing guide uk",
+          "searchVolume": 170,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 210
+            }
+          ],
+          "cpc": 1.2,
+          "competition": 0.44,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning price list",
+          "searchVolume": 170,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 320
+            }
+          ],
+          "cpc": 2.23,
+          "competition": 0.53,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning prices near me",
+          "searchVolume": 170,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 170
+            }
+          ],
+          "cpc": 1.84,
+          "competition": 0.49,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "best window cleaning near me",
+          "searchVolume": 170,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 170
+            }
+          ],
+          "cpc": 2.38,
+          "competition": 0.58,
+          "keywordDifficulty": 6,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "best window cleaners near me",
+          "searchVolume": 170,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 170
+            }
+          ],
+          "cpc": 2.38,
+          "competition": 0.58,
+          "keywordDifficulty": 6,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "professional window cleaning near me",
+          "searchVolume": 110,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 2.26,
+          "competition": 0.4,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "professional window cleaners near me",
+          "searchVolume": 110,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 2.26,
+          "competition": 0.4,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning north london",
+          "searchVolume": 90,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 50
+            }
+          ],
+          "cpc": 0.58,
+          "competition": 0.74,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "mobile window cleaning near me",
+          "searchVolume": 90,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 2.09,
+          "competition": 0.59,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "mobile window cleaners near me",
+          "searchVolume": 90,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 2.09,
+          "competition": 0.59,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaners near me within 5 mi",
+          "searchVolume": 90,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 170
+            }
+          ],
+          "cpc": null,
+          "competition": 0.34,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaner beckenham",
+          "searchVolume": 90,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 70
+            }
+          ],
+          "cpc": 3.54,
+          "competition": 0.59,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning london prices",
+          "searchVolume": 70,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 110
+            }
+          ],
+          "cpc": 2.27,
+          "competition": 0.76,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "horizon window cleaners",
+          "searchVolume": 70,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 50
+            }
+          ],
+          "cpc": 1.1,
+          "competition": 0.1,
+          "keywordDifficulty": 0,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "3 bed semi window cleaning cost",
+          "searchVolume": 70,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 170
+            }
+          ],
+          "cpc": 0.07,
+          "competition": 0.28,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "old fashioned window cleaners near me prices",
+          "searchVolume": 70,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 1.07,
+          "competition": 0.43,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "3 bed semi window cleaning cost near me",
+          "searchVolume": 50,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 210
+            }
+          ],
+          "cpc": null,
+          "competition": 0.45,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "best window cleaners near me prices",
+          "searchVolume": 50,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 70
+            }
+          ],
+          "cpc": 0.87,
+          "competition": 0.53,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning south london",
+          "searchVolume": 40,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 30
+            }
+          ],
+          "cpc": 1.86,
+          "competition": 0.59,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "water fed pole window cleaning prices",
+          "searchVolume": 40,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 5.02,
+          "competition": 0.94,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaner sainsbury's",
+          "searchVolume": 40,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 40
+            }
+          ],
+          "cpc": 0.21,
+          "competition": 1,
+          "keywordDifficulty": 0,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "window cleaning south east london",
+          "searchVolume": 30,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 30
+            }
+          ],
+          "cpc": 2.21,
+          "competition": 0.87,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning price per window",
+          "searchVolume": 30,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 40
+            }
+          ],
+          "cpc": 1.59,
+          "competition": 0.36,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning price calculator uk",
+          "searchVolume": 30,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 20
+            }
+          ],
+          "cpc": 1.81,
+          "competition": 0.3,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaners crystal palace",
+          "searchVolume": 30,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 20
+            }
+          ],
+          "cpc": 1.87,
+          "competition": 0.34,
+          "keywordDifficulty": 5,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "eco window cleaning london",
+          "searchVolume": 20,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 30
+            }
+          ],
+          "cpc": null,
+          "competition": 0.16,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaners forest hill",
+          "searchVolume": 20,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 10
+            }
+          ],
+          "cpc": 1.38,
+          "competition": 0.54,
+          "keywordDifficulty": null,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "how much do window cleaners charge per house",
+          "searchVolume": 20,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 40
+            }
+          ],
+          "cpc": 2.72,
+          "competition": 0.37,
+          "keywordDifficulty": null,
+          "intent": "informational"
+        },
+        {
+          "keyword": "jb window cleaning scunthorpe",
+          "searchVolume": 20,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 20
+            }
+          ],
+          "cpc": 1.5,
+          "competition": 0.03,
+          "keywordDifficulty": null,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "window cleaning london near me",
+          "searchVolume": 10,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 0
+            }
+          ],
+          "cpc": 1.36,
+          "competition": 0.99,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning pricing guide uk pdf",
+          "searchVolume": 10,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 0
+            }
+          ],
+          "cpc": null,
+          "competition": 0.16,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning kentish town",
+          "searchVolume": 10,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 20
+            }
+          ],
+          "cpc": 3.63,
+          "competition": 0.73,
+          "keywordDifficulty": 8,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "professional window cleaning north london",
+          "searchVolume": null,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 6,
+              "searchVolume": 0
+            }
+          ],
+          "cpc": null,
+          "competition": null,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning prices near manchester",
+          "searchVolume": null,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 6,
+              "searchVolume": 0
+            }
+          ],
+          "cpc": null,
+          "competition": null,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "jb window cleaning belfast",
+          "searchVolume": null,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 6,
+              "searchVolume": 0
+            }
+          ],
+          "cpc": null,
+          "competition": null,
+          "keywordDifficulty": null,
+          "intent": "navigational"
+        }
+      ]
+    },
+    {
+      "seed": "commercial window cleaning london",
+      "rowCount": 65,
+      "source": "related",
+      "usedFallback": false,
+      "rows": [
+        {
+          "keyword": "window cleaning near me",
+          "searchVolume": 18100,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 14800
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 22200
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 8100
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 27100
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 22200
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 18100
+            }
+          ],
+          "cpc": 2.92,
+          "competition": 0.58,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaners near me",
+          "searchVolume": 18100,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 14800
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 22200
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 8100
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 12100
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 27100
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 18100
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 22200
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 18100
+            }
+          ],
+          "cpc": 2.92,
+          "competition": 0.58,
+          "keywordDifficulty": 1,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning london",
+          "searchVolume": 1900,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 1900
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 1900
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 2900
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 1900
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 1900
+            }
+          ],
+          "cpc": 3.76,
+          "competition": 0.63,
+          "keywordDifficulty": 12,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning prices",
+          "searchVolume": 1300,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 880
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 720
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 880
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 1900
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 1600
+            }
+          ],
+          "cpc": 1.95,
+          "competition": 0.37,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "how to clean windows outside",
+          "searchVolume": 1000,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 880
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 590
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 590
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 720
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 880
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 1600
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 1600
+            }
+          ],
+          "cpc": 0.24,
+          "competition": 1,
+          "keywordDifficulty": 0,
+          "intent": "informational"
+        },
+        {
+          "keyword": "electric window cleaner",
+          "searchVolume": 1000,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 880
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 880
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 880
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 880
+            }
+          ],
+          "cpc": 0.4,
+          "competition": 1,
+          "keywordDifficulty": 0,
+          "intent": "transactional"
+        },
+        {
+          "keyword": "window cleaning near me prices",
+          "searchVolume": 880,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 880
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 590
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 880
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 880
+            }
+          ],
+          "cpc": 2.34,
+          "competition": 0.61,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaners near me prices",
+          "searchVolume": 880,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 880
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 1300
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 590
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 880
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 1000
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 880
+            }
+          ],
+          "cpc": 2.34,
+          "competition": 0.61,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "best thing to clean windows",
+          "searchVolume": 480,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 720
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 590
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 590
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 590
+            }
+          ],
+          "cpc": 0.42,
+          "competition": 1,
+          "keywordDifficulty": 0,
+          "intent": "informational"
+        },
+        {
+          "keyword": "window cleaning jobs london",
+          "searchVolume": 390,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 590
+            }
+          ],
+          "cpc": 1.38,
+          "competition": 0.06,
+          "keywordDifficulty": 0,
+          "intent": "informational"
+        },
+        {
+          "keyword": "domestic window cleaners near me",
+          "searchVolume": 320,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 590
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 590
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 320
+            }
+          ],
+          "cpc": 2.81,
+          "competition": 0.69,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "jb window cleaning",
+          "searchVolume": 260,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 320
+            }
+          ],
+          "cpc": 1.21,
+          "competition": 0.09,
+          "keywordDifficulty": 0,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "cheap window cleaning near me",
+          "searchVolume": 260,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 260
+            }
+          ],
+          "cpc": 3.09,
+          "competition": 0.73,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "old fashioned window cleaners near me",
+          "searchVolume": 260,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 480
+            }
+          ],
+          "cpc": 1.72,
+          "competition": 0.48,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "residential window cleaners near me",
+          "searchVolume": 260,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 260
+            }
+          ],
+          "cpc": 3.16,
+          "competition": 0.63,
+          "keywordDifficulty": 1,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "cheapest window cleaners near me",
+          "searchVolume": 260,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 260
+            }
+          ],
+          "cpc": 3.09,
+          "competition": 0.73,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "old-fashioned window cleaners near me",
+          "searchVolume": 260,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 480
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 480
+            }
+          ],
+          "cpc": 1.72,
+          "competition": 0.48,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "commercial window cleaning london",
+          "searchVolume": 210,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 480
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 390
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 590
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 4.8,
+          "competition": 0.51,
+          "keywordDifficulty": 10,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning east london",
+          "searchVolume": 210,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 140
+            }
+          ],
+          "cpc": 3.9,
+          "competition": 0.65,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning islington",
+          "searchVolume": 210,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 320
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 110
+            }
+          ],
+          "cpc": 4.06,
+          "competition": 0.88,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "independent window cleaners near me",
+          "searchVolume": 210,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 390
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 390
+            }
+          ],
+          "cpc": 2.51,
+          "competition": 0.59,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning pricing guide uk",
+          "searchVolume": 170,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 210
+            }
+          ],
+          "cpc": 1.2,
+          "competition": 0.44,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning price list",
+          "searchVolume": 170,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 320
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 320
+            }
+          ],
+          "cpc": 2.23,
+          "competition": 0.53,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning prices near me",
+          "searchVolume": 170,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 260
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 170
+            }
+          ],
+          "cpc": 1.84,
+          "competition": 0.49,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "best window cleaning near me",
+          "searchVolume": 170,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 170
+            }
+          ],
+          "cpc": 2.38,
+          "competition": 0.58,
+          "keywordDifficulty": 6,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "best window cleaners near me",
+          "searchVolume": 170,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 260
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 210
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 170
+            }
+          ],
+          "cpc": 2.38,
+          "competition": 0.58,
+          "keywordDifficulty": 6,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "professional window cleaning near me",
+          "searchVolume": 110,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 2.26,
+          "competition": 0.4,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "professional window cleaners near me",
+          "searchVolume": 110,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 2.26,
+          "competition": 0.4,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "magnetic window cleaner uk",
+          "searchVolume": 110,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 260
+            }
+          ],
+          "cpc": 0.29,
+          "competition": 0.99,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "cheap window cleaners near me prices",
+          "searchVolume": 110,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 170
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 170
+            }
+          ],
+          "cpc": 3,
+          "competition": 0.63,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "mobile window cleaning near me",
+          "searchVolume": 90,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 2.09,
+          "competition": 0.59,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning north london",
+          "searchVolume": 90,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 50
+            }
+          ],
+          "cpc": 0.58,
+          "competition": 0.74,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "mobile window cleaners near me",
+          "searchVolume": 90,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 2.09,
+          "competition": 0.59,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaners near me within 5 mi",
+          "searchVolume": 90,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 210
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 170
+            }
+          ],
+          "cpc": null,
+          "competition": 0.34,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaner beckenham",
+          "searchVolume": 90,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 70
+            }
+          ],
+          "cpc": 3.54,
+          "competition": 0.59,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning london prices",
+          "searchVolume": 70,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 110
+            }
+          ],
+          "cpc": 2.27,
+          "competition": 0.76,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "horizon window cleaners",
+          "searchVolume": 70,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 50
+            }
+          ],
+          "cpc": 1.1,
+          "competition": 0.1,
+          "keywordDifficulty": 0,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "3 bed semi window cleaning cost",
+          "searchVolume": 70,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 110
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 170
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 170
+            }
+          ],
+          "cpc": 0.07,
+          "competition": 0.28,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "old fashioned window cleaners near me prices",
+          "searchVolume": 70,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 1.07,
+          "competition": 0.43,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "old-fashioned window cleaners near me prices",
+          "searchVolume": 70,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 1.07,
+          "competition": 0.43,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "local window cleaners near me prices",
+          "searchVolume": 70,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 140
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 110
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 30
+            }
+          ],
+          "cpc": 1.51,
+          "competition": 0.64,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "3 bed semi window cleaning cost near me",
+          "searchVolume": 50,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 210
+            }
+          ],
+          "cpc": null,
+          "competition": 0.45,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "best window cleaners near me prices",
+          "searchVolume": 50,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 70
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 70
+            }
+          ],
+          "cpc": 0.87,
+          "competition": 0.53,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "hand window cleaner near me",
+          "searchVolume": 50,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 140
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 140
+            }
+          ],
+          "cpc": 2.44,
+          "competition": 0.52,
+          "keywordDifficulty": 0,
+          "intent": "transactional"
+        },
+        {
+          "keyword": "window cleaning south london",
+          "searchVolume": 40,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 90
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 30
+            }
+          ],
+          "cpc": 1.86,
+          "competition": 0.59,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "water fed pole window cleaning prices",
+          "searchVolume": 40,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 70
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 90
+            }
+          ],
+          "cpc": 5.02,
+          "competition": 0.94,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaner sainsbury's",
+          "searchVolume": 40,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 40
+            }
+          ],
+          "cpc": 0.21,
+          "competition": 1,
+          "keywordDifficulty": 0,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "pure water window cleaners near me",
+          "searchVolume": 40,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 40
+            }
+          ],
+          "cpc": 2.41,
+          "competition": 0.38,
+          "keywordDifficulty": 0,
+          "intent": "transactional"
+        },
+        {
+          "keyword": "window cleaning south east london",
+          "searchVolume": 30,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 30
+            }
+          ],
+          "cpc": 2.21,
+          "competition": 0.87,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning price per window",
+          "searchVolume": 30,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 40
+            }
+          ],
+          "cpc": 1.59,
+          "competition": 0.36,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning price calculator uk",
+          "searchVolume": 30,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 20
+            }
+          ],
+          "cpc": 1.81,
+          "competition": 0.3,
+          "keywordDifficulty": 0,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaners crystal palace",
+          "searchVolume": 30,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 50
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 40
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 20
+            }
+          ],
+          "cpc": 1.87,
+          "competition": 0.34,
+          "keywordDifficulty": 5,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "eco window cleaning london",
+          "searchVolume": 20,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 90
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 30
+            }
+          ],
+          "cpc": null,
+          "competition": 0.16,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaners forest hill",
+          "searchVolume": 20,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 10
+            }
+          ],
+          "cpc": 1.38,
+          "competition": 0.54,
+          "keywordDifficulty": null,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "how much do window cleaners charge per house",
+          "searchVolume": 20,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 40
+            }
+          ],
+          "cpc": 2.72,
+          "competition": 0.37,
+          "keywordDifficulty": null,
+          "intent": "informational"
+        },
+        {
+          "keyword": "jb window cleaning scunthorpe",
+          "searchVolume": 20,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 20
+            }
+          ],
+          "cpc": 1.5,
+          "competition": 0.03,
+          "keywordDifficulty": null,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "window cleaning cost calculator",
+          "searchVolume": 20,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 50
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 50
+            }
+          ],
+          "cpc": null,
+          "competition": 0.29,
+          "keywordDifficulty": 0,
+          "intent": "informational"
+        },
+        {
+          "keyword": "checkatrade window cleaners near me",
+          "searchVolume": 20,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 30
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 0
+            }
+          ],
+          "cpc": 3.14,
+          "competition": 0.48,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning london near me",
+          "searchVolume": 10,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 0
+            }
+          ],
+          "cpc": 1.36,
+          "competition": 0.99,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning pricing guide uk pdf",
+          "searchVolume": 10,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 20
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 0
+            }
+          ],
+          "cpc": null,
+          "competition": 0.16,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning kentish town",
+          "searchVolume": 10,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 30
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 20
+            }
+          ],
+          "cpc": 3.63,
+          "competition": 0.73,
+          "keywordDifficulty": 8,
+          "intent": "navigational"
+        },
+        {
+          "keyword": "cheap old fashioned window cleaners near me",
+          "searchVolume": 10,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 0
+            }
+          ],
+          "cpc": null,
+          "competition": 0.29,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "independent window cleaners near me prices",
+          "searchVolume": 10,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 6,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 10
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 10
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 40
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 20
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 40
+            }
+          ],
+          "cpc": null,
+          "competition": 0.49,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "window cleaning prices near manchester",
+          "searchVolume": null,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 6,
+              "searchVolume": 0
+            }
+          ],
+          "cpc": null,
+          "competition": null,
+          "keywordDifficulty": null,
+          "intent": "commercial"
+        },
+        {
+          "keyword": "jb window cleaning belfast",
+          "searchVolume": null,
+          "trend": [
+            {
+              "year": 2026,
+              "month": 5,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 4,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 3,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 2,
+              "searchVolume": 0
+            },
+            {
+              "year": 2026,
+              "month": 1,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 12,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 11,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 10,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 9,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 8,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 7,
+              "searchVolume": 0
+            },
+            {
+              "year": 2025,
+              "month": 6,
+              "searchVolume": 0
+            }
+          ],
+          "cpc": null,
+          "competition": null,
+          "keywordDifficulty": null,
+          "intent": "navigational"
+        }
+      ]
+    }
+  ]
+}
