@@ -43,19 +43,38 @@ que existe para países chicos, donde faltarían `keywordDifficulty` e
 `intent`). Confirmar `usedFallback` antes de confiar en el resultado de un
 mercado nuevo.
 
-## Qué cubre `research_keywords` de la secuencia de Fase 1, y qué no
+## Qué cubre OpenSEO de la secuencia de Fase 1 — cuadro completo (2026-08-06)
 
-| Paso de Fase 1 | ¿Cubierto? |
-|---|---|
-| phrase_related | Sí |
-| phrase_this/these (volumen) | Sí |
-| phrase_kdi (dificultad) | Sí |
-| phrase_questions | No — sin probar todavía |
-| phrase_organic (quién rankea hoy) | No — `get_serp_results`, sin probar todavía |
-| domain_organic | No — `get_domain_overview`, sin probar todavía |
+| Paso de Fase 1 | ¿Cubierto? | Tool | Costo real |
+|---|---|---|---|
+| phrase_related | Sí | `research_keywords` | 25 créditos/seed |
+| phrase_this/these (volumen) | Sí | `research_keywords` | (misma llamada) |
+| phrase_kdi (dificultad) | Sí | `research_keywords` | (misma llamada) |
+| phrase_organic (quién rankea hoy) | Sí | `get_serp_results` | 20 créditos/keyword |
+| domain_organic | Sí | `get_domain_overview` | 16 créditos/dominio |
+| phrase_questions | **No — sin equivalente real** | — | — |
 
-No se probaron las otras tres a propósito — la corrida de hoy fue para
-validar si el dato sirve, no para completar la fase entera de una sentada.
+5 de 6. `phrase_questions` no tiene dónde caer: `get_serp_results` marca que
+existe un bloque "People Also Ask" en el SERP (`type: "people_also_ask"`)
+pero **no devuelve su contenido** — título, url y descripción vienen `null`.
+`get_google_business_questions` es otra cosa (preguntas del perfil de Google
+Business cerca de una coordenada, no preguntas de búsqueda) — no lo forzamos
+a cubrir algo que no es. Este paso queda manual, o esperando otro proveedor,
+hasta que aparezca una fuente real — no se inventa contenido para rellenar
+el hueco (mismo principio que "cero datos inventados" del proceso).
+
+**Costo total de la validación completa (2 keywords + 1 dominio):**
+106 créditos. Los tres tools vinieron por debajo de su propio estimado
+(`research_keywords` ~25 de 30-100; `get_serp_results` ~20 de 30-60;
+`get_domain_overview` ~16 de 100-300) — barato incluso comparado con el
+peor caso que la propia documentación advertía.
+
+**Hallazgo competitivo real, no buscado a propósito:** en los resultados de
+`get_serp_results`, `jbgwc.co.uk` tiene páginas separadas para residencial
+(`/window-cleaner-london/`) y comercial (`/commercial-window-cleaner-london/`)
+— un competidor real que sí separa segmentos, al revés del enfoque de una
+sola página combinada de Capital Window. Dato crudo completo en
+`db/research/capital-window-cleaning_2026-08-06_serp_y_dominio.json`.
 
 ## De la respuesta cruda a `keywords`: qué es mecánico y qué es juicio
 

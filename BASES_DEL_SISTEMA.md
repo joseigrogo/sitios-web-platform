@@ -303,15 +303,15 @@ medias.
 | Ads API | Developer token, aprobación con demora | Objetivo de conversión por sitio, CPA/ROAS |
 | `ids_recursos` poblado | Depende de qué sitio — para Capital Window, acceso a su GTM/GA4 propio | Todas las assertions de medición |
 
-> **Fase 1 ya no está en esta tabla — dejó de estar bloqueada (2026-08-05).**
-> Semrush específicamente sigue sin unidades de API, sin resolver. Pero
-> `research_keywords` de OpenSEO/DataForSEO (conectado vía Custom Connectors,
-> plan hosted) devolvió datos reales y completos para Capital Window —
-> `usedFallback: false`, ~25 créditos por seed. Ver
-> `db/scripts/fase1_research_keywords.md` para la receta completa y la
-> trampa del `languageCode` por default. Faltan probar `get_serp_results`,
-> `get_domain_overview` y las preguntas — no se hizo a propósito, para no
-> gastar de más antes de necesitarlo de verdad.
+> **Fase 1 ya no está en esta tabla — dejó de estar bloqueada (2026-08-05,
+> validación completa 2026-08-06).** Semrush específicamente sigue sin
+> unidades de API, sin resolver. OpenSEO/DataForSEO (Custom Connectors, plan
+> hosted) cubre **5 de los 6 pasos** con dato real: related, volumen, KD
+> (`research_keywords`), quién rankea (`get_serp_results`), dominio
+> (`get_domain_overview`) — 106 créditos en total, por debajo de lo
+> estimado. El único que falta, `phrase_questions`, **no tiene equivalente
+> real** en las 23 tools de OpenSEO — se probó explícitamente y no está,
+> no es que falte probarlo. Ver `db/scripts/fase1_research_keywords.md`.
 
 > Nota: **Ads Scripts no necesitan developer token** — corren dentro de la cuenta
 > de Ads. Por eso la ingesta a `metricas_ads` sigue siendo de baja fricción

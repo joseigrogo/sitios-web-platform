@@ -1,0 +1,52 @@
+{
+  "_nota": "get_serp_results + get_domain_overview reales (OpenSEO/DataForSEO), Capital Window Cleaning. locationCode 2826 (United Kingdom), languageCode en, explícitos por la misma razón que el archivo del 2026-08-05: el proyecto Default de OpenSEO trae languageCode 'es' por default.",
+  "_fecha": "2026-08-06",
+  "_costo_real_creditos": {"get_serp_results_2_keywords": 40, "get_domain_overview_1_dominio": 16},
+  "serp": [
+    {
+      "keyword": "window cleaning london",
+      "local_pack": [
+        {"rank": 2, "domain": "www.thelondonwindowcleaningcompany.co.uk", "title": "The London Window Cleaning Company"},
+        {"rank": 3, "domain": "alexchriswindowcleaning.co.uk", "title": "ALEX&CHRIS WINDOW CLEANING LTD"},
+        {"rank": 4, "domain": "www.city-window-cleaning.co.uk", "title": "The City Window Cleaning Specialists"}
+      ],
+      "organic_top10": [
+        {"rank": 5, "domain": "fantasticcleaners.com"},
+        {"rank": 6, "domain": "www.london-window-cleaners.co.uk"},
+        {"rank": 7, "domain": "www.checkatrade.com"},
+        {"rank": 8, "domain": "thehappyhousecleaning.co.uk"},
+        {"rank": 9, "domain": "www.jb-windowcleaningservices.co.uk"},
+        {"rank": 10, "domain": "jbgwc.co.uk", "url": "https://jbgwc.co.uk/window-cleaner-london/"}
+      ],
+      "people_also_ask_presente_en_rank": 14,
+      "people_also_ask_contenido": null
+    },
+    {
+      "keyword": "commercial window cleaning london",
+      "local_pack": [
+        {"rank": 2, "domain": "www.thelondonwindowcleaningcompany.co.uk"},
+        {"rank": 3, "domain": "alexchriswindowcleaning.co.uk"},
+        {"rank": 4, "domain": "www.city-window-cleaning.co.uk"}
+      ],
+      "organic_top10": [
+        {"rank": 5, "domain": "www.clearviewwindowcleaners.co.uk"},
+        {"rank": 6, "domain": "thelondonwindowcleaningcompany.co.uk"},
+        {"rank": 7, "domain": "www.trustatrader.com"},
+        {"rank": 8, "domain": "allclean.london"},
+        {"rank": 9, "domain": "thehappyhousecleaning.co.uk"},
+        {"rank": 11, "domain": "jbgwc.co.uk", "url": "https://jbgwc.co.uk/commercial-window-cleaner-london/"}
+      ],
+      "people_also_ask_presente_en_rank": 10,
+      "people_also_ask_contenido": null
+    }
+  ],
+  "domain_overview": {
+    "domain": "thelondonwindowcleaningcompany.co.uk",
+    "organicTraffic": 968,
+    "organicKeywords": 84,
+    "backlinks": null,
+    "referringDomains": null,
+    "hasData": true
+  },
+  "_hallazgo_competitivo": "jbgwc.co.uk tiene paginas separadas para residencial (/window-cleaner-london/) y comercial (/commercial-window-cleaner-london/) -- un competidor real que SI separa segmentos en paginas distintas, al contrario del approach de una sola pagina combinada de Capital Window. Relevante para la tension ya anotada en BASES_DEL_SISTEMA.md sobre 'un sitio, un segmento'."
+}
