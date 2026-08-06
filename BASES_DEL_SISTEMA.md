@@ -279,10 +279,13 @@ OAuth completo — extraer solo la función (~25 líneas), no el archivo.
 | n8n | Disparo por evento — nunca lógica de negocio |
 | Agente | Juicio: triage, narrativa, redacción |
 
-**Practicada dos veces:** se creó `sitios-web-platform` (cumpliendo el §0
-de `CONTEXT.md`, nunca ejecutado antes) en vez de seguir todo en el chat; y
+**Practicada tres veces:** se creó `sitios-web-platform` (cumpliendo el §0
+de `CONTEXT.md`, nunca ejecutado antes) en vez de seguir todo en el chat;
 se evaluaron OpenSEO y `claude-seo` como candidatos con piezas extraíbles,
-no como cajas negras a instalar completas.
+no como cajas negras a instalar completas; y se evaluó y **descartó**
+`codebase-memory-mcp` — resuelve un problema distinto al de este sistema
+(navegación de estructura de código para un agente, no estado compartido
+de negocio como el que guarda Supabase).
 
 ### Base 9 — El valor de un secreto nunca vive donde vive su metadata
 
