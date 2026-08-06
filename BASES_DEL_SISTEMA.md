@@ -3,8 +3,13 @@
 > Qué vamos a hacer y cómo, anclado a las fases reales de
 > `Proceso_GENERAL_de_Lanzamiento_Sitios.md` — no una lista de principios
 > flotando aparte del proceso. Cada fase dice: **qué** hay que producir,
-> **cómo** se produce hoy (o por qué sigue sin decidirse), el **gate** de
-> salida si aplica, y el **estado real** de Capital Window en esa fase.
+> **cómo** se produce hoy (o por qué sigue sin decidirse), y el **gate** de
+> salida si aplica.
+>
+> Esto es diseño del sistema, no seguimiento de un sitio en marcha — nada
+> está automatizado todavía. Capital Window aparece solo donde una prueba
+> puntual con datos reales informó una regla del sistema (ver Base 2); no
+> hay ningún sitio "avanzando" por estas fases hoy.
 >
 > El proceso define seis fases secuenciales (0 a 5) — más los **sistemas
 > transversales** que se suman cuando un sitio los necesita, no cuando toca
@@ -39,11 +44,8 @@ no congelar una interfaz sobre un patrón que todavía puede cambiar
 flip manual y visible a `fase_actual = 'investigacion'` — nunca agrupado
 con el INSERT, porque pasar el gate es una decisión que se verifica, no un
 efecto colateral de crear la fila. Dominio **no** bloquea este gate — se
-movió a requisito de Fase 4 cuando la intake de Capital Window mostró que
-un sitio real puede no tener dominio decidido todavía.
-
-**Estado real:** Capital Window está acá. Gate cumplido, flip todavía sin
-ejecutar.
+movió a requisito de Fase 4 cuando una prueba real con datos concretos
+mostró que un sitio puede no tener dominio decidido todavía.
 
 ---
 
@@ -69,9 +71,6 @@ OpenSEO.
 `rol` (pilar / secundaria / long_tail) es juicio humano siempre — nunca se
 auto-asigna, sin importar qué proveedor de datos se use *(Base 4)*.
 
-**Estado real:** sin ejecutar todavía para Capital Window. Lo hecho hasta
-ahora fue validar las herramientas, no investigar el sitio.
-
 ---
 
 ### FASE 2 · Diseño del layout (spec.md)
@@ -87,11 +86,6 @@ del que se generan 4 cosas (tipos del helper `pushDataLayerEvent`, variables
 DLV de GTM, dimensiones de GA4, queries de assertion en BigQuery) — todavía
 no construido como tal *(Base 5)*.
 
-**Estado real:** Capital Window ya tiene un `SPEC.md` de 33 KB, escrito
-antes de que este sistema existiera, sin pasar por ningún gate de Supabase.
-Sin decidir cómo se reconcilia con lo que se construya ahora — no es un
-caso vacío, hay que resolverlo explícitamente cuando se llegue acá.
-
 ---
 
 ### PUENTE 3→4 · El experimento que se monta
@@ -105,8 +99,6 @@ API de GrowthBook que cualquier automatización tiene que respetar: sin
 endpoint para crear Data Sources (solo UI), `datasourceId`/
 `assignmentQueryId` deben existir antes de crear el Experiment, y el campo
 de métrica principal es `metrics` (no `goals`).
-
-**Estado real:** no aplica todavía — depende de Fase 2 y 3.
 
 ---
 
@@ -123,8 +115,6 @@ robots, H1-H3, JSON-LD, Open Graph — el mismo parseo serviría de base para
 un checker de este checklist antes de publicar, no solo para el monitoreo
 continuo de Base 7.
 
-**Estado real:** no aplica todavía.
-
 ---
 
 ### FASE 4 · Despliegue, dominio e indexación
@@ -135,14 +125,11 @@ verificación en Search Console, envío de sitemap, solicitud de indexación
 manual de páginas pilar.
 
 **Cómo:** nada construido. Dominio es requisito **de acá**, no de Fase 0
-(ver arriba). El proyecto de Capital Window ya existe en la cuenta Vercel
-del usuario (`capital-window-cleaning`, sin dominio propio conectado
-todavía) — a diferencia de Estarter, cuyos 4 sitios vivían en una cuenta
-ajena (`mia-corral-developer`) y por eso Fase 4 estaba bloqueada por
-permisos que no eran del usuario. Ese bloqueo específico no debería aplicar
-a Capital Window, pero no se verificó en detalle.
-
-**Estado real:** no aplica todavía.
+(ver arriba). Depende por completo de en qué cuenta vive el proyecto de
+despliegue — Estarter tenía sus 4 sitios en una cuenta ajena
+(`mia-corral-developer`), lo que bloqueaba esta fase entera por permisos
+que no eran del usuario. Confirmar quién administra la cuenta de deploy es
+parte de esta fase, no un supuesto.
 
 ---
 
@@ -157,9 +144,6 @@ proceso, ya prevenida por el esquema: `ids_recursos.confirmado_via_api`)*.
 el propio proceso ya identifica: permiso de Publicar en GTM (separado de
 Editor), developer token de Google Ads (aprobación con demora), Data Source
 de GrowthBook (solo por UI, sin endpoint).
-
-**Estado real:** no aplica todavía. `ids_recursos` de Capital Window sigue
-en 0 filas.
 
 ---
 
@@ -183,9 +167,6 @@ algo que se reescriba por sitio. Las 3 fallas silenciosas de esta sección
 ya están documentadas y resueltas *una vez*, en `transporte-aeropuertos.com`
 — el trabajo pendiente es convertir esa solución en librería reutilizable.
 
-**Estado real:** no aplica a ningún sitio activo en este sistema — Capital
-Window no cobra en el sitio, y Estarter ya no está en este Supabase.
-
 ### COMUNICACIÓN · Atribución y notificación automática
 
 **Qué:** atribución de leads vía tags invisibles en mensajes de WhatsApp +
@@ -194,11 +175,9 @@ labels automáticas en Chatwoot, para sitios que comparten cuenta de soporte.
 **Cómo:** **ya corre en producción** — pero para Estarter, no para nada de
 lo que este documento describe hoy. Vive en n8n con `MAPA_LABELS` y el
 inbox compartido hardcodeados en un nodo Code, violando que nada del código
-debe conocer al cliente *(Base 2)*. Sigue sin sacarse a Supabase.
-
-**Estado real:** no aplica a Capital Window — un solo sitio, sin necesidad
-de compartir soporte con nadie todavía. Si Estarter retoma automatización
-bajo su propio proyecto, este sistema viaja con él, no con este repo.
+debe conocer al cliente *(Base 2)*. Sigue sin sacarse a Supabase. Si
+Estarter retoma automatización, este sistema viaja con él, bajo su propio
+proyecto — no con este repo.
 
 ---
 
@@ -342,5 +321,4 @@ pendiente a prerequisito.
   está en este sistema.
 - **Estarter salió de este proyecto de Supabase** (cuenta personal) el
   2026-08-05. Backup de sus 5 filas guardado fuera del repo. Si retoma
-  automatización, necesita su propio proyecto — este documento describe el
-  sistema visto desde Capital Window como primer caso real.
+  automatización, necesita su propio proyecto — no este.
