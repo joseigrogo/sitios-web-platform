@@ -16,7 +16,7 @@
 > "la siguiente fase": pagos y atribución compartida. Van en su propia
 > sección, aparte, para no sugerir un orden que el proceso no tiene.
 >
-> Las 9 bases (Parte 2) son los invariantes que respaldan estas decisiones —
+> Las 9 bases (Parte 3) son los invariantes que respaldan estas decisiones —
 > se citan desde cada fase, ya no son la estructura principal del documento.
 >
 > Estado: **evaluación en curso.** Lo marcado "sin decidir" es exactamente
