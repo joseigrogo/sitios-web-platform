@@ -172,6 +172,30 @@ Dos requisitos que salen de ahí:
 2. **Toda corrida es reconstruible.** No *"el agente dijo que corrió"*, sino una
    fila con timestamp, qué chequeo, contra qué sitio, qué devolvió, exit code.
 
+**Candidato encontrado, no adoptado (2026-08-06):**
+[`AgriciDaniel/claude-seo`](https://github.com/AgriciDaniel/claude-seo) (MIT,
+13.5k stars) trae un monitor de drift ya construido —
+`drift_baseline.py` / `drift_compare.py` / `parse_html.py` / `fetch_page.py`,
+código Python real, no prompts. SQLite local, 17 reglas de comparación en 3
+niveles de severidad (CRITICAL/WARNING/INFO), captura título, canonical,
+robots, H1-H3, JSON-LD, Open Graph, Core Web Vitals y status code — cubre el
+punto 2 de esta base casi entero. Normalización de URL ya resuelta (sin
+puertos default, sin UTM, sin slash final).
+
+Una dependencia a limpiar antes de traerlo: `validate_url` vive adentro de
+`google_auth.py` (31 KB, con flujo OAuth completo de Google) — extraer solo
+esa función (~25 líneas), no el archivo entero.
+
+El repo también trae `schema_ecommerce_validate.py` (validador determinístico
+real) y `references/deprecated-types-2024-2026.md` (documentación de tipos
+Schema.org deprecados por Google) — este último es texto puro, riesgo cero
+si se quiere traer antes que el resto.
+
+**Sin código traído todavía.** MIT permite tomar piezas sueltas manteniendo
+el aviso de licencia — evaluado como candidato concreto, no instalado como
+plugin completo (eso sería adoptar una caja negra, contra el espíritu de
+esta misma base y de la Base 8).
+
 ---
 
 ### Base 8 — Un sustrato por responsabilidad, y ninguno más
