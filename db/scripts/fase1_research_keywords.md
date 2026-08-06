@@ -106,6 +106,64 @@ values (
 );
 ```
 
+## Colombia — OpenSEO vs. Semrush, evaluación en curso (2026-08-06)
+
+> **Estado: sin decisión tomada.** Esto es evidencia acumulada para decidir
+> después, no una migración cerrada. Colombia es mercado prioritario a largo
+> plazo (no UK) — por eso se evaluó ahí específicamente, con Semrush ya
+> desbloqueado (la cuota de API se resolvió durante esta evaluación) para
+> poder comparar cara a cara.
+
+### El patrón que emergió con 3 seeds de `research_keywords`/`phrase_related`
+
+| Seed | Tipo | OpenSEO | Semrush |
+|---|---|---|---|
+| transporte **empresarial** bogota | genérico + modificador abstracto | Fallback, fuera de tema (nómina, urbanismo) | Fuera de tema (terminales de buses en Cali/Cartagena/Tunja/etc.), relevancia idéntica (0.05) en todas las filas — sospechoso |
+| transporte **aeropuerto** bogota | genérico + referente concreto | On-topic pero con deriva geográfica (Cali, Bucaramanga aparecen) | Limpio y preciso |
+| transporte **turístico** bogota | genérico + modificador abstracto | Fallback, fuera de tema (viajes intermunicipales, hasta "cruceros") | `phrase_related`: "NOTHING FOUND" — pero `phrase_this` confirma volumen real (20/mes), o sea que el fallo es de la expansión, no del dato base |
+
+**Patrón repetido 2 de 2 veces, en ambos proveedores:** "transporte" + modificador abstracto de tipo de servicio (empresarial, turístico) falla. Con referente concreto (aeropuerto) funciona razonablemente en los dos. No es un problema de un proveedor — es un punto ciego compartido de la expansión estadística de keywords para este tipo de frase, en este mercado. Los tres sitios reales de Estarter caen justo en el patrón problemático (`rutas-empresariales`, `transporte-turistico`); solo `transporte-aeropuertos` tiene referente concreto.
+
+### El mismo par de seeds, ahora en SERP (`get_serp_results` vs. `phrase_organic`)
+
+| Seed | OpenSEO | Semrush |
+|---|---|---|
+| empresarial | Datos reales y on-topic (As Transportes Bogotá, Transportes Calderón, **estarter.co** rankeando #6) | **"NOTHING FOUND"** — nada |
+| aeropuerto | Bueno (El Dorado, taxis, Uber) | Igual de bueno, más `eldorado.aero` (sitio oficial) y `bogota.gov.co` (alcaldía) — fuentes más autoritativas |
+
+En ninguna de las 5 pruebas de investigación+SERP, OpenSEO devolvió cero resultados. Semrush sí, dos veces.
+
+### Dominio — `estarter.co` (`get_domain_overview` vs. `domain_rank`)
+
+| Métrica | OpenSEO | Semrush |
+|---|---|---|
+| Keywords orgánicas | 512 | 2,259 |
+| Tráfico orgánico estimado | 4,262 | 3,291 |
+
+Divergen bastante. Sin un tercer dato independiente para verificar cuál se acerca más a la realidad — queda como discrepancia sin resolver, no a favor de ninguno.
+
+### Hallazgo de negocio real, no buscado a propósito
+
+`estarter.co` — un 5º dominio del mismo negocio, **no** uno de los 4 que estaban en Supabase (`rutas-empresariales.com`, `cotizartransporte.com`, `transporte-aeropuertos.com`, `transporte-turistico.co`) — rankea orgánico en posición 6 para "transporte empresarial bogota". Riesgo real de cannibalización de keyword pilar entre propiedades del mismo cliente — exactamente lo que la Regla de Hierro del proceso existe para prevenir. Sin resolver, sin acción tomada — Estarter no está en este sistema ahora mismo (ver `BASES_DEL_SISTEMA.md`, Parte 4).
+
+### La señal que sí parece valiosa para automatizar: `usedFallback`
+
+OpenSEO expone `usedFallback` como booleano explícito. En las 3 pruebas de `research_keywords`, coincidió exactamente con los casos malos (2/2) y no se activó en el caso bueno (1/1) — mecánicamente confiable hasta ahora, con muestra chica. Es una regla directamente codificable (`si usedFallback: es_descarte = true, motivo = "modo degradado, revisar a mano"`) sin necesidad de heurística propia. Semrush no da un campo equivalente — su modo de falla en el caso "empresarial" (relevancia idéntica en todas las filas) requeriría construir un detector propio.
+
+### Cuentas y costos de OpenSEO, verificado contra su código fuente real
+
+- Trial gratuito: **$0.50 de crédito** (= 500 créditos, `1 credito = $0.001`) — confirmado contra `web/src/routes/_marketing/pricing.tsx` del repo, no contra la página renderizada.
+- Requiere suscripción activa para uso sostenido — el trial es explícitamente "antes de suscribirte", no una cuenta gratuita permanente.
+- Plan base: $10/mes, incluye $10 de crédito (10,000 créditos), sin capas intermedias ("One plan. Everything included.").
+- Una sola llamada de AI-citation/brand-check cuesta más que todo el trial junto (1,088 créditos vs. 500 disponibles) — el trial no alcanza para probar esa función en absoluto.
+- Dos cuentas probadas en esta evaluación, cada una con su propio `projectId` — no asumir que el `projectId` de una cuenta sirve para la otra.
+
+### Balance total, con las 5 pruebas — todavía no es un veredicto
+
+En ningún test OpenSEO devolvió cero resultados; Semrush sí, dos veces, pero de forma explícita y detectable (error, no dato inventado) en al menos uno de esos casos. La inclinación actual, informada pero no cerrada: **OpenSEO como base, con `usedFallback` como gate obligatorio antes de escribir a `keywords`, y Semrush como respaldo puntual para SERP en seeds concretos.** Falta: probar más seeds para confirmar el patrón "modificador abstracto" con mayor muestra, y decidir si vale la pena el costo de $10/mes de OpenSEO para sacar el trial de la ecuación.
+
+---
+
 ## Un hallazgo real de negocio, no solo técnico
 
 El SPEC de Capital Window declara lo comercial (B2B) como *"foco principal"*,

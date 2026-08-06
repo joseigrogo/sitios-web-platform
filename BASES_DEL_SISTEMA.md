@@ -303,15 +303,18 @@ medias.
 | Ads API | Developer token, aprobación con demora | Objetivo de conversión por sitio, CPA/ROAS |
 | `ids_recursos` poblado | Depende de qué sitio — para Capital Window, acceso a su GTM/GA4 propio | Todas las assertions de medición |
 
-> **Fase 1 ya no está en esta tabla — dejó de estar bloqueada (2026-08-05,
-> validación completa 2026-08-06).** Semrush específicamente sigue sin
-> unidades de API, sin resolver. OpenSEO/DataForSEO (Custom Connectors, plan
-> hosted) cubre **5 de los 6 pasos** con dato real: related, volumen, KD
-> (`research_keywords`), quién rankea (`get_serp_results`), dominio
-> (`get_domain_overview`) — 106 créditos en total, por debajo de lo
-> estimado. El único que falta, `phrase_questions`, **no tiene equivalente
-> real** en las 23 tools de OpenSEO — se probó explícitamente y no está,
-> no es que falte probarlo. Ver `db/scripts/fase1_research_keywords.md`.
+> **Fase 1 ya no está en esta tabla — dejó de estar bloqueada (2026-08-05).**
+> La cuota de Semrush también se resolvió después (2026-08-06), así que hoy
+> hay **dos proveedores viables, no uno** — OpenSEO/DataForSEO y Semrush —
+> y todavía **no hay decisión tomada sobre cuál usar para Colombia**, el
+> mercado prioritario a largo plazo. `phrase_questions` sigue sin
+> equivalente real en OpenSEO; en Semrush existe nativo pero no se
+> terminó de probar. Evaluación completa, comparativa y sin cerrar en
+> `db/scripts/fase1_research_keywords.md` — incluye el hallazgo de que
+> ambos proveedores fallan igual con seeds de modificador abstracto
+> ("empresarial", "turístico") y un hallazgo de negocio no buscado
+> (`estarter.co`, un 5º dominio de Estarter, rankeando por una keyword que
+> probablemente ya tiene asignada otra de sus propiedades).
 
 > Nota: **Ads Scripts no necesitan developer token** — corren dentro de la cuenta
 > de Ads. Por eso la ingesta a `metricas_ads` sigue siendo de baja fricción
