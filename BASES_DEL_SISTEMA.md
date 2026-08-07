@@ -87,17 +87,19 @@ DLV de GTM, dimensiones de GA4, queries de assertion en BigQuery) — todavía
 no construido como tal *(Base 5)*.
 
 **Candidato evaluado para dirección visual, sin integrar:** hoy ningún
-entregable de spec.md ni capa de Fase 3 cubre diseño visual.
-[`dembrandt`](https://github.com/dembrandt/dembrandt) (MIT) probado en
-esta sesión — extrae tokens reales (colores, tipografía, espaciado,
-sombras, componentes) de una URL en vivo vía Playwright, en menos de
-un minuto, gratis. La extracción es mecánica y confiable; colores,
-sombras y border-radius traen `count`/`confidence` por valor y se
-reducen con un filtro puro (sin agente). Tipografía es la excepción —
-no trae esa señal, así que armar una escala usable ahí sí es juicio
-del agente, acotado a resumir valores reales, nunca a inventar uno
-*(mismo principio que Base 4 en Fase 1 — ver detalle en
-`db/scripts/fase2_direccion_visual.md`)*. Fuente sugerida: competidores
+entregable de spec.md ni capa de Fase 3 cubre diseño visual. Evaluado
+en dos sesiones, contra sitios neutrales sin relación con ningún
+cliente: tokens reales vía
+[`dembrandt`](https://github.com/dembrandt/dembrandt) (MIT, mecánico
+salvo tipografía — ver Fase 1 para el mismo principio); estructura y
+composición de secciones con script propio de Playwright (sin tool
+listo que funcione en este entorno); efectos reutilizables (glass/blur,
+que Dembrandt no cubre); y comportamiento ligado a scroll (animaciones
+JS reales, no CSS declarado) — esta última pieza es la más cara en
+tiempo, probablemente no se justifica para cada sitio de referencia,
+solo cuando algo distintivo lo amerita. Detalle completo, con la
+técnica de barrido fino para comportamiento de scroll, en
+`db/scripts/fase2_direccion_visual.md`. Fuente sugerida: competidores
 que Fase 1 ya identifica, no una galería de inspiración aparte. Sin
 decidir dónde vive esta sección dentro de spec.md.
 
