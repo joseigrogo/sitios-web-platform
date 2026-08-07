@@ -86,6 +86,21 @@ del que se generan 4 cosas (tipos del helper `pushDataLayerEvent`, variables
 DLV de GTM, dimensiones de GA4, queries de assertion en BigQuery) — todavía
 no construido como tal *(Base 5)*.
 
+**Candidato evaluado para dirección visual, sin integrar:** hoy ningún
+entregable de spec.md ni capa de Fase 3 cubre diseño visual.
+[`dembrandt`](https://github.com/dembrandt/dembrandt) (MIT) probado en
+esta sesión — extrae tokens reales (colores, tipografía, espaciado,
+sombras, componentes) de una URL en vivo vía Playwright, en menos de
+un minuto, gratis. La extracción es mecánica y confiable; colores,
+sombras y border-radius traen `count`/`confidence` por valor y se
+reducen con un filtro puro (sin agente). Tipografía es la excepción —
+no trae esa señal, así que armar una escala usable ahí sí es juicio
+del agente, acotado a resumir valores reales, nunca a inventar uno
+*(mismo principio que Base 4 en Fase 1 — ver detalle en
+`db/scripts/fase2_direccion_visual.md`)*. Fuente sugerida: competidores
+que Fase 1 ya identifica, no una galería de inspiración aparte. Sin
+decidir dónde vive esta sección dentro de spec.md.
+
 ---
 
 ### PUENTE 3→4 · El experimento que se monta
@@ -307,6 +322,10 @@ pendiente a prerequisito.
 
 - **Proveedor de datos SEO para Fase 1** (OpenSEO/DataForSEO vs. Semrush) —
   evaluación completa, sin decisión.
+- **Dirección visual de un sitio (Fase 2).** Sin mecanismo hoy. `dembrandt`
+  evaluado y probado como candidato de extracción de tokens (ver Fase 2 y
+  `db/scripts/fase2_direccion_visual.md`) — falta la pieza de
+  síntesis/reducción y decidir dónde vive dentro de spec.md.
 - **`leads`: dual-write vs. migración.** Dirección acordada: Supabase, con
   dual-write desde Sheets como paso intermedio. Tabla no creada.
 - **RLS.** Hipótesis: activarlo sin políticas es seguro porque `service_role`
