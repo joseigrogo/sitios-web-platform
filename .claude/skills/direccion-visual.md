@@ -76,6 +76,32 @@ no alcanza) aplicado a estructura, no solo a animación — si el resultado
 se ve incompleto para una sección así, no asumir que eso es todo lo que
 hay.
 
+**Con `--scroll`** (`node extract_composition.mjs <url> "<heading>"
+[maxDepth] --scroll`), muestrea la sección en 5 puntos de su propio
+rango y compara qué firmas (tag+media+texto) aparecen en cada uno —
+pensado para el límite de arriba. **Límite real de esto también,
+encontrado al probarlo:** el diff por firma no detecta transiciones por
+`opacity`/superposición sobre el *mismo* nodo (una tarjeta que se
+desvanece mientras la siguiente entra, ambas visibles a la vez) — la
+firma no cambia porque el nodo es el mismo, solo cambia si se ve. Si
+`--scroll` reporta el mismo número de firmas en los 5 puntos para una
+sección que ya se sabe animada (Paso 4 dio positivo), no es que no haya
+nada — es que este método no lo puede ver.
+
+**Para esos casos, capturar y mirar, no seguir puliendo el diff:**
+
+```bash
+node capture_checkpoints.mjs <url> "<texto del heading>" [outDir]
+```
+
+Captura en los mismos 5 puntos del rango de la sección que usa
+`--scroll`, y después hay que mirar cada imagen directo (no solo correr
+el script). Confirmado en la práctica: dos capturas en puntos intermedios mostraron
+dos tarjetas visibles a la vez (una saliendo arriba, la siguiente
+entrando abajo) — exactamente lo que el diff de firmas no había podido
+ver. Es más rápido y más confiable que perseguir una firma perfecta
+que cubra cualquier tipo de transición.
+
 ## Paso 3 — Efectos
 
 ```bash
