@@ -325,15 +325,53 @@ propios elementos hoja antes de que la sección entre en vista (via
 `scrollIntoView`) contra después — no asumir que un patrón encontrado en
 una sección aplica o no aplica a las demás sin probarlo ahí también.
 
-### Siguiente refinamiento, sin probar todavía
+### ~~Siguiente refinamiento, sin probar todavía~~ — ya construido y validado
 
 Playwright puede abrir una sesión CDP
 (`page.context().newCDPSession(page)`) y escuchar el dominio `Animation`
 de Chrome — el mismo que usa el inspector de animaciones de DevTools.
-Debería ser más preciso que el barrido manual para animaciones nativas
-de CSS/Web Animations API. No cubre casos de código propio como el de
-Blacklane (no pasa por ninguna de las dos). Queda anotado como el
-siguiente paso natural, no como algo ya validado.
+Más preciso que el barrido manual para animaciones nativas de CSS/Web
+Animations API — no cubre casos de código propio (JS escribiendo
+`element.style` directo por frame), ahí el barrido fino sigue haciendo
+falta. Empaquetado como `check_cdp_animations.mjs` en el skill; detalle
+completo en `.claude/skills/direccion-visual.md`, Paso 4.
+
+### Un mecanismo distinto, no scroll-linked: carruseles con autoplay
+
+Encontrado en producción (`bigapplewindowcleaning.com`, sección "at
+work"), reproduciendo el sitio con un agente de código: una galería que
+en la captura estática se veía exactamente como una grilla fija de 15
+fotos resultó ser un carrusel Swiper.js corriendo en autoplay continuo
+— sin depender de scroll para nada, sin pausa. El DOM lo confirma
+directo:
+
+```js
+document.querySelector('.swiper-wrapper').style
+// transform: translate3d(-1903px, 0px, 0px)
+// transition-duration: 30000ms
+```
+
+Una transición CSS de 30 segundos crea la ilusión de movimiento continuo
+suave — no es JS escribiendo frame a frame. **El problema real:** ninguna
+técnica de esta Parte 5 lo detecta, porque todas asumen que el
+disparador es el scroll. Un elemento que se anima solo, en su propio
+timer, es invisible para: capturas puntuales (Parte 2), el diff de
+firmas con `--scroll` (mismo principio de "un punto no alcanza", pero
+en el eje de scroll, no de tiempo), y el propio Paso 0 de esta parte,
+que solo buscaba librerías de scroll (GSAP/Lenis/Framer). **Corregido:**
+`check_animation_libs.mjs` ahora también busca la huella de Swiper
+(`window.Swiper` o clases `.swiper-*` en el DOM) — el mismo patrón que
+ya usaba para GSAP vía `pin-spacer`. Cuando aparece, leer
+`transform`/`transition-duration` de `.swiper-wrapper` directo da el
+mecanismo completo sin barrido — a diferencia de GSAP scroll-driven,
+esto no hace falta reconstruirlo a mano.
+
+**Regla general que deja esto:** cualquier bloque con varias imágines en
+fila (galería, logos de clientes, testimonios) es candidato a carrusel
+con autoplay, no solo a grilla — vale la pena el chequeo de huella
+(Swiper y librerías similares) antes de asumir que es estático,
+especialmente si el conteo de imágenes es alto o el layout se ve
+"demasiado ordenado" para ser una grilla manual.
 
 ---
 

@@ -22,6 +22,11 @@ const libs = await page.evaluate(() => ({
   // window.gsap -- la huella real que deja en el DOM es este wrapper,
   // incluso cuando el chequeo de arriba da todo en false.
   pinSpacerFingerprint: !!document.querySelector('.pin-spacer, [class*="pin-spacer"]'),
+  // Swiper (y librerías de carrusel en general) no son scroll-linked --
+  // corren en su propio timer/autoplay. Una captura estática no puede
+  // distinguir esto de una grilla fija -- confirmado encontrando esto
+  // en producción después de reproducir una galería como grilla estática.
+  swiper: typeof window.Swiper !== 'undefined' || !!document.querySelector('.swiper-initialized, .swiper-wrapper, [class*="swiper"]'),
 }));
 
 console.log(JSON.stringify(libs, null, 2));
@@ -30,6 +35,24 @@ if (libs.pinSpacerFingerprint && !libs.gsap && !libs.scrollTrigger) {
   console.log('  Interpretación: GSAP está empaquetado como módulo local, no expuesto global -- SÍ se está');
   console.log('  usando ScrollTrigger, pero no se puede consultar ScrollTrigger.getAll() desde afuera.');
   console.log('  El barrido fino manual sigue siendo necesario, pero ya se sabe qué mecanismo buscar.');
+}
+
+if (libs.swiper) {
+  const wrapInfo = await page.evaluate(() => {
+    const el = document.querySelector('.swiper-wrapper');
+    if (!el) return null;
+    const s = getComputedStyle(el);
+    return { transform: s.transform, transitionDuration: s.transitionDuration };
+  });
+  console.log('\n⚠ Swiper detectado -- NO es scroll-linked, corre en su propio timer (autoplay).');
+  console.log('  Una captura estática es indistinguible de una grilla fija -- verificar siempre que');
+  console.log('  haya movimiento propio antes de asumir que algo con varias imágenes en fila es');
+  console.log('  estático (ver Parte 5 de fase2_direccion_visual.md, sección de carruseles).');
+  if (wrapInfo) {
+    console.log('  .swiper-wrapper ahora mismo:', JSON.stringify(wrapInfo));
+    console.log('  El mecanismo completo sale de leer transform + transition-duration directo --');
+    console.log('  no hace falta el barrido fino para esto, a diferencia del scroll-driven de GSAP.');
+  }
 }
 
 if (libs.scrollTrigger) {

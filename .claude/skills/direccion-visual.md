@@ -178,6 +178,18 @@ huella del DOM.
 - **Si no aparece ninguna de las dos señales:** ahí sí es mecanismo
   propio, sin pista previa.
 
+También busca huella de **Swiper** (`window.Swiper` o clases
+`.swiper-*`) — no es scroll-linked, corre en su propio timer
+(autoplay). Encontrado en producción: una galería de 15 fotos que en
+captura estática se veía como grilla fija resultaba ser un carrusel en
+movimiento continuo. Si aparece, leer `transform`/`transition-duration`
+de `.swiper-wrapper` directo da el mecanismo completo — no hace falta
+barrido, a diferencia del resto de este paso. Justo por ser tan barato
+comparado con el resto de Paso 4, valdría la pena correr *solo esta
+parte* (huellas de librería, no el barrido fino) por defecto en vez de
+saltarla junto con todo lo demás — sin decidir esto todavía, ver
+`db/scripts/fase2_direccion_visual.md`.
+
 **Antes de resignarse al barrido manual** (no confundir con el Paso 0
 global de arriba — esto es específico de animación, un nivel más
 profundo):
