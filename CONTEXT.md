@@ -143,6 +143,10 @@ El orquestador debe saber pausar, notificar qué falta, y reanudar.
 3. CLI — Fase 5 (GTM/GA4/BigQuery por API) — la más mecánica, la que más ha dolido.
 4. CLI — Fase 1 (Semrush) — riesgo cero, ya está probado el flujo de reportes.
 5. Template repo + generador (Fases 2-3, `spec.json` → repo Next.js completo).
+   Avance parcial real: la pieza de dirección visual de spec.md (Fase 2)
+   ya tiene método probado y skill invocable — ver §9. El resto (contenido,
+   experimentos, taxonomía, y el generador que arma el repo Next.js) sigue
+   sin construir.
 6. CLI — Fase 4 (deploy) — la más bloqueada por permisos (Vercel Hobby).
 
 ---
@@ -167,3 +171,29 @@ El orquestador debe saber pausar, notificar qué falta, y reanudar.
 *(Esta sección se completa cuando arranque el CLI — lenguaje ya decidido:
 TypeScript/Node, por consistencia con los sitios Next.js y los SDKs oficiales
 de Vercel/Google.)*
+
+---
+
+## 9. Skills ya construidos (fuera del CLI, que todavía no existe)
+
+**`direccion-visual`** — `.claude/skills/direccion-visual.md` + carpeta
+hermana con 6 scripts (Node/Playwright). Extrae la dirección visual
+completa de una URL de referencia real para alimentar la sección de
+diseño de spec.md (Fase 2): tokens (vía `dembrandt`), estructura y
+composición por sección, responsive, efectos (glass/blur), comportamiento
+de scroll (con la técnica de barrido fino cuando hace falta), un primer
+pase gratis con `designlang`, y verificación de reproducción
+(`pixelmatch`). Evaluado y probado en dos sesiones contra sitios
+neutrales (stripe.com, blacklane.com) — **nunca contra un cliente real**,
+mismo principio que el resto de este documento (Base 2). Detalle
+completo, cada gotcha real encontrado, y qué tan confiable es cada pieza
+en `db/scripts/fase2_direccion_visual.md`.
+
+Mismo criterio de bootstrap que todo lo demás (Base 4/8): existe como
+skill que un agente invoca, no como comando de un CLI — ese sigue sin
+existir. Se convierte en comando cuando el patrón de invocarlo se repita
+lo suficiente, no antes.
+
+**Fuente sugerida para la URL de referencia:** un competidor real que
+Fase 1 ya identificó (`phrase_organic`/`domain_organic`), no una galería
+de inspiración genérica — evita agregar una fuente de datos nueva.
