@@ -1,6 +1,6 @@
 ---
 name: direccion-visual
-description: Extrae tokens, estructura, efectos y comportamiento de scroll de una URL de referencia real, y arma el bloque de "Dirección visual" para spec.md (Fase 2). Toma una URL como argumento.
+description: Extrae tokens, estructura, efectos y comportamiento de scroll de una URL de referencia real, y arma el bloque de "Dirección visual" para spec.md (Fase 2). Opcionalmente, copy real y catálogo de imágenes cuando el objetivo es reproducción cercana, no dirección propia. Toma una URL como argumento.
 ---
 
 Este skill empaqueta el método validado en `db/scripts/fase2_direccion_visual.md`
@@ -141,6 +141,38 @@ dos tarjetas visibles a la vez (una saliendo arriba, la siguiente
 entrando abajo) — exactamente lo que el diff de firmas no había podido
 ver. Es más rápido y más confiable que perseguir una firma perfecta
 que cubra cualquier tipo de transición.
+
+## Paso 2.5 — Copy real y catálogo de imágenes (solo si el objetivo es reproducción cercana)
+
+```bash
+node extract_content.mjs <url>
+```
+
+**No es parte del flujo por defecto.** El resto de este skill construye
+insumo para una dirección propia (Base del método) — esto es distinto:
+copy literal e inventario de imágenes reales, para cuando el objetivo
+explícito es reproducir de cerca una referencia (probado una vez, contra
+`bigapplewindowcleaning.com`, con autorización explícita del operador
+para usar copy e imágenes reales).
+
+Camina las mismas secciones landmark que `extract_structure.mjs` y para
+cada una saca: texto propio (sin bajar a sub-secciones, para no
+duplicar) e imágenes reales (`<img>` + `background-image`, con URL, alt
+y dimensiones). Excluye `script`/`style`/`noscript` antes de leer
+`innerText` — sin esto, un `<script>` de inicialización embebido en la
+sección (ej. un mapa de Google) se cuela como si fuera copy real.
+
+- **Copy e imágenes son reales, de un sitio de un tercero** — tratar
+  como uso interno/privado, no publicar sin decidirlo aparte.
+- **Recursos:** cataloga la URL real, no descarga el archivo — el
+  agente que construya la reproducción es quien decide si baja los
+  binarios al repo nuevo.
+- **Límite conocido, sin resolver:** solo captura lo que existe en el
+  DOM en reposo (scroll=0, sin interacción) — un carrusel/acordeón con
+  contenido que se inserta recién al interactuar (ver Paso 4, huella de
+  Swiper) no aparece acá. Mismo principio de "un punto no alcanza" que
+  ya aplica en Parte 2 y Parte 5, todavía sin una solución barata para
+  este caso puntual.
 
 ## Paso 3 — Efectos
 
