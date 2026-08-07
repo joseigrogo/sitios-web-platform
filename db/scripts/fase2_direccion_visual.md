@@ -11,6 +11,14 @@ Fase 2 no tiene, hoy, ningún entregable ni mecanismo para esto (ver
 estructura, contenido, experimentos y taxonomía de eventos; ninguno lo
 cubre). Este documento junta lo probado en dos sesiones distintas.
 
+**Empaquetado como skill:** el método de abajo ya se repitió lo
+suficiente (dos sitios de referencia distintos) como para graduarse de
+"pasos sueltos" a comando, siguiendo el mismo criterio que Base 4/8 usan
+para el resto del sistema. Vive en
+[`.claude/skills/direccion-visual.md`](../../.claude/skills/direccion-visual.md)
+— este documento sigue siendo el porqué y el detalle de cada gotcha; el
+skill es el cómo se ejecuta.
+
 ---
 
 ## Parte 1 · Tokens (color, tipografía, espaciado, radios, sombras)
@@ -155,13 +163,30 @@ el `fullPage: true` es obligatorio para poder recortar más allá de un
 solo viewport; sin eso, cualquier `clip` con `y` mayor a la altura del
 viewport sale vacío.
 
-**Candidato sin verificar para este hueco:** un skill de Claude Code
-("Screenshot Design Analyzer", listado en mcpmarket.com) promete
-reverse-engineering de una captura a datos estructurados de layout, no
-solo colores — apuntaría directo a este punto débil. Intenté confirmar
-su comando de instalación real y el sitio devolvió error 429 (demasiadas
-consultas) dos veces seguidas. No se instaló ni se probó — queda como
-pista a confirmar, no como solución adoptada.
+**Actualización sobre "Screenshot Design Analyzer":** no es una
+herramienta externa para instalar — confirmado por búsqueda, es un
+skill basado en prompt (un `.md` con pasos) que usa la propia visión de
+Claude sobre una captura, sin dependencia nueva. No hace falta
+instalación; hace falta escribirlo, si se quiere esa pieza.
+
+**`extract_composition.mjs`** — nuevo, en `.claude/skills/
+direccion-visual/`. A diferencia del desenvolvimiento de un solo nivel
+de arriba, salta wrappers de un solo hijo a *cualquier* profundidad (no
+1-3 fijo) y distingue `img`/`background-image`/`svg` de texto real —
+para cuando una sección puntual necesita más detalle que el esqueleto
+general.
+
+**Límite real encontrado, no un bug:** probado contra la misma sección
+de Blacklane que ya se había investigado a mano (3 tarjetas
+confirmadas visualmente) — la extracción automática, en reposo
+(scroll=0), solo encontró 1. Verificado directo: el contenedor tiene 26
+elementos descendientes en total, pero un solo hijo directo real en ese
+momento. Las otras dos tarjetas no existen en el DOM todavía — las
+inserta el mismo mecanismo de scroll que ya se había documentado en
+Parte 5. Es el mismo principio ("un solo punto de medición no alcanza")
+aplicado a estructura, no solo a valores de animación: para secciones
+con señales de ser controladas por scroll, medir solo en reposo puede
+reportar menos de lo que realmente hay.
 
 ---
 
@@ -225,12 +250,23 @@ animación conocida globalmente:
 
 Si `ScrollTrigger` existe, `ScrollTrigger.getAll()` devuelve la
 configuración real de cada trigger (inicio, fin, pin, elemento) directo
-de la librería — nada que reconstruir a mano. Probado contra
-blacklane.com: las cuatro dieron `false` — su animación es código propio,
-no pasa por ninguna librería reconocible, así que ahí el barrido fino de
-abajo seguía siendo necesario. Vale la pena chequear esto siempre
-primero de todas formas — GSAP es común, y cuando está presente ahorra
-toda la parte cara de esta sección.
+de la librería — nada que reconstruir a mano.
+
+**Corrección real sobre lo probado antes:** la primera pasada contra
+blacklane.com dio las cuatro variables en `false` y se concluyó
+"código propio, sin librería reconocible" — conclusión equivocada. Una
+segunda pasada, extrayendo composición interna de una sección, encontró
+una clase `pin-spacer` en el DOM — la huella que GSAP deja
+automáticamente al fijar un elemento. El chequeo de variables globales
+no lo detecta porque apps empaquetadas con webpack/Next.js suelen
+importar GSAP como módulo local, sin exponerlo en `window`. **Regla
+corregida:** el chequeo de Paso 0 tiene que buscar las dos señales, no
+solo una — variables globales *y* huellas en el DOM (`pin-spacer` como
+mínimo). Si aparece la huella sin las variables, sí es GSAP, solo que no
+consultable desde afuera — el barrido fino sigue haciendo falta, pero ya
+se sabe qué mecanismo buscar en vez de partir de cero. Vale la pena
+chequear esto siempre primero de todas formas — cuando las variables
+globales sí están expuestas, ahorra toda la parte cara de esta sección.
 
 **Regla central: un chequeo en un solo punto de scroll no alcanza para
 descartar nada.** Una animación real puede vivir en una ventana de scroll
@@ -377,8 +413,9 @@ de buscar y elegir a mano no tiene equivalente automatizable ahí.
 
 - Dónde vive exactamente esta sección dentro de spec.md — ¿quinto
   entregable aparte, o parte de "Estructura del sitio"?
-- Quién corre la síntesis de tipografía (la única pieza de tokens sin
-  atajo mecánico) — ¿el agente en la misma sesión, o un paso separado?
+- ~~Quién corre la síntesis de tipografía~~ — resuelto al empaquetar
+  como skill: el agente, en la misma invocación, como Paso 1 (ver
+  `.claude/skills/direccion-visual.md`).
 - Si se referencia un solo competidor o se triangulan varios.
 - **Cuánto de Parte 5 (animación) vale la pena hacer por sitio de
   referencia.** El barrido fino es el paso más caro en tiempo de toda

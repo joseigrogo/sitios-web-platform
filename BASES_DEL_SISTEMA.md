@@ -117,6 +117,19 @@ endpoint para crear Data Sources (solo UI), `datasourceId`/
 `assignmentQueryId` deben existir antes de crear el Experiment, y el campo
 de métrica principal es `metrics` (no `goals`).
 
+**Dependencia de secuencia, no solo de API:** este paso necesita un
+dataset de BigQuery con datos reales para configurar el Data Source de
+GrowthBook — y el propio proceso ya documenta que el export de GA4 a
+BigQuery tarda ~24h en aparecer (Fase 5, Nodo 3, "latencia por diseño").
+Tal como está numerado el proceso, Puente 3→4 va *antes* de Fase 5,
+donde recién se conecta ese pipeline — leído en orden estricto, se
+llegaría acá sin datos para conectar. Consecuencia real: GTM→GA4→BigQuery
+(Nodos 1-3 de Fase 5, fricción baja, cuenta de servicio) tienen que
+arrancar en paralelo con Fase 3, o apenas el sitio tenga un entorno
+emitiendo eventos reales — no esperar a "llegar a Fase 5". Google Ads
+(Nodo 5) es la excepción que sí debe esperar, por la demora real de
+aprobación externa del developer token — no aplicar la misma lógica ahí.
+
 ---
 
 ### FASE 3 · Construcción del sitio
