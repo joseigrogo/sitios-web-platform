@@ -397,6 +397,109 @@ Advertencia: insumo para una dirección propia, no plantilla para clonar
 completa del sitio de referencia.
 ```
 
+## Primer ensamblaje real (Paso 5), contra stripe.com — 2026-08-07
+
+Hasta esta corrida, cada pieza (tokens, estructura, efectos) se había
+validado por separado — nunca combinada. Esto ejecuta Pasos 1-3 completos
+contra la misma referencia (`stripe.com`, ya usado en sesiones previas,
+sin sumar una fuente nueva) y arma el bloque final: primera vez que se ve
+la síntesis de punta a punta, no solo el método de cada parte por
+separado. Paso 4 (animación) se saltó a propósito, siguiendo la política
+ya documentada — nada en esta corrida se señaló como distintivo.
+
+```
+## Dirección visual
+Fuente: https://stripe.com — extraído el 2026-08-07
+
+Paleta: primary #533afd · secondary #e2e4ff · accent #ff6118 ·
+        background #ffffff · text #000000
+
+Tipografía: sohne-var, fallback SF Pro Display
+  Escala: Display 56px/300 · H1 48px/300 · H2 32px/300 · H3 26px/300 ·
+          Body 16px/400 · UI 14px/400 · Caption 12px/400
+  Nota de peso dominante: 300 (light) en toda la escala editorial grande;
+  400 aparece específicamente en tamaños de lectura/control ≤16px.
+  Familia secundaria fuera de escala: SourceCodePro, 9-12px/500-700 —
+  uso tipo código, no editorial.
+
+Espaciado: sistema base 8px (122 usos, el valor "redondo" más frecuente)
+  — no puro: 6px también tiene presencia real (81 usos).
+Radios: 4px (138 usos) y 6px (116 usos), ambos dominantes.
+Sombra representativa: rgba(50,50,93,.25) 0 30px 45px -30px,
+  rgba(0,0,0,.1) 0 18px 36px -18px (8 usos — única con confidence=high).
+Componente de referencia — botón primario ("Get started"): bg #533afd,
+  texto #ffffff, padding 15.5px 24px 16.5px, radius 4px, 16px/400.
+Componente de referencia — input: no encontrado en esta home (ver nota
+  abajo).
+
+Estructura: header+nav fijos → hero → "Flexible solutions for every
+  business model" → sección sin heading → "The backbone of global
+  commerce" → "Powering businesses of all sizes" (la más larga, 4610px)
+  → "Reliable, extensible infrastructure for..." → "What's happening" →
+  grid de 12 columnas sin heading → footer. Mobile: 20662px vs. 14756px
+  desktop (+40%) — confirma reflow real, no solo reescalado.
+
+Efectos reutilizables: backdrop-filter aparece 2 veces, sin receta
+  idéntica (blur 12px en tarjeta de producto vs. blur 20px en banner de
+  cookies) — no califica como componente "glass" del design system, a
+  diferencia de Blacklane. mix-blend-mode real en 3 elementos decorativos
+  del hero/stats (multiply, hard-light) — técnica puntual, no masiva.
+
+Comportamiento de scroll: no evaluado en esta corrida (Paso 4 saltado).
+
+Advertencia: insumo para una dirección propia, no plantilla para clonar
+1:1 — son tokens y patrones (valores), no la composición creativa
+completa del sitio de referencia.
+```
+
+### Gotchas nuevos, encontrados al ensamblar (no al extraer)
+
+- **`colors.semantic.secondary` no tiene respaldo en `colors.palette`.**
+  A diferencia de `primary` (#533afd, 948 usos, confidence alta) y
+  `accent` (#ff6118, 37 usos, confidence alta), el valor de `secondary`
+  (#e2e4ff) no aparece en ninguna de las 35 entradas del palette completo
+  — es un valor que Dembrandt deriva para el bloque semántico, no uno
+  contado directamente. Sí aparece como color real en un botón secundario
+  de `components.buttons` ("Read the story"), así que no está inventado
+  — pero llega por un camino distinto al filtro mecánico
+  (`confidence=high`, ordenar por `count`) que sí aplica limpio a
+  `primary`/`accent`/`background`/`text`. **Regla:** tratar
+  `semantic.secondary` con la misma sospecha que ya aplicaba al
+  `secondary` de `designlang` (Paso 0) — cruzarlo contra `components`
+  antes de confiar, no darlo por bueno solo porque viene del mismo campo
+  que `primary`.
+- **Backdrop-filter presente no implica "componente reutilizable".** La
+  regla documentada en Parte 4 ("si aparece con la misma receta en varios
+  lugares, es un componente del design system") asume que la receta se
+  repite — acá no fue así: 2 instancias, blur distinto (12px vs 20px),
+  fondo distinto, radius distinto. Una de las dos ni siquiera es de marca
+  (`CookieSettings`, banner de cookies — UI de terceros/boilerplate, no
+  diseño del sitio). **Regla añadida:** antes de llamar "reutilizable" a
+  un efecto, confirmar que la receta se repite Y que no es un componente
+  genérico de terceros (cookie banners, widgets de chat, etc.) — la
+  presencia sola no alcanza.
+- **`mix-blend-mode` sí aparece, cuando antes se había probado con 0
+  usos.** La Parte 4 original decía "en la única prueba hecha, cero usos
+  encontrados". Stripe.com dio 3 usos reales. No era un error del método,
+  era n=1 — corregido: no asumir tasa base de un solo sitio, seguir
+  chequeando siempre porque es barato.
+- **El componente "input de texto" puede no existir en la página.** El
+  extractor de `components.inputs.text` no encontró ningún campo de
+  formulario real en la home de Stripe — solo elementos ya clasificados
+  como botones. No es una falla del método: una landing de marketing
+  puede genuinamente no tener inputs visibles sin scrollear a una demo o
+  abrir un modal. El Paso 5 tiene que tolerar esta ausencia (dejar la
+  línea vacía con una nota), no asumir que siempre habrá un input que
+  reportar.
+- **Solo una sombra alcanza `confidence=high`.** El resto de candidatas
+  reales (count 3-5) quedan en `medium`. La plantilla pide "2-3
+  representativas" asumiendo que habrá varias de alta confianza — en la
+  práctica puede que solo haya una. Está bien usar `medium` como segunda
+  opción si se etiqueta como tal, en vez de forzar un umbral que el sitio
+  no tiene.
+
+---
+
 ## Fuente recomendada para la referencia — no una galería genérica
 
 Apuntar esto a un competidor real que Fase 1 ya identificó
@@ -412,10 +515,19 @@ de buscar y elegir a mano no tiene equivalente automatizable ahí.
 ## Sin decidir todavía
 
 - Dónde vive exactamente esta sección dentro de spec.md — ¿quinto
-  entregable aparte, o parte de "Estructura del sitio"?
+  entregable aparte, o parte de "Estructura del sitio"? Deliberadamente
+  sin evaluar todavía: la decisión depende de probar la construcción de
+  un sitio real primero (Fase 3, que sigue sin construirse), no de tener
+  un bloque de ejemplo como el de arriba.
 - ~~Quién corre la síntesis de tipografía~~ — resuelto al empaquetar
   como skill: el agente, en la misma invocación, como Paso 1 (ver
   `.claude/skills/direccion-visual.md`).
+- ~~Si el ensamblaje mecánico (Paso 5) funciona de punta a punta con
+  datos reales~~ — resuelto: corrida completa contra stripe.com arriba.
+  Lo que sigue abierto no es "si funciona" sino los gotchas puntuales que
+  esa corrida encontró (`semantic.secondary` sin respaldo, backdrop-filter
+  sin receta consistente, input ausente, sombra única en confidence
+  alta — todos documentados arriba, ya incorporados como reglas).
 - Si se referencia un solo competidor o se triangulan varios.
 - **Cuánto de Parte 5 (animación) vale la pena hacer por sitio de
   referencia.** El barrido fino es el paso más caro en tiempo de toda

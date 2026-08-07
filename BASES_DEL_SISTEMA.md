@@ -86,10 +86,10 @@ del que se generan 4 cosas (tipos del helper `pushDataLayerEvent`, variables
 DLV de GTM, dimensiones de GA4, queries de assertion en BigQuery) — todavía
 no construido como tal *(Base 5)*.
 
-**Candidato evaluado para dirección visual, sin integrar:** hoy ningún
-entregable de spec.md ni capa de Fase 3 cubre diseño visual. Evaluado
-en dos sesiones, contra sitios neutrales sin relación con ningún
-cliente: tokens reales vía
+**Candidato evaluado para dirección visual, empaquetado como skill, sin
+integrar a un spec.md real:** hoy ningún entregable de spec.md ni capa
+de Fase 3 cubre diseño visual. Evaluado en tres sesiones, contra sitios
+neutrales sin relación con ningún cliente: tokens reales vía
 [`dembrandt`](https://github.com/dembrandt/dembrandt) (MIT, mecánico
 salvo tipografía — ver Fase 1 para el mismo principio); estructura y
 composición de secciones con script propio de Playwright (sin tool
@@ -97,8 +97,12 @@ listo que funcione en este entorno); efectos reutilizables (glass/blur,
 que Dembrandt no cubre); y comportamiento ligado a scroll (animaciones
 JS reales, no CSS declarado) — esta última pieza es la más cara en
 tiempo, probablemente no se justifica para cada sitio de referencia,
-solo cuando algo distintivo lo amerita. Detalle completo, con la
-técnica de barrido fino para comportamiento de scroll, en
+solo cuando algo distintivo lo amerita. El método completo vive como
+skill invocable (`.claude/skills/direccion-visual.md`), y el paso de
+síntesis/ensamblaje final (Paso 5, arma el bloque para spec.md) ya se
+corrió de punta a punta contra una referencia real, no solo diseñado en
+el papel. Detalle completo, con la técnica de barrido fino para
+comportamiento de scroll y los gotchas del ensamblaje, en
 `db/scripts/fase2_direccion_visual.md`. Fuente sugerida: competidores
 que Fase 1 ya identifica, no una galería de inspiración aparte. Sin
 decidir dónde vive esta sección dentro de spec.md.
@@ -337,10 +341,12 @@ pendiente a prerequisito.
 
 - **Proveedor de datos SEO para Fase 1** (OpenSEO/DataForSEO vs. Semrush) —
   evaluación completa, sin decisión.
-- **Dirección visual de un sitio (Fase 2).** Sin mecanismo hoy. `dembrandt`
-  evaluado y probado como candidato de extracción de tokens (ver Fase 2 y
-  `db/scripts/fase2_direccion_visual.md`) — falta la pieza de
-  síntesis/reducción y decidir dónde vive dentro de spec.md.
+- **Dirección visual de un sitio (Fase 2).** Mecanismo evaluado y
+  empaquetado como skill (`.claude/skills/direccion-visual.md`), con el
+  paso de síntesis ya corrido de punta a punta contra una referencia real
+  (ver Fase 2 y `db/scripts/fase2_direccion_visual.md`) — falta decidir
+  dónde vive dentro de spec.md, y aplicarlo contra un sitio real por
+  primera vez (sigue sin haber cliente activo para eso).
 - **`leads`: dual-write vs. migración.** Dirección acordada: Supabase, con
   dual-write desde Sheets como paso intermedio. Tabla no creada.
 - **RLS.** Hipótesis: activarlo sin políticas es seguro porque `service_role`
