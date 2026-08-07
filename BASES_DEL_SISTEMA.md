@@ -101,8 +101,16 @@ solo cuando algo distintivo lo amerita. El método completo vive como
 skill invocable (`.claude/skills/direccion-visual.md`), y el paso de
 síntesis/ensamblaje final (Paso 5, arma el bloque para spec.md) ya se
 corrió de punta a punta contra una referencia real, no solo diseñado en
-el papel. Detalle completo, con la técnica de barrido fino para
-comportamiento de scroll y los gotchas del ensamblaje, en
+el papel. Validado más a fondo construyendo una reproducción cercana
+completa de un segundo sitio (fuera del sistema, sin cliente) y
+comparándola sección por sección contra el real — de ahí salieron 3
+bugs reales del propio skill (corregidos) y detección de carruseles con
+autoplay (Swiper, no scroll-linked — antes invisible para el método).
+Sumó también un paso opcional nuevo, **Paso 2.5** (copy real + catálogo
+de imágenes), para cuando el objetivo es reproducción cercana en vez de
+dirección propia — graduado a script permanente después de repetirse
+una vez (Base 4/8). Detalle completo, con la técnica de barrido fino
+para comportamiento de scroll y los gotchas del ensamblaje, en
 `db/scripts/fase2_direccion_visual.md`. Fuente sugerida: competidores
 que Fase 1 ya identifica, no una galería de inspiración aparte. Sin
 decidir dónde vive esta sección dentro de spec.md.
@@ -341,12 +349,15 @@ pendiente a prerequisito.
 
 - **Proveedor de datos SEO para Fase 1** (OpenSEO/DataForSEO vs. Semrush) —
   evaluación completa, sin decisión.
-- **Dirección visual de un sitio (Fase 2).** Mecanismo evaluado y
-  empaquetado como skill (`.claude/skills/direccion-visual.md`), con el
-  paso de síntesis ya corrido de punta a punta contra una referencia real
-  (ver Fase 2 y `db/scripts/fase2_direccion_visual.md`) — falta decidir
-  dónde vive dentro de spec.md, y aplicarlo contra un sitio real por
-  primera vez (sigue sin haber cliente activo para eso).
+- **Dirección visual de un sitio (Fase 2).** Mecanismo evaluado,
+  empaquetado como skill (`.claude/skills/direccion-visual.md`) y
+  validado a fondo con una reproducción cercana completa de un sitio
+  real (fuera del sistema, sin cliente) — 3 bugs reales del skill
+  encontrados y corregidos en el camino, más un paso nuevo (Paso 2.5,
+  copy + imágenes) ya graduado a permanente (ver Fase 2 y
+  `db/scripts/fase2_direccion_visual.md`) — falta decidir dónde vive
+  dentro de spec.md, y aplicarlo dentro del sistema contra un cliente
+  real por primera vez (sigue sin haber uno activo para eso).
 - **`leads`: dual-write vs. migración.** Dirección acordada: Supabase, con
   dual-write desde Sheets como paso intermedio. Tabla no creada.
 - **RLS.** Hipótesis: activarlo sin políticas es seguro porque `service_role`
