@@ -18,6 +18,46 @@ resultado es insumo para una dirección propia.
   la primera vez en una máquina nueva, `sudo npx playwright install-deps
   chromium` (pide contraseña interactiva, no es automatizable).
 
+## Paso 0 — Primer pase rápido (designlang)
+
+```bash
+npx designlang <url>
+```
+
+Gratis, local, MIT, sin API key — usa Playwright, el mismo motor que
+todo lo demás acá. Probado contra los dos sitios de esta sesión, con
+resultados reales, no supuestos — **complementa los pasos 1-4, no los
+reemplaza:**
+
+- **Confiable, verificado:** el color primario coincidió exacto con lo
+  ya confirmado por conteo real en los dos sitios (`#533afd` en
+  stripe.com, `#0f63bd` en blacklane.com). El campo
+  `motion-tokens.json → $meta.scrollLinked` detectó correctamente que
+  había movimiento ligado a scroll, sin correr nada más — señal barata
+  para decidir si vale la pena seguir con el Paso 4.
+- **No confiable, verificado con evidencia real — no usar sin cruzar:**
+  - Color `secondary`: dio `#0000ee` en blacklane.com — el mismo azul
+    de link por defecto que ya había contaminado una corrida de
+    Dembrandt (Paso 1). Mismo error, dos herramientas distintas.
+  - `stack-intel.json`/`library.json`: no detectó GSAP (mismo punto
+    ciego que tenía nuestro propio `check_animation_libs.mjs` antes de
+    la huella de `pin-spacer`) ni el framework, pese a evidencia clara
+    en las clases del sitio.
+  - **`backdrop-filter in use: no`** — falso, confirmado dos veces en
+    blacklane.com (`visual-dna.json` y el markdown) contra 4+ usos
+    reales ya documentados en el Paso 3. No confiar en esto sin correr
+    `extract_effects.mjs` de todas formas.
+  - No captura la coreografía real de un mecanismo scroll-driven (el
+    -858px sobre 1800px de Blacklane) — solo el flag genérico de que
+    algo así existe.
+
+Da de regalo exports listos que hoy no generamos de otra forma
+(Tailwind config, tema de shadcn/ui, variables de Figma, tema de React)
+— vale guardarlos como insumo adicional aunque no sean la fuente de
+verdad. Tuvo un error final ("Extraction failed... Received undefined")
+en las dos corridas, sin investigar la causa — los archivos prometidos
+se generaron completos igual las dos veces.
+
 ## Paso 1 — Tokens (Dembrandt)
 
 ```bash
@@ -138,7 +178,31 @@ huella del DOM.
 - **Si no aparece ninguna de las dos señales:** ahí sí es mecanismo
   propio, sin pista previa.
 
-En cualquiera de los últimos dos casos, se reconstruye con un barrido
+**Antes de resignarse al barrido manual** (no confundir con el Paso 0
+global de arriba — esto es específico de animación, un nivel más
+profundo):
+
+```bash
+node check_cdp_animations.mjs <url> [scrollEndY]
+```
+
+Usa el dominio `Animation` del protocolo CDP (sesión de Playwright) para
+ver si el navegador registra animaciones reales — sirve para
+transiciones CSS declaradas (hover, focus, cualquier `transition:`) y
+para CSS Animations/Web Animations API. Probado: un hover real capturó
+23 transiciones exactas (duración y easing incluidos — `200ms
+ease-in-out`, dato que antes no se tenía). **No es un sí/no para toda la
+página, es por mecanismo:** en la misma sección de Blacklane, el pin +
+traslado escalonado ya confirmado (Parte 5, `element.style.transform`
+escrito directo) dio 0 eventos aislado — pero un scroll más amplio, en
+un rango donde *otro* efecto de la página sí pasa por transición CSS
+real, capturó eventos igual. No asumir "esta página no tiene animación
+CSS real" de un solo resultado en 0 — probarlo acotado a la zona
+específica que importa, no a la página entera, para no mezclar
+mecanismos distintos.
+
+En el caso de que el mecanismo puntual que importa dé 0 (o no haya
+forma de aislarlo del resto de la página), se reconstruye con un barrido
 fino manual (10-30px por paso, `document.elementFromPoint` en un
 punto fijo del viewport por debajo de cualquier elemento `fixed`,
 comparando `getComputedStyle` contra `element.style` para confirmar que
