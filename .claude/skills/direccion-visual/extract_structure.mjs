@@ -14,7 +14,7 @@ const viewport = { width: Number(widthArg) || 1440, height: Number(heightArg) ||
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport });
-await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+await page.goto(url, { waitUntil: 'load', timeout: 30000 });
 
 const cookieSelectors = [
   'button:has-text("Aceptar")', 'button:has-text("Accept")',

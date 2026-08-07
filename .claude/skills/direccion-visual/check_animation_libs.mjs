@@ -10,7 +10,7 @@ if (!url) {
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+await page.goto(url, { waitUntil: 'load', timeout: 30000 });
 await page.waitForTimeout(1000);
 
 const libs = await page.evaluate(() => ({
@@ -40,6 +40,12 @@ if (libs.scrollTrigger) {
   );
   console.log('\nScrollTrigger.getAll() -- configuración real, no hace falta barrer:');
   console.log(JSON.stringify(triggers, null, 2));
+} else if (libs.lenis || libs.framerMotion) {
+  console.log('\nLibrería de scroll/motion detectada (lenis y/o framerMotion), pero ninguna expone');
+  console.log('un equivalente a ScrollTrigger.getAll() -- no hay configuración que leer directo.');
+  console.log('lenis suaviza/inercia el scroll nativo (afecta el "feel" aunque no dispare animaciones');
+  console.log('por sección) -- si eso importa para la reproducción, sigue haciendo falta el barrido fino');
+  console.log('manual para ver qué anima, no solo cómo se siente el scroll (ver Parte 5 del research doc).');
 } else {
   console.log('\nNinguna librería reconocida -- si hay animación de scroll, hace falta el barrido fino manual (ver Parte 5 de fase2_direccion_visual.md).');
 }

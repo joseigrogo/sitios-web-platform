@@ -21,7 +21,7 @@ if (!url) {
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+await page.goto(url, { waitUntil: 'load', timeout: 30000 });
 try { await page.locator('button:has-text("Aceptar")').first().click({ timeout: 1500 }); } catch (e) {}
 await page.waitForTimeout(800);
 
