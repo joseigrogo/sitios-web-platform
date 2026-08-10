@@ -33,19 +33,26 @@ marca oculta, cross-linking, respaldo legal) + Fase 0 de sitio (4 preguntas:
 segmento, arquetipo, dominio tentativo, nombre de marca) → dos filas en
 Supabase (`clientes` + `sitios`).
 
-**Cómo:** hoy, agente + Supabase MCP directo, siguiendo el patrón ya
-extraído de uso real en `db/scripts/alta_cliente_y_sitio.sql` (de la intake
-de Capital Window, 2026-08-05/06). Se convierte en comando CLI
-(`cli cliente alta`) cuando se repita un par de veces más — no antes, para
-no congelar una interfaz sobre un patrón que todavía puede cambiar
-*(Base 4, Base 8)*.
+**Cómo:** **ya es comando de CLI** — `cli cliente alta` (`cli/`, construido
+2026-08-10), sobre el mismo patrón extraído de uso real en
+`db/scripts/alta_cliente_y_sitio.sql` (de la intake de Capital Window,
+2026-08-05/06). Construido *antes* de que el patrón se repitiera "un par de
+veces más" — la condición que esta misma sección pedía para congelar la
+interfaz (Base 4, Base 8) — por decisión explícita del usuario, no por deriva
+silenciosa (registrado en `CONTEXT.md`, §6 y §10). Validado con `node:test`
+contra repos falsos en memoria, incluida la rama "¿el cliente ya existe?" que
+el .sql original marcaba como nunca ejercitada de verdad. **Todavía sin
+correr contra el proyecto Supabase real**, aunque ya no por RLS — eso se
+cerró el 2026-08-10 (Parte 4); falta solo la corrida real con credenciales.
 
 **Gate de salida:** `nombre_marca` / `arquetipo` / `segmento` no vacíos →
 flip manual y visible a `fase_actual = 'investigacion'` — nunca agrupado
 con el INSERT, porque pasar el gate es una decisión que se verifica, no un
-efecto colateral de crear la fila. Dominio **no** bloquea este gate — se
-movió a requisito de Fase 4 cuando una prueba real con datos concretos
-mostró que un sitio puede no tener dominio decidido todavía.
+efecto colateral de crear la fila. Ahora es `cli sitio gate-fase0 <id>`:
+sin `--confirmar` solo verifica (no escribe), con `--confirmar` hace el flip
+solo si el gate pasa. Dominio **no** bloquea este gate — se movió a
+requisito de Fase 4 cuando una prueba real con datos concretos mostró que un
+sitio puede no tener dominio decidido todavía.
 
 ---
 
@@ -360,8 +367,24 @@ pendiente a prerequisito.
   real por primera vez (sigue sin haber uno activo para eso).
 - **`leads`: dual-write vs. migración.** Dirección acordada: Supabase, con
   dual-write desde Sheets como paso intermedio. Tabla no creada.
-- **RLS.** Hipótesis: activarlo sin políticas es seguro porque `service_role`
-  lo bypassea. Sin confirmar con una prueba real.
+- ~~**RLS.**~~ **CERRADO el 2026-08-10.** La hipótesis ("activarlo sin
+  políticas es seguro porque `service_role` lo bypassea") quedó **confirmada
+  con prueba real**: `rolbypassrls = true` verificado contra `pg_roles`, y
+  lectura/escritura con la clave pública probadas antes y después. Activado
+  sin políticas en las 6 tablas — ver `CONTEXT.md` §2 y
+  `db/migrations/20260810_activar_rls_sin_politicas.sql`. La prueba encontró
+  además que la clave pública tenía **escritura** anónima, no solo lectura.
+- **`cli cliente alta` / `cli sitio gate-fase0` (Fase 0) construidos, sin
+  correr todavía contra el proyecto Supabase real.** Validados solo con
+  repos falsos en memoria (`node:test`). Ya **no** están bloqueados por RLS
+  (cerrado arriba) — lo que falta es la corrida real, con
+  `SUPABASE_SERVICE_ROLE_KEY` en `cli/.env`.
+- **Sin transacción entre `clientes` y `sitios` en el CLI.** El
+  `alta_cliente_y_sitio.sql` original era un CTE encadenado (una sola
+  sentencia: o quedan las dos filas o ninguna); el CLI hace dos llamadas
+  separadas por el SDK, así que si falla la creación del sitio queda un
+  cliente huérfano. Retroceso conocido frente al .sql, sin resolver — la
+  salida probable es una función RPC en Postgres, no reintentos en el CLI.
 - **Registrador de dominios** — define si el DNS se automatiza o queda como
   gate.
 - **Agente de triage: Claude programado vs. Hermes autohospedado.**

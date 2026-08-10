@@ -77,12 +77,28 @@ cuando hay un solo sitio. No se bifurca lógica entre "modo red" y "modo single"
 `transporte`), con sus 4 sitios (rutas-empresariales.com, cotizartransporte.com,
 transporte-aeropuertos.com, transporte-turistico.co) y su fase actual real.
 
-### ⚠️ Pendiente de seguridad — bloqueante antes de conectar nada externo
-Row Level Security está **desactivado** en las 6 tablas. Hoy no importa porque
-nada externo está conectado. Antes de que el CLI o la consola interna se
-conecten con una key real, hay que decidir la política (probable: service key
-con acceso total para el CLI, solo-lectura para la consola) y activar RLS.
-No activar sin políticas definidas — bloquea todo el acceso, incluido el propio.
+### ✅ RLS — resuelto el 2026-08-10 (era el bloqueante de todo lo externo)
+Row Level Security está **activo** en las 6 tablas, sin políticas, a
+propósito. Migración documentada en
+`db/migrations/20260810_activar_rls_sin_politicas.sql`.
+
+La política quedó como se había anticipado: **`service_role` (el CLI) tiene
+acceso total** porque `rolbypassrls = true` — verificado contra `pg_roles`,
+no asumido. **anon/authenticated quedan denegados por completo**, que es el
+default más restrictivo y el correcto mientras nada externo consuma estas
+tablas. Las políticas de solo-lectura para la consola interna se agregan
+cuando esa consola exista.
+
+**Lo que la prueba encontró antes de activarlo:** la clave publicable —la que
+va embebida en cualquier bundle de navegador— no solo leía las 6 tablas,
+**también escribía** (un INSERT anónimo devolvió HTTP 201 y creó la fila; se
+borró después con `service_role`). No era riesgo teórico. Después de
+activar RLS: 0 filas legibles y HTTP 401 al intentar escribir.
+
+**Falla silenciosa encontrada de paso** (candidata a sumar al catálogo del
+proceso, ver Base 7): bajo RLS, un DELETE que no hace match con ninguna fila
+devuelve **HTTP 204 igual**, como si hubiera borrado. Un 204 no confirma un
+borrado — confirma que borró lo que podía ver, que puede ser nada.
 
 ---
 
@@ -149,6 +165,13 @@ El orquestador debe saber pausar, notificar qué falta, y reanudar.
    sin construir.
 6. CLI — Fase 4 (deploy) — la más bloqueada por permisos (Vercel Hobby).
 
+**Desviación registrada (2026-08-10):** el primer código real del CLI no
+siguió este orden — se construyó `cli cliente alta` (Fase 0, que ni siquiera
+estaba en esta lista) antes que cualquiera de los puntos 2-6, y antes de que
+el patrón se repitiera "un par de veces más" como pedía la regla original de
+Fase 0 (ver Fase 0 y Base 8 en `BASES_DEL_SISTEMA.md`). Decisión explícita
+del usuario, no una deriva silenciosa — ver §10.
+
 ---
 
 ## 7. Decisiones abiertas (no bloquean empezar, pero hay que resolverlas)
@@ -166,11 +189,29 @@ El orquestador debe saber pausar, notificar qué falta, y reanudar.
 
 ---
 
-## 8. Convenciones de código (a definir con las primeras líneas reales)
+## 8. Convenciones de código
 
-*(Esta sección se completa cuando arranque el CLI — lenguaje ya decidido:
 TypeScript/Node, por consistencia con los sitios Next.js y los SDKs oficiales
-de Vercel/Google.)*
+de Vercel/Google. Vive en `cli/` (no en la raíz del repo, para no mezclar
+`node_modules`/`dist` con los documentos). Confirmadas con las primeras
+líneas reales (`cli cliente alta`, ver §10):
+
+- **Commander** para subcomandos (`cli <recurso> <acción>`, ej. `cliente
+  alta`, `sitio gate-fase0`) — evita reinventar parseo de flags/help.
+- **`@supabase/supabase-js`** (SDK oficial) para todo acceso a datos. Nunca
+  `fetch` directo a la REST API.
+- **Secretos solo por variables de entorno** (`.env`, gitignoreado —
+  `.env.example` versionado con las claves vacías) — nunca hardcodeados ni
+  commiteados junto a su metadata (Base 9).
+- **Lógica separada del parseo de flags**: cada comando expone una función
+  central testeable (ej. `ejecutarClienteAlta(input, repos)`) que recibe los
+  repos por parámetro, más una capa delgada de wiring a Commander. Permite
+  testear con repos falsos en memoria sin tocar Supabase real — mismo
+  principio de "nunca contra un cliente real" que ya regía para el skill de
+  dirección visual (§9).
+- **`node:test`** (built-in) para tests — sin dependencia de framework
+  aparte mientras el volumen de tests no lo justifique.
+- ESM + `NodeNext` (`tsx` para dev/test, `tsc` para build de producción).
 
 ---
 
@@ -203,3 +244,33 @@ lo suficiente, no antes.
 **Fuente sugerida para la URL de referencia:** un competidor real que
 Fase 1 ya identificó (`phrase_organic`/`domain_organic`), no una galería
 de inspiración genérica — evita agregar una fuente de datos nueva.
+
+---
+
+## 10. CLI — comandos ya construidos
+
+**`cli cliente alta`** y **`cli sitio gate-fase0`** — primer código real del
+CLI (`cli/`, ver §8). Implementan el checklist de Fase 0 tal como quedó
+documentado en `db/scripts/alta_cliente_y_sitio.sql`: alta de cliente + sitio
+en una función central (`ejecutarClienteAlta`, separada del parseo de flags)
+y el gate de salida como comando aparte que por default solo lee — el flip a
+`fase_actual = 'investigacion'` requiere `--confirmar` explícito, nunca es
+efecto colateral del INSERT (mismo principio que ya pedía la Fase 0 del
+proceso en `BASES_DEL_SISTEMA.md`).
+
+Se construyeron antes de que el patrón se repitiera "un par de veces más"
+(la condición que la Fase 0 original y Base 8 pedían para congelar esta
+interfaz) — decisión explícita del usuario, no una deriva silenciosa (§6).
+Consecuencia real de construirlo ya: la rama "¿el cliente ya existe?" del
+.sql, nunca antes ejercitada, tiene ahora test real
+(`cli/test/clienteAlta.test.ts`), y comparar contra el esquema real de
+Supabase (MCP `list_tables`, no contra el .sql) encontró que
+`regla_no_cross_linking` ya existía como columna pero el patrón original
+nunca la insertaba — corregido acá.
+
+Validado con `node:test` contra repos falsos en memoria — nunca contra
+Supabase real, mismo principio de "nunca contra un cliente real" que ya
+regía para el skill de dirección visual (§9). **Sin correr todavía contra el
+proyecto Supabase real** — ya no por RLS (cerrado el 2026-08-10, §2), solo
+falta poner `SUPABASE_SERVICE_ROLE_KEY` en `cli/.env` y correrlo. Detalle de
+uso en `cli/README.md`.
