@@ -91,4 +91,33 @@ export interface NuevaKeywordInput {
 
 export interface KeywordsRepo {
   crear(input: NuevaKeywordInput): Promise<Keyword>;
+  contarPilaresPorSitio(sitioId: string): Promise<number>;
+}
+
+export type Horizonte = 'corto_15d' | 'largo_90_150d';
+export type Etapa = 'proponer' | 'ejecutar' | 'medir' | 'decidir';
+
+export interface Hipotesis {
+  id: string;
+  sitioId: string;
+  enunciado: string;
+  datoVerificado: string | null;
+  horizonte: Horizonte;
+  etapa: Etapa;
+  criterioExito: string;
+  resultado: string | null;
+  decision: 'validada_escala' | 'matada' | null;
+}
+
+export interface NuevaHipotesisInput {
+  sitioId: string;
+  enunciado: string;
+  datoVerificado: string;
+  horizonte: Horizonte;
+  criterioExito: string;
+}
+
+export interface HipotesisRepo {
+  crear(input: NuevaHipotesisInput): Promise<Hipotesis>;
+  contarPorSitio(sitioId: string): Promise<number>;
 }

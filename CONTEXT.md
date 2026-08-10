@@ -316,3 +316,34 @@ en `lib/investigacion.ts` — no por proveedor solo. 3 tests nuevos (24
 en total) cubren ambos lados: los 4 reportes que sí necesitan el gate y
 los 2 que lo rechazan si se pasa. Mismo patrón que el bug de `.env`:
 encontrado corriendo de verdad, no en el diseño en papel.
+
+**`cli investigacion promover-keyword`, `crear-hipotesis`, y `cli sitio
+gate-fase1`** (2026-08-10) — cierran las piezas que le faltaban a Fase 1.
+`promover-keyword`: INSERT mecánico a `keywords`, dos modos mutuamente
+excluyentes (`--rol` para promover, `--descarte`+`--motivo-descarte` para
+un descarte consciente) — `rol` nunca se infiere, siempre viene decidido
+desde afuera (Base 4). Clasificación real, keyword por keyword con el
+usuario, sobre las 65 filas de `research_keywords`: 44 filas reales (1
+pilar, 23 secundaria, 6 long_tail, 14 descartes con motivo). La primera
+corrida de descartes reveló otro gap real de schema — `rol` era `NOT NULL`
+pese a que `es_descarte`/`motivo_descarte` ya eran nullable y existían
+exactamente para este caso — corregido con
+`db/migrations/20260810_keywords_rol_nullable.sql`.
+
+`crear-hipotesis`: mismo principio que `rol` aplicado a
+`enunciado`/`criterio_exito` — nunca inventados por el comando. Exige
+además `--dato-verificado` no vacío (restricción de la plataforma, no del
+schema — extensión de "cero datos inventados" a hipótesis).
+
+`gate-fase1`: mismo patrón que `gate-fase0` (solo lee sin `--confirmar`).
+Condición: ≥1 keyword `rol=pilar` + ≥1 hipótesis, anclada al "Qué" ya
+escrito de Fase 1, no inventada para la ocasión.
+
+**Encontrado corriendo el gate de verdad:** `gate-fase0 --confirmar` nunca
+se había corrido en serio antes de hoy — solo verificado en modo lectura
+durante una demo — así que `fase_actual` seguía en `'encuadre'` con 44
+keywords reales ya cargadas. Corregido en orden: `gate-fase0 --confirmar`
+→ `gate-fase1 --confirmar`. **Capital Window es hoy el primer sitio real
+en `fase_actual = 'spec'`**, con las tres transiciones (`encuadre` →
+`investigacion` → `spec`) corridas de verdad, cada una confirmada a mano,
+ninguna automática.

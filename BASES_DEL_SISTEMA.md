@@ -6,10 +6,13 @@
 > **cómo** se produce hoy (o por qué sigue sin decidirse), y el **gate** de
 > salida si aplica.
 >
-> Esto es diseño del sistema, no seguimiento de un sitio en marcha — nada
-> está automatizado todavía. Capital Window aparece solo donde una prueba
-> puntual con datos reales informó una regla del sistema (ver Base 2); no
-> hay ningún sitio "avanzando" por estas fases hoy.
+> Esto sigue siendo diseño del sistema, no un tracker de proyecto — la
+> mayoría de las fases no tienen nada construido. Pero desde el 2026-08-10
+> esto dejó de ser 100% cierto para Fase 0 y Fase 1: **Capital Window es un
+> sitio real avanzando por gates reales**, no solo evidencia puntual (ver
+> Base 2) — `encuadre` → `investigacion` → `spec`, cada flip corrido de
+> verdad con `cli sitio gate-faseN --confirmar`, nunca automático. Fases 2
+> en adelante siguen sin gate ni automatización.
 >
 > El proceso define seis fases secuenciales (0 a 5) — más los **sistemas
 > transversales** que se suman cuando un sitio los necesita, no cuando toca
@@ -137,9 +140,45 @@ Corregido con `db/migrations/20260810_keywords_rol_nullable.sql`.
 auto-asigna, sin importar qué proveedor de datos se use *(Base 4)*. Este
 comando tampoco lo infiere — solo mueve a la tabla una decisión ya tomada.
 
+**Hipótesis, la tercera pieza del "Qué" que faltaba:** `cli investigacion
+crear-hipotesis` — mismo principio que `rol`: `enunciado`/`criterio_exito`
+son juicio humano, el comando valida y guarda, nunca inventa contenido.
+Exige además `--dato-verificado` no vacío (columna nullable en el schema,
+pero restricción de la plataforma — extensión de "cero datos inventados",
+Base 3, a hipótesis: una sin un dato real que la motive es una opinión, no
+algo falsificable). Primera hipótesis real creada 2026-08-10, para Capital
+Window: separar una página B2B dedicada al pilar (en vez de la página
+combinada actual) genera más leads calificados sin canibalizar el tráfico
+residencial de mayor volumen — anclada en el hallazgo real de `jbgwc.co.uk`
+separando esas dos páginas. `horizonte: largo_90_150d`, `criterio_exito`
+verificable (≥10 leads, ≥70% calificando como comercial real).
+
+**Gate de salida (definido y confirmado 2026-08-10):** `cli sitio
+gate-fase1 <id>` — ≥1 keyword con `rol='pilar'` para el sitio Y ≥1 fila en
+`hipotesis`. Sin `--confirmar` solo verifica; con `--confirmar` hace el
+flip a `fase_actual = 'spec'` solo si pasa y el sitio está en
+`'investigacion'` — mismo patrón que Fase 0 (nunca efecto colateral de
+crear una fila). Condición anclada al propio "Qué" de esta fase (reportes
+→ `keywords` con rol + hipótesis falsificables), no inventada para la
+ocasión.
+
+**Corrido de verdad para Capital Window, primera vez de punta a punta:**
+`gate-fase0 --confirmar` nunca se había corrido con `--confirmar` en
+serio — solo se había verificado en modo lectura durante una demo — así
+que `fase_actual` seguía en `'encuadre'` pese a tener 44 keywords reales
+ya cargadas. Corregido en el orden correcto: `gate-fase0 --confirmar`
+(`encuadre` → `investigacion`), después `gate-fase1 --confirmar`
+(`investigacion` → `spec`). Capital Window es hoy el primer sitio real en
+`fase_actual = 'spec'`.
+
 ---
 
 ### FASE 2 · Diseño del layout (spec.md)
+
+**Capital Window está acá de verdad** (`fase_actual = 'spec'` desde
+2026-08-10) — primer sitio real que llega a esta fase por el mecanismo, no
+por evidencia puntual. Eso no cambia nada de lo de abajo: esta fase sigue
+sin gate ni automatización, sin importar quién esté "en" ella.
 
 **Qué:** cuatro entregables — estructura del sitio, contenido (dada la
 estructura + estrategia SEO/GEO), experimentos a validar, taxonomía de

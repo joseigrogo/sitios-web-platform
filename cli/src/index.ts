@@ -3,9 +3,11 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
 import { registrarComandoClienteAlta } from './commands/clienteAlta.js';
+import { registrarComandoCrearHipotesis } from './commands/investigacionCrearHipotesis.js';
 import { registrarComandoGuardarReporte } from './commands/investigacionGuardarReporte.js';
 import { registrarComandoPromoverKeyword } from './commands/investigacionPromoverKeyword.js';
 import { registrarComandoSitioGateFase0 } from './commands/sitioGateFase0.js';
+import { registrarComandoSitioGateFase1 } from './commands/sitioGateFase1.js';
 
 // Resuelto contra la ubicación del módulo, no contra cwd, para que cargue
 // cli/.env sin importar desde dónde se invoque el comando (dev vía tsx desde
@@ -23,9 +25,11 @@ registrarComandoClienteAlta(cliente);
 
 const sitio = program.command('sitio').description('Comandos sobre sitios');
 registrarComandoSitioGateFase0(sitio);
+registrarComandoSitioGateFase1(sitio);
 
 const investigacion = program.command('investigacion').description('Comandos de Fase 1 (investigación)');
 registrarComandoGuardarReporte(investigacion);
 registrarComandoPromoverKeyword(investigacion);
+registrarComandoCrearHipotesis(investigacion);
 
 await program.parseAsync(process.argv);

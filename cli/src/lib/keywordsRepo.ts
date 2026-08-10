@@ -39,5 +39,15 @@ export function crearKeywordsRepoSupabase(client: SupabaseClient): KeywordsRepo 
       if (error) throw new Error(`Error creando keyword: ${error.message}`);
       return filaAKeyword(data);
     },
+
+    async contarPilaresPorSitio(sitioId: string) {
+      const { count, error } = await client
+        .from('keywords')
+        .select('*', { count: 'exact', head: true })
+        .eq('sitio_id', sitioId)
+        .eq('rol', 'pilar');
+      if (error) throw new Error(`Error contando pilares: ${error.message}`);
+      return count ?? 0;
+    },
   };
 }
