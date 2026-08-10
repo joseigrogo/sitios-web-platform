@@ -177,17 +177,23 @@ de Vercel/Google.)*
 ## 9. Skills ya construidos (fuera del CLI, que todavía no existe)
 
 **`direccion-visual`** — `.claude/skills/direccion-visual.md` + carpeta
-hermana con 6 scripts (Node/Playwright). Extrae la dirección visual
+hermana con 7 scripts (Node/Playwright). Extrae la dirección visual
 completa de una URL de referencia real para alimentar la sección de
 diseño de spec.md (Fase 2): tokens (vía `dembrandt`), estructura y
 composición por sección, responsive, efectos (glass/blur), comportamiento
-de scroll (con la técnica de barrido fino cuando hace falta), un primer
-pase gratis con `designlang`, y verificación de reproducción
-(`pixelmatch`). Evaluado y probado en dos sesiones contra sitios
-neutrales (stripe.com, blacklane.com) — **nunca contra un cliente real**,
-mismo principio que el resto de este documento (Base 2). Detalle
-completo, cada gotcha real encontrado, y qué tan confiable es cada pieza
-en `db/scripts/fase2_direccion_visual.md`.
+de scroll (con la técnica de barrido fino cuando hace falta, más
+detección de librerías conocidas — incluye carruseles con autoplay tipo
+Swiper, no solo animación ligada a scroll), un primer pase gratis con
+`designlang`, verificación de reproducción (`pixelmatch`), y un paso
+opcional (Paso 2.5 — copy real + catálogo de imágenes) para cuando el
+objetivo es reproducción cercana en vez de dirección propia. Evaluado
+contra sitios neutrales (stripe.com, blacklane.com) y validado a fondo
+construyendo una reproducción cercana completa de un tercero
+(bigapplewindowcleaning.com, fuera de este sistema) — de esa prueba
+salieron 3 bugs reales del skill corregidos y la detección de Swiper.
+**Nunca contra un cliente real**, mismo principio que el resto de este
+documento (Base 2). Detalle completo, cada gotcha real encontrado, y
+qué tan confiable es cada pieza en `db/scripts/fase2_direccion_visual.md`.
 
 Mismo criterio de bootstrap que todo lo demás (Base 4/8): existe como
 skill que un agente invoca, no como comando de un CLI — ese sigue sin
