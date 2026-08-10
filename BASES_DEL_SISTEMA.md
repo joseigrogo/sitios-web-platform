@@ -115,13 +115,27 @@ archivos en `db/research/capital-window-cleaning_2026-08-10_*.json`. 62
 créditos de OpenSEO gastados de 425 disponibles (trial, sin decidir aún si
 vale el plan de $10/mes — Parte 4).
 
-Esto es cobertura del *mecanismo*, no de Fase 1 completa para Capital
-Window: falta clasificar `rol` (ver abajo) y promover filas reales a
-`keywords` — sigue siendo trabajo humano pendiente, no bloqueado por
-herramienta.
+**Actualizado 2026-08-10 — clasificación y promoción reales, no solo
+mecanismo.** `cli investigacion promover-keyword` (INSERT mecánico;
+`rol`/descarte siempre decidido afuera, nunca inferido por el comando —
+Base 4) + una sesión de clasificación humana keyword por keyword sobre las
+65 filas de `research_keywords`: **44 filas reales en `keywords`** — 1
+pilar (`commercial window cleaning london`, foco B2B del spec confirmado
+sobre las 18,100 búsquedas/mes de "near me" genérico — decisión humana
+explícita, no la de mayor volumen), 23 secundaria, 6 long_tail (por barrio
+de Londres), 14 descartes conscientes con motivo (nombres de competidores
+específicos, ciudad equivocada, búsquedas de empleo, intención de compra
+de producto en vez de servicio).
+
+**Gap real de schema encontrado en la primera corrida de descartes:** `rol`
+era `NOT NULL` en la tabla, pese a que `es_descarte`/`motivo_descarte` ya
+existían, nullable, pensados exactamente para este caso — nadie lo había
+notado porque nunca se había intentado insertar un descarte de verdad.
+Corregido con `db/migrations/20260810_keywords_rol_nullable.sql`.
 
 `rol` (pilar / secundaria / long_tail) es juicio humano siempre — nunca se
-auto-asigna, sin importar qué proveedor de datos se use *(Base 4)*.
+auto-asigna, sin importar qué proveedor de datos se use *(Base 4)*. Este
+comando tampoco lo infiere — solo mueve a la tabla una decisión ya tomada.
 
 ---
 

@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
 import { registrarComandoClienteAlta } from './commands/clienteAlta.js';
 import { registrarComandoGuardarReporte } from './commands/investigacionGuardarReporte.js';
+import { registrarComandoPromoverKeyword } from './commands/investigacionPromoverKeyword.js';
 import { registrarComandoSitioGateFase0 } from './commands/sitioGateFase0.js';
 
 // Resuelto contra la ubicación del módulo, no contra cwd, para que cargue
@@ -25,5 +26,6 @@ registrarComandoSitioGateFase0(sitio);
 
 const investigacion = program.command('investigacion').description('Comandos de Fase 1 (investigación)');
 registrarComandoGuardarReporte(investigacion);
+registrarComandoPromoverKeyword(investigacion);
 
 await program.parseAsync(process.argv);

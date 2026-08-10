@@ -59,3 +59,36 @@ export interface SitiosRepo {
   obtenerPorId(id: string): Promise<Sitio | null>;
   actualizarFaseActual(id: string, fase: FaseActual): Promise<void>;
 }
+
+export type Rol = 'pilar' | 'secundaria' | 'long_tail';
+
+export interface Keyword {
+  id: string;
+  sitioId: string;
+  clienteId: string;
+  keyword: string;
+  rol: Rol | null;
+  ciudad: string | null;
+  volumen: number | null;
+  kd: number | null;
+  fuenteValidacion: string;
+  esDescarte: boolean;
+  motivoDescarte: string | null;
+}
+
+export interface NuevaKeywordInput {
+  sitioId: string;
+  clienteId: string;
+  keyword: string;
+  rol: Rol | null;
+  ciudad: string | null;
+  volumen: number | null;
+  kd: number | null;
+  fuenteValidacion: string;
+  esDescarte: boolean;
+  motivoDescarte: string | null;
+}
+
+export interface KeywordsRepo {
+  crear(input: NuevaKeywordInput): Promise<Keyword>;
+}
