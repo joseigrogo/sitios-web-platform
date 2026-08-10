@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
 import { registrarComandoClienteAlta } from './commands/clienteAlta.js';
+import { registrarComandoGuardarReporte } from './commands/investigacionGuardarReporte.js';
 import { registrarComandoSitioGateFase0 } from './commands/sitioGateFase0.js';
 
 // Resuelto contra la ubicación del módulo, no contra cwd, para que cargue
@@ -21,5 +22,8 @@ registrarComandoClienteAlta(cliente);
 
 const sitio = program.command('sitio').description('Comandos sobre sitios');
 registrarComandoSitioGateFase0(sitio);
+
+const investigacion = program.command('investigacion').description('Comandos de Fase 1 (investigación)');
+registrarComandoGuardarReporte(investigacion);
 
 await program.parseAsync(process.argv);

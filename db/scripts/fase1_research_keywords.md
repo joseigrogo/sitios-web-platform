@@ -1,3 +1,13 @@
+> **Actualización 2026-08-11:** el acceso a Semrush venció esta fecha. La
+> inclinación de este documento (OpenSEO base + Semrush de respaldo para
+> SERP, "todavía no es un veredicto") quedó forzada a resolverse por esa
+> fecha, no por completarse la evaluación — ver `BASES_DEL_SISTEMA.md`,
+> Fase 1 y Parte 4. `phrase_questions` (única pieza sin equivalente en
+> OpenSEO, ver más abajo) se capturó una última vez para Capital Window el
+> 2026-08-10, vía `cli investigacion guardar-reporte`
+> (`db/research/capital-window-cleaning_2026-08-10_semrush_phrase_questions.json`)
+> — después de esta fecha queda manual hasta que aparezca otro proveedor.
+
 # Fase 1 — investigación de keywords, vía OpenSEO/DataForSEO
 
 Extraído de una corrida real contra Capital Window Cleaning (2026-08-05), no

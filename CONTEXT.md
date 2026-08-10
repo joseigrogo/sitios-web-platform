@@ -279,3 +279,26 @@ llamaba a `process.loadEnvFile`) — corregido en `src/index.ts`, resuelto
 contra la ubicación del módulo para que funcione igual en dev/build/global.
 Todavía sin correr `cliente alta` (la escritura) contra producción. Detalle
 de uso en `cli/README.md`.
+
+**`cli investigacion guardar-reporte`** — primer comando de Fase 1
+(2026-08-10). Distinto de los dos anteriores en un punto importante: **no
+tiene credenciales propias.** Semrush y OpenSEO, en este entorno, solo son
+alcanzables por el conector MCP de la sesión del agente — no hay una API
+key portable como la de Supabase (`service_role`), así que el comando no
+llama a ningún proveedor. Recibe el JSON crudo que el agente ya trajo por
+MCP, valida (nombre de reporte contra los 6/7 nombres reales, gate de
+`usedFallback` obligatorio solo con `--proveedor openseo` — Semrush no
+expone ese campo, así que ni se acepta con `--proveedor semrush`), y lo
+guarda en `db/research/` con la convención de nombre ya establecida más un
+envelope de metadata. Mismo nivel de graduación que el skill de dirección
+visual (§9): mecánico y versionado en código, pero todavía depende de la
+sesión del agente para el paso de traer el dato — se vuelve CLI
+end-to-end el día que exista una API key propia.
+
+Motivo de construirlo hoy y no después: el acceso a Semrush vencía el
+2026-08-11, y `phrase_questions` (uno de los 6 reportes obligatorios) no
+tiene equivalente real en OpenSEO — ver Fase 1 en `BASES_DEL_SISTEMA.md`.
+Corrida real el mismo día: 14 preguntas reales capturadas para Capital
+Window antes del corte, sin volver a poder repetirse contra Semrush
+después. 9 tests nuevos con `node:test` (fs falso, sin tocar disco real ni
+red) antes de la corrida real, mismo orden que Fase 0.

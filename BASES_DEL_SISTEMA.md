@@ -64,17 +64,39 @@ these, phrase_organic, phrase_kdi, phrase_questions, domain_organic) → tabla
 `keywords` con volumen/KD/rol por fila, más una lista de descartes
 conscientes, más las hipótesis falsificables con su criterio de éxito.
 
-**Cómo:** **sin proveedor decidido.** Evaluación completa (5 pruebas reales,
-research + SERP + dominio) entre OpenSEO/DataForSEO y Semrush, documentada
-en `db/scripts/fase1_research_keywords.md`. Hallazgo central: los dos
-proveedores fallan igual con seeds de modificador abstracto ("transporte
-empresarial", "transporte turístico") y funcionan bien con referente
-concreto ("transporte aeropuerto") — no es un problema de vendor, es un
-punto ciego de la expansión estadística de keywords para ese tipo de frase.
-Si se usa OpenSEO, `usedFallback` es gate obligatorio antes de escribir a
-`keywords` *(Base 3 — ya validado 2/2 en las pruebas)*. `phrase_questions`
-solo existe nativo en Semrush — sin equivalente real en las 23 tools de
-OpenSEO.
+**Cómo:** **proveedor: OpenSEO/DataForSEO desde el 2026-08-11 — forzado por
+vencimiento de acceso a Semrush, no un veredicto técnico cerrado.**
+Evaluación completa (5 pruebas reales, research + SERP + dominio) entre
+OpenSEO/DataForSEO y Semrush, documentada en
+`db/scripts/fase1_research_keywords.md`. La inclinación real de esa
+evaluación era un híbrido — OpenSEO como base, Semrush como respaldo
+puntual de SERP en seeds concretos — nunca se cerró a "reemplazo total".
+Perder el acceso a Semrush es perder ese respaldo también, no solo cambiar
+de proveedor principal.
+
+Hallazgo central de la evaluación: los dos proveedores fallan igual con
+seeds de modificador abstracto ("transporte empresarial", "transporte
+turístico") y funcionan bien con referente concreto ("transporte
+aeropuerto") — no es un problema de vendor, es un punto ciego de la
+expansión estadística de keywords para ese tipo de frase. Si se usa
+OpenSEO, `usedFallback` es gate obligatorio antes de escribir a `keywords`
+*(Base 3 — ya validado 2/2 en las pruebas)*.
+
+`phrase_questions` solo existe nativo en Semrush — sin equivalente real en
+OpenSEO (confirmado: `get_serp_results` marca el bloque "People Also Ask"
+pero sin contenido, `get_google_business_questions` es otra cosa). **Queda
+manual desde el 2026-08-11** — sin con qué automatizarlo hasta que aparezca
+otro proveedor. Captura real hecha el 2026-08-10, último día de acceso: 14
+preguntas reales para Capital Window
+(`db/research/capital-window-cleaning_2026-08-10_semrush_phrase_questions.json`),
+vía `cli investigacion guardar-reporte` — primer comando real de Fase 1.
+Valida y guarda un reporte crudo con el gate de `usedFallback` y la
+convención de nombre de archivo; no llama a Semrush/OpenSEO directo, porque
+en este entorno esa conexión solo existe vía el conector MCP de la sesión
+del agente, no con una API key portable (ver CONTEXT.md §8) — el agente
+sigue trayendo el dato crudo, el CLI lo valida y lo guarda. Las otras 5
+piezas de la secuencia siguen sin comando — van contra OpenSEO cuando se
+construyan, sin apuro de fecha (ya validadas en la evaluación).
 
 `rol` (pilar / secundaria / long_tail) es juicio humano siempre — nunca se
 auto-asigna, sin importar qué proveedor de datos se use *(Base 4)*.
@@ -355,8 +377,14 @@ pendiente a prerequisito.
 
 ## Parte 4 · Lo que queda explícitamente abierto
 
-- **Proveedor de datos SEO para Fase 1** (OpenSEO/DataForSEO vs. Semrush) —
-  evaluación completa, sin decisión.
+- ~~**Proveedor de datos SEO para Fase 1.**~~ **Resuelto el 2026-08-11, por
+  vencimiento de Semrush, no por veredicto técnico.** La evaluación (5
+  pruebas reales) se inclinaba a un híbrido — OpenSEO base + Semrush de
+  respaldo para SERP — que nunca se cerró. Con Semrush fuera, OpenSEO queda
+  como único proveedor y `phrase_questions` (sin equivalente ahí) pasa a
+  manual — ver Fase 1. Si en el futuro aparece otro proveedor con
+  `phrase_questions`, esto vuelve a ser una decisión abierta, no cerrada
+  para siempre.
 - **Dirección visual de un sitio (Fase 2).** Mecanismo evaluado,
   empaquetado como skill (`.claude/skills/direccion-visual.md`) y
   validado a fondo con una reproducción cercana completa de un sitio
