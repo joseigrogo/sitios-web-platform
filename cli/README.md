@@ -16,6 +16,11 @@ este CLI funciona con normalidad (ver `../CONTEXT.md` §2). La
 `SUPABASE_SERVICE_ROLE_KEY` es una credencial privada — no va a git ni a un
 cliente; `.env` está gitignoreado.
 
+El `.env` se carga con `process.loadEnvFile` (built-in de Node ≥ 20.12, sin
+dependencia extra), resuelto contra la ubicación del módulo — funciona igual
+en dev (`tsx` desde `src/`), build (`node` desde `dist/`) o `cli` global
+después de `npm link`.
+
 ## Comandos
 
 ```bash

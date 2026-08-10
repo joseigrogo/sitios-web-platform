@@ -270,7 +270,12 @@ nunca la insertaba — corregido acá.
 
 Validado con `node:test` contra repos falsos en memoria — nunca contra
 Supabase real, mismo principio de "nunca contra un cliente real" que ya
-regía para el skill de dirección visual (§9). **Sin correr todavía contra el
-proyecto Supabase real** — ya no por RLS (cerrado el 2026-08-10, §2), solo
-falta poner `SUPABASE_SERVICE_ROLE_KEY` en `cli/.env` y correrlo. Detalle de
-uso en `cli/README.md`.
+regía para el skill de dirección visual (§9). **Primera corrida real contra
+Supabase: 2026-08-10**, `cli sitio gate-fase0` de solo lectura (sin
+`--confirmar`) contra el sitio real de Capital Window — confirmó gate PASA,
+sin escribir nada. Encontró un bug real en el camino: nada cargaba `.env` al
+proceso (`crearSupabaseClient()` leía `process.env`, pero ningún código
+llamaba a `process.loadEnvFile`) — corregido en `src/index.ts`, resuelto
+contra la ubicación del módulo para que funcione igual en dev/build/global.
+Todavía sin correr `cliente alta` (la escritura) contra producción. Detalle
+de uso en `cli/README.md`.

@@ -41,9 +41,10 @@ veces más" — la condición que esta misma sección pedía para congelar la
 interfaz (Base 4, Base 8) — por decisión explícita del usuario, no por deriva
 silenciosa (registrado en `CONTEXT.md`, §6 y §10). Validado con `node:test`
 contra repos falsos en memoria, incluida la rama "¿el cliente ya existe?" que
-el .sql original marcaba como nunca ejercitada de verdad. **Todavía sin
-correr contra el proyecto Supabase real**, aunque ya no por RLS — eso se
-cerró el 2026-08-10 (Parte 4); falta solo la corrida real con credenciales.
+el .sql original marcaba como nunca ejercitada de verdad. **Primera corrida
+real 2026-08-10**: `cli sitio gate-fase0` (solo lectura, sin `--confirmar`)
+contra el sitio real de Capital Window — gate PASA, nada escrito. Sigue sin
+correr `cliente alta` (la escritura) contra producción (Parte 4).
 
 **Gate de salida:** `nombre_marca` / `arquetipo` / `segmento` no vacíos →
 flip manual y visible a `fase_actual = 'investigacion'` — nunca agrupado
@@ -374,11 +375,10 @@ pendiente a prerequisito.
   sin políticas en las 6 tablas — ver `CONTEXT.md` §2 y
   `db/migrations/20260810_activar_rls_sin_politicas.sql`. La prueba encontró
   además que la clave pública tenía **escritura** anónima, no solo lectura.
-- **`cli cliente alta` / `cli sitio gate-fase0` (Fase 0) construidos, sin
-  correr todavía contra el proyecto Supabase real.** Validados solo con
-  repos falsos en memoria (`node:test`). Ya **no** están bloqueados por RLS
-  (cerrado arriba) — lo que falta es la corrida real, con
-  `SUPABASE_SERVICE_ROLE_KEY` en `cli/.env`.
+- **`cli cliente alta` sin correr todavía contra el proyecto Supabase real**
+  (`cli sitio gate-fase0`, de solo lectura, sí corrió — 2026-08-10, PASA
+  contra el sitio real de Capital Window, ver Fase 0). La primera escritura
+  real sigue pendiente.
 - **Sin transacción entre `clientes` y `sitios` en el CLI.** El
   `alta_cliente_y_sitio.sql` original era un CTE encadenado (una sola
   sentencia: o quedan las dos filas o ninguna); el CLI hace dos llamadas
