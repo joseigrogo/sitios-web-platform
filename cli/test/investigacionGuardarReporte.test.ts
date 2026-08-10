@@ -94,6 +94,40 @@ test('semrush CON --used-fallback se rechaza (no aplica, no se acepta en silenci
   );
 });
 
+test('openseo + phrase_organic NO exige --used-fallback (get_serp_results no expone ese campo)', async () => {
+  const fs = crearFsFalso({ 'in.json': '[]' });
+  const resultado = await ejecutarGuardarReporte(
+    { proveedor: 'openseo', reporte: 'phrase_organic', clienteSlug: 'x', rutaEntrada: 'in.json' },
+    fs
+  );
+  assert.equal(resultado.usedFallback, null);
+});
+
+test('openseo + domain_organic NO exige --used-fallback (get_domain_overview no expone ese campo)', async () => {
+  const fs = crearFsFalso({ 'in.json': '{}' });
+  const resultado = await ejecutarGuardarReporte(
+    { proveedor: 'openseo', reporte: 'domain_organic', clienteSlug: 'x', rutaEntrada: 'in.json' },
+    fs
+  );
+  assert.equal(resultado.usedFallback, null);
+});
+
+test('openseo + phrase_organic CON --used-fallback se rechaza (ese reporte no lo expone, no se acepta en silencio)', async () => {
+  const fs = crearFsFalso({ 'in.json': '[]' });
+  await assert.rejects(
+    () =>
+      ejecutarGuardarReporte(
+        { proveedor: 'openseo', reporte: 'phrase_organic', clienteSlug: 'x', rutaEntrada: 'in.json', usedFallback: false },
+        fs
+      ),
+    (err: unknown) => {
+      assert.ok(err instanceof ValidationError);
+      assert.ok(err.errores.some((e) => e.includes('--used-fallback')));
+      return true;
+    }
+  );
+});
+
 test('rechaza si el archivo de entrada no existe', async () => {
   const fs = crearFsFalso({});
   await assert.rejects(

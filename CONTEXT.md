@@ -302,3 +302,17 @@ Corrida real el mismo día: 14 preguntas reales capturadas para Capital
 Window antes del corte, sin volver a poder repetirse contra Semrush
 después. 9 tests nuevos con `node:test` (fs falso, sin tocar disco real ni
 red) antes de la corrida real, mismo orden que Fase 0.
+
+**Mismo día, las otras 5 piezas contra OpenSEO** — `research_keywords`,
+`get_serp_results`, `get_domain_overview`, mismo seed/mercado (UK) para
+continuidad con la evaluación original. La primera corrida real contra
+`get_serp_results` encontró que el comando exigía `--used-fallback`
+para *cualquier* reporte de OpenSEO, pero ese campo solo existe en la
+respuesta de `research_keywords` — `get_serp_results` no lo devuelve en
+absoluto (confirmado contra la respuesta real, no contra la
+documentación). El comando pedía inventar un valor que no existía.
+Corregido: el gate ahora es por (proveedor, reporte) — `requiereGateUsedFallback()`
+en `lib/investigacion.ts` — no por proveedor solo. 3 tests nuevos (24
+en total) cubren ambos lados: los 4 reportes que sí necesitan el gate y
+los 2 que lo rechazan si se pasa. Mismo patrón que el bug de `.env`:
+encontrado corriendo de verdad, no en el diseño en papel.

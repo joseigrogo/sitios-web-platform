@@ -80,7 +80,14 @@ turístico") y funcionan bien con referente concreto ("transporte
 aeropuerto") — no es un problema de vendor, es un punto ciego de la
 expansión estadística de keywords para ese tipo de frase. Si se usa
 OpenSEO, `usedFallback` es gate obligatorio antes de escribir a `keywords`
-*(Base 3 — ya validado 2/2 en las pruebas)*.
+*(Base 3 — ya validado 2/2 en las pruebas)* — **pero solo existe como campo
+en `research_keywords`** (phrase_related/phrase_this/these/phrase_kdi), no
+en `get_serp_results` ni `get_domain_overview`. No es una generalización:
+al construir `cli investigacion guardar-reporte` se asumió el gate parejo
+para cualquier reporte de OpenSEO, y la primera corrida real contra
+`get_serp_results` (2026-08-10) devolvió una respuesta sin ese campo en
+absoluto — el comando exigía un valor que no existía. Corregido para exigir
+`--used-fallback` solo en los 4 reportes que salen de `research_keywords`.
 
 `phrase_questions` solo existe nativo en Semrush — sin equivalente real en
 OpenSEO (confirmado: `get_serp_results` marca el bloque "People Also Ask"
@@ -94,9 +101,24 @@ Valida y guarda un reporte crudo con el gate de `usedFallback` y la
 convención de nombre de archivo; no llama a Semrush/OpenSEO directo, porque
 en este entorno esa conexión solo existe vía el conector MCP de la sesión
 del agente, no con una API key portable (ver CONTEXT.md §8) — el agente
-sigue trayendo el dato crudo, el CLI lo valida y lo guarda. Las otras 5
-piezas de la secuencia siguen sin comando — van contra OpenSEO cuando se
-construyan, sin apuro de fecha (ya validadas en la evaluación).
+sigue trayendo el dato crudo, el CLI lo valida y lo guarda.
+
+**Los 6 puestos de la secuencia tienen al menos una captura real para
+Capital Window, 2026-08-10** — 3 llamadas de OpenSEO cubren los 5 puestos
+restantes: `research_keywords` (seed "commercial window cleaning london",
+UK) trae de una sola vez phrase_related + phrase_this/these + phrase_kdi
+(65 filas, `usedFallback: false`); `get_serp_results` mismo seed → 14
+resultados orgánicos reales; `get_domain_overview` contra `jbgwc.co.uk`
+(competidor real, ya identificado en la evaluación original por separar
+páginas residencial/comercial — no un dominio elegido al azar). Los 4
+archivos en `db/research/capital-window-cleaning_2026-08-10_*.json`. 62
+créditos de OpenSEO gastados de 425 disponibles (trial, sin decidir aún si
+vale el plan de $10/mes — Parte 4).
+
+Esto es cobertura del *mecanismo*, no de Fase 1 completa para Capital
+Window: falta clasificar `rol` (ver abajo) y promover filas reales a
+`keywords` — sigue siendo trabajo humano pendiente, no bloqueado por
+herramienta.
 
 `rol` (pilar / secundaria / long_tail) es juicio humano siempre — nunca se
 auto-asigna, sin importar qué proveedor de datos se use *(Base 4)*.

@@ -3,7 +3,7 @@ import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Command } from 'commander';
 import { manejarErrorCli, ValidationError } from '../lib/errors.js';
-import { esTipoReporteValido, REPORTES_FASE1, type ProveedorSeo } from '../lib/investigacion.js';
+import { esTipoReporteValido, REPORTES_FASE1, requiereGateUsedFallback, type ProveedorSeo } from '../lib/investigacion.js';
 
 export interface GuardarReporteInput {
   proveedor: string;
@@ -44,17 +44,24 @@ function validar(input: GuardarReporteInput): string[] {
     errores.push('--entrada es obligatorio (ruta al JSON crudo ya obtenido)');
   }
 
-  // Base 3: usedFallback es gate obligatorio antes de escribir a keywords, y
-  // solo existe como campo en OpenSEO -- Semrush no lo expone. Por eso no es
-  // un flag opcional con default: con openseo tiene que venir explícito, y
-  // con semrush ni siquiera se acepta, para no sugerir que ahí también aplica.
-  if (input.proveedor === 'openseo' && input.usedFallback === undefined) {
-    errores.push(
-      '--used-fallback es obligatorio con --proveedor openseo (true|false) -- gate de Base 3, nunca implícito'
-    );
-  }
-  if (input.proveedor === 'semrush' && input.usedFallback !== undefined) {
-    errores.push('--used-fallback no aplica a semrush (no expone ese campo) -- no pasarlo');
+  // Base 3: usedFallback es gate obligatorio antes de escribir a keywords --
+  // pero solo existe en el modo research_keywords de OpenSEO (volumen vía
+  // solo-Google-Ads cuando el país no tiene datos completos de DataForSEO
+  // Labs). get_serp_results y get_domain_overview no exponen ese campo en su
+  // respuesta real (confirmado 2026-08-10, no asumido por generalización) --
+  // exigirlo ahí forzaría inventar un valor. Ver REPORTES_CON_GATE_USED_FALLBACK.
+  if (esTipoReporteValido(input.reporte)) {
+    const requiereGate = requiereGateUsedFallback(input.proveedor, input.reporte);
+    if (requiereGate && input.usedFallback === undefined) {
+      errores.push(
+        `--used-fallback es obligatorio con --proveedor openseo y --reporte ${input.reporte} -- gate de Base 3, nunca implícito`
+      );
+    }
+    if (!requiereGate && input.usedFallback !== undefined) {
+      errores.push(
+        `--used-fallback no aplica a --proveedor ${input.proveedor} con --reporte ${input.reporte} -- no pasarlo`
+      );
+    }
   }
 
   return errores;
@@ -81,7 +88,7 @@ export async function ejecutarGuardarReporte(
 
   const proveedor = input.proveedor as ProveedorSeo;
   const fecha = deps.fechaHoy();
-  const usedFallback = proveedor === 'openseo' ? (input.usedFallback ?? null) : null;
+  const usedFallback = requiereGateUsedFallback(proveedor, input.reporte) ? (input.usedFallback ?? null) : null;
   const nombreArchivo = `${input.clienteSlug}_${fecha}_${proveedor}_${input.reporte}.json`;
   const rutaSalida = `db/research/${nombreArchivo}`;
 
@@ -156,7 +163,10 @@ export function registrarComandoGuardarReporte(program: Command): void {
     .requiredOption('--reporte <tipo>', `uno de: ${REPORTES_FASE1.join(', ')}`)
     .requiredOption('--cliente-slug <slug>', 'slug del cliente, para el nombre del archivo')
     .requiredOption('--entrada <ruta>', 'ruta al JSON crudo ya obtenido')
-    .option('--used-fallback <valor>', "'true'|'false' -- obligatorio con --proveedor openseo, no aplica a semrush")
+    .option(
+      '--used-fallback <valor>',
+      `'true'|'false' -- obligatorio con --proveedor openseo y --reporte en: ${['phrase_related', 'phrase_this', 'phrase_these', 'phrase_kdi'].join(', ')} (research_keywords). No aplica a semrush ni a phrase_organic/domain_organic (no exponen ese campo).`
+    )
     .action(async (opts) => {
       try {
         const resultado = await ejecutarGuardarReporte(
@@ -173,7 +183,7 @@ export function registrarComandoGuardarReporte(program: Command): void {
         console.log(`Guardado: ${resultado.rutaSalida}`);
         console.log(`  proveedor: ${resultado.proveedor}, reporte: ${resultado.reporte}`);
         console.log(`  filas: ${resultado.filas ?? '(no es un array en el nivel superior)'}`);
-        if (resultado.proveedor === 'openseo') {
+        if (requiereGateUsedFallback(resultado.proveedor, resultado.reporte)) {
           console.log(`  usedFallback: ${resultado.usedFallback}`);
           if (resultado.usedFallback) {
             console.warn(

@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "proveedor": "openseo",
+    "reporte": "domain_organic",
+    "clienteSlug": "capital-window-cleaning",
+    "fecha": "2026-08-10",
+    "usedFallback": null
+  },
+  "datos": {
+    "domain": "jbgwc.co.uk",
+    "organicTraffic": 723,
+    "organicKeywords": 77,
+    "backlinks": null,
+    "referringDomains": null,
+    "hasData": true,
+    "fetchedAt": "2026-08-10T16:31:18.386Z"
+  }
+}
