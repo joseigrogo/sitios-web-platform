@@ -190,6 +190,44 @@ reportar menos de lo que realmente hay.
 
 ---
 
+## Parte 2.5 · Copy real y catálogo de imágenes (fuera del flujo por defecto)
+
+Distinto del resto de este documento a propósito: todo lo de arriba
+construye insumo para una *dirección propia* (Base del método, ver
+advertencia de la plantilla más abajo). Esto es para cuando el objetivo
+explícito es *reproducción cercana* — copy literal e imágenes reales,
+no solo patrones y valores.
+
+Nació como extracción puntual para una prueba real de reproducción
+cercana contra `bigapplewindowcleaning.com` (fuera de este sistema, sin
+cliente, con autorización explícita del operador para usar copy e
+imágenes reales de un tercero) — y se graduó a script permanente
+(`extract_content.mjs`) después de esa única repetición, mismo criterio
+que el resto del skill (Base 4/8).
+
+Camina las mismas secciones landmark que `extract_structure.mjs` y saca,
+por sección: texto propio (clonando el nodo y quitando sub-secciones
+antes de leer, para no duplicar contenido) y catálogo de imágenes reales
+(`<img>` y `background-image`, con URL/alt/dimensiones — cataloga la
+URL, no descarga el archivo).
+
+**Gotcha real, encontrado y corregido:** la primera versión (la
+puntual, antes de graduarse) dejaba pasar el contenido de cualquier
+`<script>` embebido dentro de una sección — confirmado con un caso real:
+la sección "Service area" de bigapplewindowcleaning.com tiene un
+`<script>` de inicialización de Google Maps metido directo en el
+markup, y su código apareció como si fuera copy del sitio. La versión
+permanente excluye `script`/`style`/`noscript` antes de leer
+`innerText` — verificado corriendo de nuevo contra el mismo sitio, esa
+sección sale limpia ahora.
+
+**Mismo límite que Parte 2 y Parte 5 (sin resolver todavía):** solo
+captura lo que existe en el DOM en reposo — contenido que se inserta
+recién al interactuar con un carrusel/acordeón (ver huella de Swiper,
+más abajo) no aparece acá.
+
+---
+
 ## Parte 3 · Responsive
 
 Mismo script de estructura, corrido de nuevo a viewport mobile (ej.
