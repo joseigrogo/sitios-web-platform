@@ -4,10 +4,19 @@
 -- Extraído de la intake real de Capital Window Cleaning (2026-08-05) —
 -- no especificado en el aire, corrido una vez de verdad primero.
 --
--- Todavía NO es un comando de CLI. Es el patrón ya usado, versionado para
--- que no dependa de que alguien lo recuerde o lo reescriba en un chat.
--- Se envuelve en un comando real cuando se haya vuelto a usar un par de
--- veces más — ver BASES_DEL_SISTEMA.md, Base 8.
+-- GRADUADO a comando de CLI real el 2026-08-10: `cli cliente alta` (ver
+-- ../../cli/src/commands/clienteAlta.ts), antes de que este patrón se
+-- repitiera "un par de veces más" como pedía la nota original de abajo —
+-- decisión explícita del usuario (ver CONTEXT.md §6 y §10), no la condición
+-- de Base 8 cumpliéndose sola. Este archivo queda como referencia histórica
+-- del patrón tal como se usó a mano la primera vez; el comando de CLI es
+-- ahora la fuente de verdad ejecutable, y ya corrige un gap que este
+-- archivo tenía (nunca insertaba `regla_no_cross_linking`, aunque la
+-- columna ya existía).
+--
+-- Todavía NO se corrió el comando de CLI contra el proyecto Supabase real
+-- — sigue pendiente decidir la política de RLS primero (ver
+-- BASES_DEL_SISTEMA.md, Parte 4).
 --
 -- Cómo se usa hoy: un agente completa los :'placeholders' con las
 -- respuestas del checklist de abajo y corre el bloque entero. Es una sola
