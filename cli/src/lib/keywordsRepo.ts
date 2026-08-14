@@ -49,5 +49,15 @@ export function crearKeywordsRepoSupabase(client: SupabaseClient): KeywordsRepo 
       if (error) throw new Error(`Error contando pilares: ${error.message}`);
       return count ?? 0;
     },
+
+    async listarPorSitio(sitioId: string) {
+      const { data, error } = await client
+        .from('keywords')
+        .select('*')
+        .eq('sitio_id', sitioId)
+        .order('volumen', { ascending: false, nullsFirst: false });
+      if (error) throw new Error(`Error listando keywords: ${error.message}`);
+      return (data ?? []).map(filaAKeyword);
+    },
   };
 }

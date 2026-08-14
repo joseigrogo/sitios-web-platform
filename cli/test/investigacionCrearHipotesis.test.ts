@@ -22,6 +22,11 @@ function crearHipotesisRepoFalso(): HipotesisRepo & { creadas: NuevaHipotesisInp
     async contarPorSitio(sitioId) {
       return creadas.filter((h) => h.sitioId === sitioId).length;
     },
+    async listarPorSitio(sitioId) {
+      return creadas
+        .filter((h) => h.sitioId === sitioId)
+        .map((input, i) => ({ id: `hip-${i + 1}`, etapa: 'proponer' as const, resultado: null, decision: null, ...input }));
+    },
   };
 }
 

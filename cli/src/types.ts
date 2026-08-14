@@ -58,6 +58,7 @@ export interface SitiosRepo {
   crear(input: NuevoSitioInput): Promise<Sitio>;
   obtenerPorId(id: string): Promise<Sitio | null>;
   actualizarFaseActual(id: string, fase: FaseActual): Promise<void>;
+  listarPorCliente(clienteId: string): Promise<Sitio[]>;
 }
 
 export type Rol = 'pilar' | 'secundaria' | 'long_tail';
@@ -92,6 +93,7 @@ export interface NuevaKeywordInput {
 export interface KeywordsRepo {
   crear(input: NuevaKeywordInput): Promise<Keyword>;
   contarPilaresPorSitio(sitioId: string): Promise<number>;
+  listarPorSitio(sitioId: string): Promise<Keyword[]>;
 }
 
 export type Horizonte = 'corto_15d' | 'largo_90_150d';
@@ -120,4 +122,5 @@ export interface NuevaHipotesisInput {
 export interface HipotesisRepo {
   crear(input: NuevaHipotesisInput): Promise<Hipotesis>;
   contarPorSitio(sitioId: string): Promise<number>;
+  listarPorSitio(sitioId: string): Promise<Hipotesis[]>;
 }

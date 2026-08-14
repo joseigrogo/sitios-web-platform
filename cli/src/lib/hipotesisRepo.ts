@@ -41,5 +41,15 @@ export function crearHipotesisRepoSupabase(client: SupabaseClient): HipotesisRep
       if (error) throw new Error(`Error contando hipótesis: ${error.message}`);
       return count ?? 0;
     },
+
+    async listarPorSitio(sitioId: string) {
+      const { data, error } = await client
+        .from('hipotesis')
+        .select('*')
+        .eq('sitio_id', sitioId)
+        .order('created_at', { ascending: true });
+      if (error) throw new Error(`Error listando hipótesis: ${error.message}`);
+      return (data ?? []).map(filaAHipotesis);
+    },
   };
 }

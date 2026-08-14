@@ -41,5 +41,15 @@ export function crearSitiosRepoSupabase(client: SupabaseClient): SitiosRepo {
       const { error } = await client.from('sitios').update({ fase_actual: fase }).eq('id', id);
       if (error) throw new Error(`Error actualizando fase_actual: ${error.message}`);
     },
+
+    async listarPorCliente(clienteId) {
+      const { data, error } = await client
+        .from('sitios')
+        .select('*')
+        .eq('cliente_id', clienteId)
+        .order('created_at', { ascending: true });
+      if (error) throw new Error(`Error listando sitios: ${error.message}`);
+      return (data ?? []).map(filaASitio);
+    },
   };
 }

@@ -13,6 +13,14 @@ function crearKeywordsRepoFalso(): KeywordsRepo & { creadas: NuevaKeywordInput[]
       const keyword: Keyword = { id: `kw-${creadas.length}`, ...input };
       return keyword;
     },
+    async contarPilaresPorSitio(sitioId) {
+      return creadas.filter((k) => k.sitioId === sitioId && k.rol === 'pilar').length;
+    },
+    async listarPorSitio(sitioId) {
+      return creadas
+        .filter((k) => k.sitioId === sitioId)
+        .map((input, i) => ({ id: `kw-${i + 1}`, ...input }));
+    },
   };
 }
 

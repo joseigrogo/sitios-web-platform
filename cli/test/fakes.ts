@@ -39,5 +39,8 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
       const sitio = sitios.find((s) => s.id === id);
       if (sitio) sitio.faseActual = fase;
     },
+    async listarPorCliente(clienteId: string) {
+      return sitios.filter((s) => s.clienteId === clienteId);
+    },
   };
 }

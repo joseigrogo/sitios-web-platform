@@ -25,6 +25,9 @@ function repoKeywordsFalso(pilares: number): KeywordsRepo {
     async contarPilaresPorSitio() {
       return pilares;
     },
+    async listarPorSitio() {
+      return [];
+    },
   };
 }
 
@@ -35,6 +38,9 @@ function repoHipotesisFalso(cantidad: number): HipotesisRepo {
     },
     async contarPorSitio() {
       return cantidad;
+    },
+    async listarPorSitio() {
+      return [];
     },
   };
 }
