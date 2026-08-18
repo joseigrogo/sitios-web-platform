@@ -1,5 +1,14 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { FaseActual, NuevoSitioInput, Sitio, SitiosRepo } from '../types.js';
+import type { EntregableFase2, EstadoEntregablesFase2, FaseActual, NuevoSitioInput, Sitio, SitiosRepo } from '../types.js';
+
+// Literal en vez de importar estadoFase2Vacio() de ../types.js: Turbopack (a
+// través del alias @cli/* del dashboard) no resuelve una importación de
+// VALOR desde types.ts -- solo `import type` de ese archivo funciona ahí.
+// Confirmado con varias formas de import y cachés limpios antes de este
+// workaround (2026-08-14); tsc/tsx nativos del CLI no tienen el problema.
+function estadoFase2VacioLocal(): EstadoEntregablesFase2 {
+  return { estructura: false, contenido: false, experimentos: false, taxonomia_eventos: false };
+}
 
 function filaASitio(fila: Record<string, unknown>): Sitio {
   return {
@@ -50,6 +59,34 @@ export function crearSitiosRepoSupabase(client: SupabaseClient): SitiosRepo {
         .order('created_at', { ascending: true });
       if (error) throw new Error(`Error listando sitios: ${error.message}`);
       return (data ?? []).map(filaASitio);
+    },
+
+    async obtenerEstadoEntregablesFase2(sitioId) {
+      const { data, error } = await client.from('sitios').select('estado_gates').eq('id', sitioId).maybeSingle();
+      if (error) throw new Error(`Error obteniendo estado_gates: ${error.message}`);
+      const gates = (data?.estado_gates ?? {}) as Record<string, unknown>;
+      const fase2 = (gates.fase2 ?? {}) as Partial<EstadoEntregablesFase2>;
+      const resultado = estadoFase2VacioLocal();
+      for (const clave of Object.keys(resultado) as EntregableFase2[]) {
+        resultado[clave] = Boolean(fase2[clave]);
+      }
+      return resultado;
+    },
+
+    async marcarEntregableFase2(sitioId, entregable) {
+      const { data, error: errorLectura } = await client
+        .from('sitios')
+        .select('estado_gates')
+        .eq('id', sitioId)
+        .maybeSingle();
+      if (errorLectura) throw new Error(`Error leyendo estado_gates: ${errorLectura.message}`);
+
+      const gatesActuales = (data?.estado_gates ?? {}) as Record<string, unknown>;
+      const fase2Actual = (gatesActuales.fase2 ?? {}) as Partial<EstadoEntregablesFase2>;
+      const nuevosGates = { ...gatesActuales, fase2: { ...fase2Actual, [entregable]: true } };
+
+      const { error } = await client.from('sitios').update({ estado_gates: nuevosGates }).eq('id', sitioId);
+      if (error) throw new Error(`Error marcando entregable: ${error.message}`);
     },
   };
 }

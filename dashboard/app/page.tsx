@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import type { FaseActual, Keyword, Rol } from "@cli/types";
+import type { EntregableFase2, EstadoEntregablesFase2, FaseActual, Keyword, Rol } from "@cli/types";
 import { COOKIE_NAME, sesionValida } from "@/lib/auth";
 import { cargarEstadoSistema, type EstadoSitio } from "@/lib/estado-sistema";
 
@@ -14,33 +14,87 @@ const FASES: { valor: FaseActual; etiqueta: string }[] = [
   { valor: "activo", etiqueta: "Activo" },
 ];
 
+const ETIQUETAS_ENTREGABLES_FASE2: Record<EntregableFase2, string> = {
+  estructura: "Estructura del sitio",
+  contenido: "Contenido",
+  experimentos: "Experimentos a validar",
+  taxonomia_eventos: "Taxonomía de eventos",
+};
+
 function contarPorRol(keywords: Keyword[], rol: Rol): number {
   return keywords.filter((k) => !k.esDescarte && k.rol === rol).length;
 }
 
 function BarraFases({ actual }: { actual: FaseActual }) {
   const indiceActual = FASES.findIndex((f) => f.valor === actual);
+  // "Avance general": cuántas fases quedaron atrás sobre el total -- dato
+  // real, ya calculable con fase_actual. No dice nada de qué falta DENTRO
+  // de la fase actual (eso es ProgresoFaseActual, y no siempre hay dato).
+  const porcentajeGeneral = Math.round((indiceActual / FASES.length) * 100);
+
   return (
-    <div className="flex flex-wrap gap-2">
-      {FASES.map((fase, i) => {
-        const pasada = i < indiceActual;
-        const esActual = i === indiceActual;
-        return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap gap-2">
+        {FASES.map((fase, i) => {
+          const pasada = i < indiceActual;
+          const esActual = i === indiceActual;
+          return (
+            <span
+              key={fase.valor}
+              className={
+                "rounded-full px-3 py-1 text-xs font-medium " +
+                (esActual
+                  ? "bg-emerald-500 text-emerald-950"
+                  : pasada
+                    ? "bg-neutral-700 text-neutral-300"
+                    : "bg-neutral-900 text-neutral-600")
+              }
+            >
+              {pasada && "✓ "}
+              {fase.etiqueta}
+            </span>
+          );
+        })}
+      </div>
+      <p className="text-xs text-neutral-500">
+        Avance general: <b className="text-neutral-300">{indiceActual} de {FASES.length} fases</b> ({porcentajeGeneral}%)
+      </p>
+    </div>
+  );
+}
+
+function ProgresoFaseActual({ sitio, entregablesFase2 }: { sitio: EstadoSitio["sitio"]; entregablesFase2: EstadoEntregablesFase2 }) {
+  if (sitio.faseActual !== "spec") {
+    return (
+      <p className="text-xs text-neutral-600">
+        Sin seguimiento detallado todavía para "{FASES.find((f) => f.valor === sitio.faseActual)?.etiqueta}" —
+        no hay entregables rastreados en la base para esta fase (no es un 0%, es que no se mide todavía).
+      </p>
+    );
+  }
+
+  const claves = Object.keys(entregablesFase2) as EntregableFase2[];
+  const completados = claves.filter((c) => entregablesFase2[c]).length;
+
+  return (
+    <div className="space-y-2">
+      <p className="text-xs text-neutral-500">
+        Progreso de Spec: <b className="text-neutral-300">{completados}/{claves.length} entregables</b>
+      </p>
+      <div className="flex flex-wrap gap-2">
+        {claves.map((c) => (
           <span
-            key={fase.valor}
+            key={c}
             className={
-              "rounded-full px-3 py-1 text-xs font-medium " +
-              (esActual
-                ? "bg-emerald-500 text-emerald-950"
-                : pasada
-                  ? "bg-neutral-700 text-neutral-300"
-                  : "bg-neutral-900 text-neutral-600")
+              "rounded-full px-3 py-1 text-xs " +
+              (entregablesFase2[c] ? "bg-emerald-500 text-emerald-950" : "bg-neutral-900 text-neutral-500")
             }
           >
-            {fase.etiqueta}
+            {entregablesFase2[c] && "✓ "}
+            {ETIQUETAS_ENTREGABLES_FASE2[c]}
           </span>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 }
@@ -133,6 +187,7 @@ export default async function DashboardPage() {
               </div>
 
               <BarraFases actual={s.sitio.faseActual} />
+              <ProgresoFaseActual sitio={s.sitio} entregablesFase2={s.entregablesFase2} />
 
               <div>
                 <h2 className="mb-2 text-sm font-medium text-neutral-300">Fase 1 — Keywords</h2>

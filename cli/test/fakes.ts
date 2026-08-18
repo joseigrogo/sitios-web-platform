@@ -1,4 +1,14 @@
-import type { Cliente, ClientesRepo, FaseActual, NuevoClienteInput, NuevoSitioInput, Sitio, SitiosRepo } from '../src/types.js';
+import { estadoFase2Vacio } from '../src/types.js';
+import type {
+  Cliente,
+  ClientesRepo,
+  EntregableFase2,
+  FaseActual,
+  NuevoClienteInput,
+  NuevoSitioInput,
+  Sitio,
+  SitiosRepo,
+} from '../src/types.js';
 
 let contador = 0;
 function idFalso(prefijo: string): string {
@@ -26,6 +36,8 @@ export function crearClientesRepoFalso(iniciales: Cliente[] = []): ClientesRepo 
 
 export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
   const sitios = [...iniciales];
+  const gatesFase2 = new Map<string, ReturnType<typeof estadoFase2Vacio>>();
+
   return {
     async crear(input: NuevoSitioInput) {
       const sitio: Sitio = { id: idFalso('sitio'), faseActual: 'encuadre', ...input };
@@ -41,6 +53,14 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
     },
     async listarPorCliente(clienteId: string) {
       return sitios.filter((s) => s.clienteId === clienteId);
+    },
+    async obtenerEstadoEntregablesFase2(sitioId: string) {
+      return { ...(gatesFase2.get(sitioId) ?? estadoFase2Vacio()) };
+    },
+    async marcarEntregableFase2(sitioId: string, entregable: EntregableFase2) {
+      const actual = gatesFase2.get(sitioId) ?? estadoFase2Vacio();
+      actual[entregable] = true;
+      gatesFase2.set(sitioId, actual);
     },
   };
 }

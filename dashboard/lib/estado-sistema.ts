@@ -3,7 +3,7 @@ import { crearHipotesisRepoSupabase } from "@cli/lib/hipotesisRepo";
 import { crearKeywordsRepoSupabase } from "@cli/lib/keywordsRepo";
 import { crearSitiosRepoSupabase } from "@cli/lib/sitiosRepo";
 import { crearSupabaseClient } from "@cli/lib/supabaseClient";
-import type { Cliente, Hipotesis, Keyword, Sitio } from "@cli/types";
+import type { Cliente, EstadoEntregablesFase2, Hipotesis, Keyword, Sitio } from "@cli/types";
 
 // Único cliente real hoy (2026-08-10). Generaliza a "listar todos los
 // clientes" cuando exista un segundo -- no antes (Base 4/8: no construir
@@ -14,6 +14,7 @@ export interface EstadoSitio {
   sitio: Sitio;
   keywords: Keyword[];
   hipotesis: Hipotesis[];
+  entregablesFase2: EstadoEntregablesFase2;
 }
 
 export interface EstadoSistema {
@@ -37,6 +38,7 @@ export async function cargarEstadoSistema(): Promise<EstadoSistema | null> {
       sitio,
       keywords: await keywordsRepo.listarPorSitio(sitio.id),
       hipotesis: await hipotesisRepo.listarPorSitio(sitio.id),
+      entregablesFase2: await sitiosRepo.obtenerEstadoEntregablesFase2(sitio.id),
     }))
   );
 

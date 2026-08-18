@@ -347,3 +347,27 @@ keywords reales ya cargadas. Corregido en orden: `gate-fase0 --confirmar`
 en `fase_actual = 'spec'`**, con las tres transiciones (`encuadre` →
 `investigacion` → `spec`) corridas de verdad, cada una confirmada a mano,
 ninguna automática.
+
+**`cli sitio marcar-entregable-fase2`** (2026-08-14) — rastrea los 4
+entregables de Fase 2 (`sitios.estado_gates`, columna jsonb que ya existía
+sin usarse). Mecánico, como `promover-keyword`: marca el flag, nunca valida
+que el trabajo esté bien hecho. El dashboard (§10 más abajo) lo usa para
+mostrar progreso real dentro de la fase actual, en vez de un número
+inventado.
+
+**Gotcha real de Turbopack, encontrado construyendo esto — vale la pena no
+repetirlo:** una función (valor, no tipo) exportada por primera vez desde
+`types.ts` e importada por `sitiosRepo.ts` rompía la resolución de módulos
+del dashboard (`Module not found`), incluso con caché limpio y sin ningún
+otro proceso corriendo. `import type { ... } from '../types.js'` siempre
+funcionó bien en todos los repos; el mismo archivo con un `import { valor
+} from '../types.js'` (una función real, no un tipo) fallaba — confirmado
+tras descartar primero una causa real pero distinta (un `next dev` y un
+`next build` corriendo al mismo tiempo sobre el mismo `.next/`, que si
+corrompe el build y vale la pena evitar siempre). `tsc`/`tsx` nativos del
+CLI nunca tuvieron el problema — es específico de Turbopack + el alias
+`@cli/*` + `outputFileTracingRoot` apuntando fuera de `dashboard/`.
+Workaround aplicado: la función que necesitaba `sitiosRepo.ts` quedó
+definida localmente ahí (`estadoFase2VacioLocal`), no importada — ver
+`cli/src/lib/sitiosRepo.ts`. Si esto vuelve a aparecer: sospechar primero
+de un import de *valor* (no tipo) cruzando la frontera del alias.

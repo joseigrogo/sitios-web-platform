@@ -6,6 +6,7 @@ import { registrarComandoClienteAlta } from './commands/clienteAlta.js';
 import { registrarComandoCrearHipotesis } from './commands/investigacionCrearHipotesis.js';
 import { registrarComandoGuardarReporte } from './commands/investigacionGuardarReporte.js';
 import { registrarComandoPromoverKeyword } from './commands/investigacionPromoverKeyword.js';
+import { registrarComandoMarcarEntregableFase2 } from './commands/sitioMarcarEntregableFase2.js';
 import { registrarComandoSitioGateFase0 } from './commands/sitioGateFase0.js';
 import { registrarComandoSitioGateFase1 } from './commands/sitioGateFase1.js';
 
@@ -26,6 +27,7 @@ registrarComandoClienteAlta(cliente);
 const sitio = program.command('sitio').description('Comandos sobre sitios');
 registrarComandoSitioGateFase0(sitio);
 registrarComandoSitioGateFase1(sitio);
+registrarComandoMarcarEntregableFase2(sitio);
 
 const investigacion = program.command('investigacion').description('Comandos de Fase 1 (investigación)');
 registrarComandoGuardarReporte(investigacion);

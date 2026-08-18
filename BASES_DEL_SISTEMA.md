@@ -191,6 +191,17 @@ del que se generan 4 cosas (tipos del helper `pushDataLayerEvent`, variables
 DLV de GTM, dimensiones de GA4, queries de assertion en BigQuery) — todavía
 no construido como tal *(Base 5)*.
 
+**Rastreo mecánico de los 4 entregables (2026-08-14).** `cli sitio
+marcar-entregable-fase2 <sitioId> <entregable>` marca uno de los 4 como
+hecho en `sitios.estado_gates` (jsonb, columna que ya existía sin usarse —
+confirmado `{}` en la fila real antes de este cambio, no una columna nueva
+inventada para la ocasión). **Marca el flag, no valida el contenido** —
+mismo principio que `promover-keyword` con `rol`: el comando es mecánico,
+decidir si el entregable está de verdad bien hecho sigue siendo juicio
+humano *(Base 4)*. Sin gate de salida definido todavía para Fase 2 (a
+diferencia de Fase 0 y 1) — este rastreo es insumo para uno futuro, no
+lo reemplaza.
+
 **Candidato evaluado para dirección visual, empaquetado como skill, sin
 integrar a un spec.md real:** hoy ningún entregable de spec.md ni capa
 de Fase 3 cubre diseño visual. Evaluado en tres sesiones, contra sitios

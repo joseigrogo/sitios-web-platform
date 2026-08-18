@@ -54,11 +54,41 @@ export interface ClientesRepo {
   crear(input: NuevoClienteInput): Promise<Cliente>;
 }
 
+// Los 4 entregables de Fase 2 (BASES_DEL_SISTEMA.md, "Qué"). Rastreados en
+// sitios.estado_gates (jsonb) bajo la clave "fase2" -- la columna existía sin
+// usarse (confirmado {} en la fila real de Capital Window, 2026-08-14) antes
+// de este rastreo, no es una columna nueva inventada para la ocasión.
+export type EntregableFase2 = 'estructura' | 'contenido' | 'experimentos' | 'taxonomia_eventos';
+
+export type EstadoEntregablesFase2 = Record<EntregableFase2, boolean>;
+
+// Viven acá (no en lib/fase2.ts) porque Turbopack, a través del alias
+// @cli/* del dashboard, no resuelve imports entre archivos hermanos dentro
+// de cli/src/lib/ (confirmado: tsc/tsx sí lo resuelven bien -- es una
+// limitación puntual de esa combinación alias+bundler, no del código). El
+// patrón que sí funciona en todos lados es importar contra types.ts.
+export const ENTREGABLES_FASE2: readonly EntregableFase2[] = [
+  'estructura',
+  'contenido',
+  'experimentos',
+  'taxonomia_eventos',
+];
+
+export function esEntregableFase2Valido(valor: string): valor is EntregableFase2 {
+  return (ENTREGABLES_FASE2 as readonly string[]).includes(valor);
+}
+
+export function estadoFase2Vacio(): EstadoEntregablesFase2 {
+  return { estructura: false, contenido: false, experimentos: false, taxonomia_eventos: false };
+}
+
 export interface SitiosRepo {
   crear(input: NuevoSitioInput): Promise<Sitio>;
   obtenerPorId(id: string): Promise<Sitio | null>;
   actualizarFaseActual(id: string, fase: FaseActual): Promise<void>;
   listarPorCliente(clienteId: string): Promise<Sitio[]>;
+  obtenerEstadoEntregablesFase2(sitioId: string): Promise<EstadoEntregablesFase2>;
+  marcarEntregableFase2(sitioId: string, entregable: EntregableFase2): Promise<void>;
 }
 
 export type Rol = 'pilar' | 'secundaria' | 'long_tail';
