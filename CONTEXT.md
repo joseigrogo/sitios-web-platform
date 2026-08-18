@@ -186,6 +186,11 @@ del usuario, no una deriva silenciosa — ver §10.
 - **Leads en Sheets vs. Supabase.** Para calcular CPL real por sitio hay que
   cruzar leads con costo de Ads — un join que en Sheets duele. Dirección:
   migrar a Supabase; paso intermedio sano es dual-write.
+- **Permiso de Vercel para deployar el dashboard** (2026-08-14). La cuenta
+  conectada a este chat no puede crear proyectos nuevos en el team "Jose's
+  projects" (`403`, ver §11) — bloquea publicar `dashboard/`, que hoy solo
+  corre local. No es una decisión de diseño, es un permiso a resolver del
+  lado de Vercel.
 
 ---
 
@@ -371,3 +376,45 @@ Workaround aplicado: la función que necesitaba `sitiosRepo.ts` quedó
 definida localmente ahí (`estadoFase2VacioLocal`), no importada — ver
 `cli/src/lib/sitiosRepo.ts`. Si esto vuelve a aparecer: sospechar primero
 de un import de *valor* (no tipo) cruzando la frontera del alias.
+
+---
+
+## 11. Dashboard — qué es, cómo correrlo, qué falta
+
+**Qué es:** `dashboard/` — Next.js 16 (App Router), primer frontend real del
+sistema. Solo lectura hoy: muestra cliente + sitio, `fase_actual` con check
+en las fases pasadas y "avance general" (X de 7 fases), keywords por rol +
+descartes, hipótesis, y progreso real de entregables para la fase actual
+(hoy: Spec/Fase 2, único con tracking definido). **No dispara acciones** —
+los gates y el resto de la escritura siguen siendo el CLI, invocado por el
+agente. Arquitectura completa y el porqué de cada decisión: §10 más arriba
+(comandos) y las entradas fechadas 2026-08-10/14 de esta sección.
+
+**Cómo correrlo (no persiste entre sesiones — hay que arrancarlo cada vez):**
+```
+cd dashboard && npm run dev -- -p 3001
+```
+Abre en `http://localhost:3001`. Pide una contraseña (`DASHBOARD_PASSWORD`,
+generada al azar, vive en `dashboard/.env.local` — gitignoreado, nunca en
+este archivo ni en el repo). Si el puerto 3000 está libre alcanza con
+`npm run dev` sin el flag `-p`.
+
+**Deploy a Vercel: bloqueado, no por código.** `deploy_to_vercel` devuelve
+`403 — "You don't have permission to create a project"` en el team "Jose's
+projects" (`team_pOdLeEoVOVfQqYUlpF8JH0l2`). El build de producción
+(`next build`) compila limpio y quedó verificado con datos reales — el
+único bloqueante es el permiso de la cuenta de Vercel conectada a este
+chat. Para retomar: revisar el rol en ese team, o reconectar el integrador
+con más permisos, o deployar en una cuenta personal fuera del team — ver
+también §7.
+
+**Lo que falta, en orden de lo ya conversado:**
+1. Resolver el permiso de Vercel y deployar de verdad (§7).
+2. Definir el Gate de salida de Fase 2 (hoy solo hay tracking de los 4
+   entregables, sin condición de "listo para pasar a Construcción" — ver
+   Fase 2 en `BASES_DEL_SISTEMA.md`).
+3. Si se decide sumar acciones de escritura al dashboard (confirmar gates,
+   promover keywords, desde la UI): reusar las funciones núcleo del CLI
+   (`ejecutarGateFase1`, etc.) desde una Server Action o Route Handler, no
+   reimplementar la lógica — ya se conversó y quedó acordado así, no
+   construido todavía.
