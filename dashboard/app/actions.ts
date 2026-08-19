@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { crearDependenciasFetchReal, ejecutarChecklistFase3 } from "@cli/lib/checklistFase3";
 import { ejecutarGateFase2 } from "@cli/lib/gateFase2";
 import { crearSitiosRepoSupabase } from "@cli/lib/sitiosRepo";
 import { crearSupabaseClient } from "@cli/lib/supabaseClient";
@@ -65,6 +66,28 @@ export async function solicitarConstruccion(formData: FormData) {
   const supabase = crearSupabaseClient();
   const repos = crearSitiosRepoSupabase(supabase);
   await repos.actualizarEstadoConstruccion(sitioId, "solicitada");
+
+  revalidatePath("/");
+}
+
+// Corre el checklist real de verdad (fetches reales a la URL dada) y guarda
+// el último resultado -- reusa ejecutarChecklistFase3 del CLI, no
+// reimplementa los 10 chequeos acá (mismo criterio que confirmarGateFase2).
+export async function correrChecklistFase3(formData: FormData) {
+  const cookieStore = await cookies();
+  if (!sesionValida(cookieStore.get(COOKIE_NAME)?.value)) {
+    redirect("/login");
+  }
+
+  const sitioId = String(formData.get("sitioId") ?? "");
+  const url = String(formData.get("checklistUrl") ?? "").trim();
+  if (!sitioId.trim() || !url) return;
+
+  const resultado = await ejecutarChecklistFase3(url, crearDependenciasFetchReal());
+
+  const supabase = crearSupabaseClient();
+  const repos = crearSitiosRepoSupabase(supabase);
+  await repos.guardarResultadoChecklistFase3(sitioId, url, resultado);
 
   revalidatePath("/");
 }

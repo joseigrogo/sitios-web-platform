@@ -1,3 +1,5 @@
+import type { ChecklistFase3Resultado } from './lib/checklistFase3.js';
+
 export type Modelo = 'red' | 'unico';
 
 export type FaseActual =
@@ -37,6 +39,8 @@ export interface Sitio {
   repoGithub: string | null;
   construccionEstado: ConstruccionEstado | null;
   construccionReporte: string | null;
+  checklistFase3Url: string | null;
+  checklistFase3Resultado: ChecklistFase3Resultado | null;
 }
 
 export interface NuevoClienteInput {
@@ -109,6 +113,7 @@ export interface SitiosRepo {
   actualizarReferenciaUrl(id: string, url: string): Promise<void>;
   actualizarEstadoConstruccion(id: string, estado: ConstruccionEstado): Promise<void>;
   finalizarConstruccion(id: string, reporte: string, repoGithub: string): Promise<void>;
+  guardarResultadoChecklistFase3(id: string, url: string, resultado: ChecklistFase3Resultado): Promise<void>;
   listarPorCliente(clienteId: string): Promise<Sitio[]>;
   obtenerEstadoEntregablesFase2(sitioId: string): Promise<EstadoEntregablesFase2>;
   marcarEntregableFase2(sitioId: string, entregable: EntregableFase2): Promise<void>;

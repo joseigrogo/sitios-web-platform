@@ -18,6 +18,8 @@ function sitioBase(overrides: Partial<Sitio> = {}): Sitio {
     repoGithub: null,
     construccionEstado: null,
     construccionReporte: null,
+    checklistFase3Url: null,
+    checklistFase3Resultado: null,
     ...overrides,
   };
 }

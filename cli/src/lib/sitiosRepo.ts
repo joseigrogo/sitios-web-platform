@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { ChecklistFase3Resultado } from './checklistFase3.js';
 import type {
   ConstruccionEstado,
   EntregableFase2,
@@ -36,6 +37,8 @@ function filaASitio(fila: Record<string, unknown>): Sitio {
     repoGithub: (fila.repo_github as string | null) ?? null,
     construccionEstado: (fila.construccion_estado as ConstruccionEstado | null) ?? null,
     construccionReporte: (fila.construccion_reporte as string | null) ?? null,
+    checklistFase3Url: (fila.checklist_fase3_url as string | null) ?? null,
+    checklistFase3Resultado: (fila.checklist_fase3_resultado as ChecklistFase3Resultado | null) ?? null,
   };
 }
 
@@ -84,6 +87,14 @@ export function crearSitiosRepoSupabase(client: SupabaseClient): SitiosRepo {
         .update({ construccion_estado: 'terminada', construccion_reporte: reporte, repo_github: repoGithub })
         .eq('id', id);
       if (error) throw new Error(`Error finalizando construcción: ${error.message}`);
+    },
+
+    async guardarResultadoChecklistFase3(id, url, resultado) {
+      const { error } = await client
+        .from('sitios')
+        .update({ checklist_fase3_url: url, checklist_fase3_resultado: resultado })
+        .eq('id', id);
+      if (error) throw new Error(`Error guardando resultado de checklist: ${error.message}`);
     },
 
     async listarPorCliente(clienteId) {

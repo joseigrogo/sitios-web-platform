@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { EntregableFase2, EstadoContenidoFase2, EstadoEntregablesFase2, FaseActual, Keyword, Rol } from "@cli/types";
-import { confirmarGateFase2, guardarReferenciaUrl, solicitarConstruccion } from "./actions";
+import { confirmarGateFase2, correrChecklistFase3, guardarReferenciaUrl, solicitarConstruccion } from "./actions";
 import { COOKIE_NAME, sesionValida } from "@/lib/auth";
 import { cargarEstadoSistema, type EstadoSitio } from "@/lib/estado-sistema";
 
@@ -207,6 +207,62 @@ function SeccionConstruccion({ sitio }: { sitio: EstadoSitio["sitio"] }) {
   );
 }
 
+function SeccionChecklistFase3({ sitio }: { sitio: EstadoSitio["sitio"] }) {
+  // Mismo criterio de fase que SeccionConstruccion: el checklist recién
+  // tiene sentido una vez que hay algo construido para verificar.
+  if (sitio.faseActual !== "construccion") return null;
+
+  const resultado = sitio.checklistFase3Resultado;
+
+  return (
+    <div className="space-y-3 rounded border border-neutral-800 p-3">
+      <h2 className="text-sm font-medium text-neutral-300">Checklist de Fase 3 (verificación técnica/SEO)</h2>
+
+      <form action={correrChecklistFase3} className="flex items-center gap-2">
+        <input type="hidden" name="sitioId" value={sitio.id} />
+        <input
+          type="url"
+          name="checklistUrl"
+          defaultValue={sitio.checklistFase3Url ?? ""}
+          placeholder="https://preview-del-sitio.vercel.app"
+          className="flex-1 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-sm text-neutral-100"
+        />
+        <button
+          type="submit"
+          className="rounded border border-neutral-700 px-3 py-1.5 text-xs text-neutral-300 hover:bg-neutral-800"
+        >
+          Correr checklist
+        </button>
+      </form>
+
+      {!resultado ? (
+        <p className="text-xs text-neutral-600">Sin correr todavía.</p>
+      ) : (
+        <div className="space-y-2">
+          <p className="text-xs text-neutral-500">
+            Última corrida contra <span className="text-neutral-300">{resultado.url}</span>
+          </p>
+          {resultado.items.map((item) => (
+            <div key={item.id} className="flex items-start gap-2 text-xs">
+              <span
+                className={
+                  item.pasa === null ? "text-neutral-600" : item.pasa ? "text-emerald-500" : "text-red-500"
+                }
+              >
+                {item.pasa === null ? "·" : item.pasa ? "✓" : "✗"}
+              </span>
+              <div>
+                <p className="text-neutral-300">{item.nombre}</p>
+                <p className="text-neutral-600">{item.detalle}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SeccionKeywords({ keywords }: { keywords: Keyword[] }) {
   const pilares = keywords.filter((k) => !k.esDescarte && k.rol === "pilar");
   const descartes = keywords.filter((k) => k.esDescarte);
@@ -297,6 +353,7 @@ export default async function DashboardPage() {
               <BarraFases actual={s.sitio.faseActual} />
               <ProgresoFaseActual sitio={s.sitio} entregablesFase2={s.entregablesFase2} contenidoFase2={s.contenidoFase2} />
               <SeccionConstruccion sitio={s.sitio} />
+              <SeccionChecklistFase3 sitio={s.sitio} />
 
               <div>
                 <h2 className="mb-2 text-sm font-medium text-neutral-300">Fase 1 — Keywords</h2>

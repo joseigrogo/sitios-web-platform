@@ -11,6 +11,7 @@ import type {
   Sitio,
   SitiosRepo,
 } from '../src/types.js';
+import type { ChecklistFase3Resultado } from '../src/lib/checklistFase3.js';
 
 let contador = 0;
 function idFalso(prefijo: string): string {
@@ -50,6 +51,8 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
         repoGithub: null,
         construccionEstado: null,
         construccionReporte: null,
+        checklistFase3Url: null,
+        checklistFase3Resultado: null,
         ...input,
       };
       sitios.push(sitio);
@@ -76,6 +79,13 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
         sitio.construccionEstado = 'terminada';
         sitio.construccionReporte = reporte;
         sitio.repoGithub = repoGithub;
+      }
+    },
+    async guardarResultadoChecklistFase3(id: string, url: string, resultado: ChecklistFase3Resultado) {
+      const sitio = sitios.find((s) => s.id === id);
+      if (sitio) {
+        sitio.checklistFase3Url = url;
+        sitio.checklistFase3Resultado = resultado;
       }
     },
     async listarPorCliente(clienteId: string) {
