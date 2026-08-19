@@ -13,6 +13,10 @@ function sitioBase(overrides: Partial<Sitio> = {}): Sitio {
     segmento: 'Propietarios residenciales en DC',
     dominio: null,
     faseActual: 'encuadre',
+    referenciaUrl: null,
+    repoGithub: null,
+    construccionEstado: null,
+    construccionReporte: null,
     ...overrides,
   };
 }

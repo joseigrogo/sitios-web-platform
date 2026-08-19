@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import type { EntregableFase2, EstadoEntregablesFase2, FaseActual, Keyword, Rol } from "@cli/types";
+import type { EntregableFase2, EstadoContenidoFase2, EstadoEntregablesFase2, FaseActual, Keyword, Rol } from "@cli/types";
+import { confirmarGateFase2, guardarReferenciaUrl, solicitarConstruccion } from "./actions";
 import { COOKIE_NAME, sesionValida } from "@/lib/auth";
 import { cargarEstadoSistema, type EstadoSitio } from "@/lib/estado-sistema";
 
@@ -63,7 +64,15 @@ function BarraFases({ actual }: { actual: FaseActual }) {
   );
 }
 
-function ProgresoFaseActual({ sitio, entregablesFase2 }: { sitio: EstadoSitio["sitio"]; entregablesFase2: EstadoEntregablesFase2 }) {
+function ProgresoFaseActual({
+  sitio,
+  entregablesFase2,
+  contenidoFase2,
+}: {
+  sitio: EstadoSitio["sitio"];
+  entregablesFase2: EstadoEntregablesFase2;
+  contenidoFase2: EstadoContenidoFase2;
+}) {
   if (sitio.faseActual !== "spec") {
     return (
       <p className="text-xs text-neutral-600">
@@ -75,26 +84,125 @@ function ProgresoFaseActual({ sitio, entregablesFase2 }: { sitio: EstadoSitio["s
 
   const claves = Object.keys(entregablesFase2) as EntregableFase2[];
   const completados = claves.filter((c) => entregablesFase2[c]).length;
+  // Mismo criterio que ejecutarGateFase2 (Base 4: mecánico, no inventa una
+  // condición nueva acá) -- si difiere, el gate real del Server Action manda.
+  const pasaGate = completados === claves.length;
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <p className="text-xs text-neutral-500">
         Progreso de Spec: <b className="text-neutral-300">{completados}/{claves.length} entregables</b>
       </p>
-      <div className="flex flex-wrap gap-2">
+
+      <div className="space-y-2">
         {claves.map((c) => (
-          <span
-            key={c}
-            className={
-              "rounded-full px-3 py-1 text-xs " +
-              (entregablesFase2[c] ? "bg-emerald-500 text-emerald-950" : "bg-neutral-900 text-neutral-500")
-            }
-          >
-            {entregablesFase2[c] && "✓ "}
-            {ETIQUETAS_ENTREGABLES_FASE2[c]}
-          </span>
+          <div key={c} className="rounded border border-neutral-800 p-3">
+            <span
+              className={
+                "rounded-full px-3 py-1 text-xs " +
+                (entregablesFase2[c] ? "bg-emerald-500 text-emerald-950" : "bg-neutral-900 text-neutral-500")
+              }
+            >
+              {entregablesFase2[c] && "✓ "}
+              {ETIQUETAS_ENTREGABLES_FASE2[c]}
+            </span>
+            {contenidoFase2[c] ? (
+              <p className="mt-2 whitespace-pre-wrap text-sm text-neutral-300">{contenidoFase2[c]}</p>
+            ) : (
+              <p className="mt-2 text-xs text-neutral-600">Sin contenido guardado todavía.</p>
+            )}
+          </div>
         ))}
       </div>
+
+      {pasaGate && (
+        <form action={confirmarGateFase2} className="flex items-center gap-2 pt-1">
+          <input type="hidden" name="sitioId" value={sitio.id} />
+          <button
+            type="submit"
+            className="rounded bg-emerald-500 px-3 py-1.5 text-xs font-medium text-emerald-950 hover:bg-emerald-400"
+          >
+            Confirmar y pasar a Construcción
+          </button>
+          <span className="text-xs text-neutral-500">Gate de Fase 2: PASA — falta tu confirmación.</span>
+        </form>
+      )}
+    </div>
+  );
+}
+
+function SeccionConstruccion({ sitio }: { sitio: EstadoSitio["sitio"] }) {
+  // Capturar la referencia sirve desde Spec (la usa dirección visual,
+  // db/scripts/fase2_formato_spec.md §5) -- pero solicitar construcción
+  // solo tiene sentido una vez que el sitio ya está en esa fase de verdad.
+  if (sitio.faseActual !== "spec" && sitio.faseActual !== "construccion") return null;
+
+  return (
+    <div className="space-y-3 rounded border border-neutral-800 p-3">
+      <h2 className="text-sm font-medium text-neutral-300">Sitio de referencia y construcción</h2>
+
+      <form action={guardarReferenciaUrl} className="flex items-center gap-2">
+        <input type="hidden" name="sitioId" value={sitio.id} />
+        <input
+          type="url"
+          name="referenciaUrl"
+          defaultValue={sitio.referenciaUrl ?? ""}
+          placeholder="https://sitio-de-referencia.com"
+          className="flex-1 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-sm text-neutral-100"
+        />
+        <button
+          type="submit"
+          className="rounded border border-neutral-700 px-3 py-1.5 text-xs text-neutral-300 hover:bg-neutral-800"
+        >
+          Guardar
+        </button>
+      </form>
+
+      {sitio.faseActual === "construccion" && (
+        <div className="pt-1">
+          {!sitio.construccionEstado && (
+            <form action={solicitarConstruccion} className="flex items-center gap-2">
+              <input type="hidden" name="sitioId" value={sitio.id} />
+              <button
+                type="submit"
+                disabled={!sitio.referenciaUrl}
+                className="rounded bg-emerald-500 px-3 py-1.5 text-xs font-medium text-emerald-950 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Solicitar construcción
+              </button>
+              {!sitio.referenciaUrl && (
+                <span className="text-xs text-neutral-500">Guardá un sitio de referencia primero.</span>
+              )}
+            </form>
+          )}
+
+          {(sitio.construccionEstado === "solicitada" || sitio.construccionEstado === "en_curso") && (
+            <p className="text-xs text-neutral-400">
+              {sitio.construccionEstado === "solicitada"
+                ? "Construcción solicitada — esperando que la rutina la tome."
+                : "Construcción en curso."}
+            </p>
+          )}
+
+          {sitio.construccionEstado === "terminada" && (
+            <div className="space-y-1">
+              <p className="text-xs text-emerald-500">
+                Construcción terminada —{" "}
+                {sitio.repoGithub ? (
+                  <a href={sitio.repoGithub} target="_blank" rel="noreferrer" className="underline">
+                    ver repo
+                  </a>
+                ) : (
+                  "sin repo registrado"
+                )}
+              </p>
+              {sitio.construccionReporte && (
+                <p className="whitespace-pre-wrap text-xs text-neutral-400">{sitio.construccionReporte}</p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -187,7 +295,8 @@ export default async function DashboardPage() {
               </div>
 
               <BarraFases actual={s.sitio.faseActual} />
-              <ProgresoFaseActual sitio={s.sitio} entregablesFase2={s.entregablesFase2} />
+              <ProgresoFaseActual sitio={s.sitio} entregablesFase2={s.entregablesFase2} contenidoFase2={s.contenidoFase2} />
+              <SeccionConstruccion sitio={s.sitio} />
 
               <div>
                 <h2 className="mb-2 text-sm font-medium text-neutral-300">Fase 1 — Keywords</h2>
@@ -204,7 +313,10 @@ export default async function DashboardPage() {
       )}
 
       <p className="text-xs text-neutral-600">
-        Solo lectura. Sin acciones de escritura desde acá todavía — los gates se confirman con el CLI.
+        Mayormente solo lectura — la escritura posible desde acá es confirmar el gate de Fase 2,
+        guardar el sitio de referencia, y solicitar construcción (que solo marca la intención en
+        Supabase — quién reacciona a eso es aparte). El resto (marcar entregables, gates de otras
+        fases, promover keywords, correr la construcción en sí) sigue siendo por CLI o por la rutina.
       </p>
     </main>
   );

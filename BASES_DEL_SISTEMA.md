@@ -228,8 +228,21 @@ dirección propia — graduado a script permanente después de repetirse
 una vez (Base 4/8). Detalle completo, con la técnica de barrido fino
 para comportamiento de scroll y los gotchas del ensamblaje, en
 `db/scripts/fase2_direccion_visual.md`. Fuente sugerida: competidores
-que Fase 1 ya identifica, no una galería de inspiración aparte. Sin
-decidir dónde vive esta sección dentro de spec.md.
+que Fase 1 ya identifica, no una galería de inspiración aparte.
+
+**Dónde vive esta sección dentro de spec.md: resuelto (2026-08-18).** Ver
+`db/scripts/fase2_formato_spec.md` — completa (no reemplaza) los cuatro
+entregables ya definidos en `Proceso_GENERAL_de_Lanzamiento_Sitios.md`
+(Fase 2), agregando dónde vive dirección visual y tres disciplinas nuevas,
+a partir de analizar el único spec real que llegó a producción
+(`capital-window/SPEC.md`) contra el código que produjo.
+Hallazgo del análisis: ~32 de 60 commits de esa construcción resolvieron
+decisiones que el spec nunca registró — el formato nuevo agrega mapeo
+explícito a la referencia (marcando qué NO tiene contraparte), una bitácora
+de cambios que registra remociones (no solo adiciones — el spec viejo dejó
+pasar en silencio que se sacó un segmento entero sin actualizar el resto del
+documento), y exige que la dirección visual quede cerrada por escrito en vez
+de "genérico a propósito".
 
 ---
 
@@ -477,9 +490,10 @@ pendiente a prerequisito.
   real (fuera del sistema, sin cliente) — 3 bugs reales del skill
   encontrados y corregidos en el camino, más un paso nuevo (Paso 2.5,
   copy + imágenes) ya graduado a permanente (ver Fase 2 y
-  `db/scripts/fase2_direccion_visual.md`) — falta decidir dónde vive
-  dentro de spec.md, y aplicarlo dentro del sistema contra un cliente
-  real por primera vez (sigue sin haber uno activo para eso).
+  `db/scripts/fase2_direccion_visual.md`) — dónde vive dentro de spec.md
+  ya está resuelto (`db/scripts/fase2_formato_spec.md`, 2026-08-18). Sigue
+  pendiente aplicarlo dentro del sistema contra un cliente real por
+  primera vez (Capital Window sigue en 0/4 entregables de Fase 2).
 - **`leads`: dual-write vs. migración.** Dirección acordada: Supabase, con
   dual-write desde Sheets como paso intermedio. Tabla no creada.
 - ~~**RLS.**~~ **CERRADO el 2026-08-10.** La hipótesis ("activarlo sin

@@ -20,6 +20,11 @@ export interface Cliente {
   respaldoLegalTipo: string | null;
 }
 
+// Ciclo de vida de la rutina de construcción automática (Fase 3) -- 3
+// estados, anclados literal a db/scripts/fase3_construccion_instrucciones.md,
+// no inventados aparte.
+export type ConstruccionEstado = 'solicitada' | 'en_curso' | 'terminada';
+
 export interface Sitio {
   id: string;
   clienteId: string;
@@ -28,6 +33,10 @@ export interface Sitio {
   segmento: string;
   dominio: string | null;
   faseActual: FaseActual;
+  referenciaUrl: string | null;
+  repoGithub: string | null;
+  construccionEstado: ConstruccionEstado | null;
+  construccionReporte: string | null;
 }
 
 export interface NuevoClienteInput {
@@ -82,13 +91,29 @@ export function estadoFase2Vacio(): EstadoEntregablesFase2 {
   return { estructura: false, contenido: false, experimentos: false, taxonomia_eventos: false };
 }
 
+// Contenido real de cada entregable (el texto en sí, no el flag de
+// "hecho"). Sustrato separado a propósito de estadoFase2Vacio: guardar
+// contenido y marcar como terminado son dos acciones distintas (Base 4 --
+// que exista un borrador de contenido no implica que ya esté bien hecho,
+// esa sigue siendo una decisión humana aparte).
+export type EstadoContenidoFase2 = Record<EntregableFase2, string | null>;
+
+export function contenidoFase2Vacio(): EstadoContenidoFase2 {
+  return { estructura: null, contenido: null, experimentos: null, taxonomia_eventos: null };
+}
+
 export interface SitiosRepo {
   crear(input: NuevoSitioInput): Promise<Sitio>;
   obtenerPorId(id: string): Promise<Sitio | null>;
   actualizarFaseActual(id: string, fase: FaseActual): Promise<void>;
+  actualizarReferenciaUrl(id: string, url: string): Promise<void>;
+  actualizarEstadoConstruccion(id: string, estado: ConstruccionEstado): Promise<void>;
+  finalizarConstruccion(id: string, reporte: string, repoGithub: string): Promise<void>;
   listarPorCliente(clienteId: string): Promise<Sitio[]>;
   obtenerEstadoEntregablesFase2(sitioId: string): Promise<EstadoEntregablesFase2>;
   marcarEntregableFase2(sitioId: string, entregable: EntregableFase2): Promise<void>;
+  obtenerContenidoFase2(sitioId: string): Promise<EstadoContenidoFase2>;
+  guardarContenidoFase2(sitioId: string, entregable: EntregableFase2, contenido: string): Promise<void>;
 }
 
 export type Rol = 'pilar' | 'secundaria' | 'long_tail';

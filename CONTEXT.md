@@ -410,11 +410,61 @@ también §7.
 
 **Lo que falta, en orden de lo ya conversado:**
 1. Resolver el permiso de Vercel y deployar de verdad (§7).
-2. Definir el Gate de salida de Fase 2 (hoy solo hay tracking de los 4
-   entregables, sin condición de "listo para pasar a Construcción" — ver
-   Fase 2 en `BASES_DEL_SISTEMA.md`).
-3. Si se decide sumar acciones de escritura al dashboard (confirmar gates,
-   promover keywords, desde la UI): reusar las funciones núcleo del CLI
-   (`ejecutarGateFase1`, etc.) desde una Server Action o Route Handler, no
-   reimplementar la lógica — ya se conversó y quedó acordado así, no
-   construido todavía.
+2. ~~Definir el Gate de salida de Fase 2~~ **Hecho (2026-08-18)** — ver §12.
+3. ~~Si se decide sumar acciones de escritura al dashboard...~~ **Hecho
+   (2026-08-18)** — ver §12. Confirmado: sí reusa la función núcleo del CLI
+   (`ejecutarGateFase2`) desde un Server Action, no la reimplementa.
+
+---
+
+## 12. Fase 2 — gate de salida, escritura desde el dashboard, y formato de spec.md
+
+**`cli sitio gate-fase2`** (2026-08-18) — mismo patrón que gate-fase0/1:
+condición = los 4 entregables de `estado_gates.fase2` en true (no se inventó
+un criterio nuevo, se mecanizó el que ya existía como flags sueltos). Sin
+`--confirmar` solo lee; con `--confirmar` flipea `spec` → `construccion`.
+
+**`cli sitio guardar-contenido-fase2`** — nuevo, separado de
+`marcar-entregable-fase2` a propósito (Base 4): guarda el contenido real
+(texto) de un entregable, nunca lo marca como terminado. El contenido vive
+en Supabase (`estado_gates.fase2_contenido`), no en archivos — un solo
+sustrato para lo mismo (Base 8), no dos.
+
+**Dashboard** — ahora muestra el contenido real de cada entregable (no solo
+el check), y tiene su primera escritura real: un botón que confirma el gate
+de Fase 2 vía Server Action, reusando `ejecutarGateFase2` (no reimplementado
+— ver `dashboard/app/actions.ts`). **Bug real encontrado corriendo el dev
+server, no en el diseño en papel:** un archivo de `cli/src/commands/` que
+importa `commander` no puede cruzar el alias `@cli/*` hacia el dashboard —
+ese paquete no existe en `dashboard/node_modules`. Turbopack marcaba TODOS
+los imports relativos de ese archivo como no resueltos, no solo el de
+`commander`. Solución: la lógica núcleo (`ejecutarGateFase2`) vive en
+`cli/src/lib/gateFase2.ts` (sin `commander`), separada del wiring del CLI.
+
+**Formato de spec.md — definido (2026-08-18), en `db/scripts/fase2_formato_spec.md`.**
+Completa (no reemplaza) los cuatro entregables ya definidos en
+`Proceso_GENERAL_de_Lanzamiento_Sitios.md` (Fase 2) — ese documento define
+la estructura real, con reglas de contenido y hasta una tabla de eventos ya
+concretas. Nace de analizar el único spec real que llegó a producción
+(`capital-window/SPEC.md`, 770 líneas) contra los 60 commits que produjo.
+Hallazgo: ~32 de esos 60 commits resolvieron decisiones que el spec nunca
+registró como cambio — más de la mitad. El nuevo formato exige tres cosas
+que ese caso no tenía: mapeo explícito sección-por-sección contra el sitio
+de referencia (marcando qué NO tiene contraparte, en vez de dejarlo
+implícito — así se coló un "template" externo sin nombre a mitad de
+construcción), una bitácora de cambios que registra remociones y no solo
+adiciones (así se coló un segmento eliminado del código sin que el resto
+del spec se actualizara), y una dirección visual cerrada por escrito en vez
+de "genérico a propósito" (así se instaló glassmorphism contradiciendo una
+regla explícita del spec, sin que nadie lo reconciliara).
+
+**En curso:** automatizar una primera pasada de Fase 3 (construcción,
+~80%, resto a mano) usando spec + sitio de referencia como input, disparada
+desde el dashboard vía `RemoteTrigger` (rutina de Claude Code + webhook,
+sin inventar infraestructura nueva) y un Database Webhook nativo de
+Supabase (no n8n, para no construir esa integración desde cero solo para
+este caso). Deliberadamente sin definir todavía un "estado de construcción"
+en Supabase más allá de `referencia_url` (nueva columna en `sitios`,
+migración `20260818_sitios_referencia_url.sql`) — ese ciclo de vida depende
+de terminar de validar el formato de spec nuevo contra un caso real
+primero.
