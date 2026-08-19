@@ -458,13 +458,30 @@ del spec se actualizara), y una dirección visual cerrada por escrito en vez
 de "genérico a propósito" (así se instaló glassmorphism contradiciendo una
 regla explícita del spec, sin que nadie lo reconciliara).
 
-**En curso:** automatizar una primera pasada de Fase 3 (construcción,
-~80%, resto a mano) usando spec + sitio de referencia como input, disparada
-desde el dashboard vía `RemoteTrigger` (rutina de Claude Code + webhook,
-sin inventar infraestructura nueva) y un Database Webhook nativo de
-Supabase (no n8n, para no construir esa integración desde cero solo para
-este caso). Deliberadamente sin definir todavía un "estado de construcción"
-en Supabase más allá de `referencia_url` (nueva columna en `sitios`,
-migración `20260818_sitios_referencia_url.sql`) — ese ciclo de vida depende
-de terminar de validar el formato de spec nuevo contra un caso real
-primero.
+**Disparador automático de Fase 3 — cableado de punta a punta (2026-08-18).**
+Una primera pasada de construcción (~80%, resto a mano) usando spec + sitio
+de referencia como input. Cadena real, ya conectada:
+
+`sitios.construccion_estado = 'solicitada'` (desde el dashboard o el CLI) →
+trigger de Postgres (`trigger_construccion_fase3`, tabla `sitios`) → `pg_net`
+manda un POST a la rutina de `RemoteTrigger` (`trig_0117Wpqv8Sk45qvcQFCThJ9e`,
+repo `joseigrogo/sitios-web-platform`, corre en su propia rama) → la rutina
+lee `db/scripts/fase3_construccion_instrucciones.md` y construye.
+
+El token de la rutina vive en **Supabase Vault** (secreto
+`construccion_fase3_api_token`, cifrado) — nunca en un archivo del repo,
+que además ahora es público (se volvió público a propósito para destrabar
+un bug real de Anthropic: la conexión GitHub↔Claude para repos privados no
+completaba el paso de instalación — confirmado contra varios reportes en
+`github.com/anthropics/claude-code/issues`; repos públicos sí funcionaban).
+
+No se usó n8n (documentado como el sistema de eventos oficial, CONTEXT.md
+§4) para no construir esa integración desde cero solo para este caso — el
+Database Webhook nativo de Supabase alcanza.
+
+**Pendiente, no bloqueante:** la rutina quedó con los 8 conectores default
+(Google Drive, n8n, dos OpenSeo, Semrush, Vercel, visualize, Supabase) en
+vez de solo Supabase, que es lo único que necesita — recortar cuando haya
+tiempo. Y la precondición real: Capital Window sigue sin tener sus 4
+entregables de Fase 2 confirmados como terminados (Base 4, es juicio
+humano) — el trigger no le sirve a nadie hasta que eso pase primero.

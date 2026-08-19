@@ -11,6 +11,7 @@ import { registrarComandoSitioGateFase0 } from './commands/sitioGateFase0.js';
 import { registrarComandoSitioGateFase1 } from './commands/sitioGateFase1.js';
 import { registrarComandoSitioGateFase2 } from './commands/sitioGateFase2.js';
 import { registrarComandoGuardarContenidoFase2 } from './commands/sitioGuardarContenidoFase2.js';
+import { registrarComandoChecklistFase3 } from './commands/sitioChecklistFase3.js';
 
 // Resuelto contra la ubicación del módulo, no contra cwd, para que cargue
 // cli/.env sin importar desde dónde se invoque el comando (dev vía tsx desde
@@ -32,6 +33,7 @@ registrarComandoSitioGateFase1(sitio);
 registrarComandoMarcarEntregableFase2(sitio);
 registrarComandoSitioGateFase2(sitio);
 registrarComandoGuardarContenidoFase2(sitio);
+registrarComandoChecklistFase3(sitio);
 
 const investigacion = program.command('investigacion').description('Comandos de Fase 1 (investigación)');
 registrarComandoGuardarReporte(investigacion);

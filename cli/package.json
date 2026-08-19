@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
-    "commander": "^12.1.0"
+    "commander": "^12.1.0",
+    "node-html-parser": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
