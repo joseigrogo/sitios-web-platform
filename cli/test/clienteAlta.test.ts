@@ -1,9 +1,21 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { ejecutarClienteAlta, type ClienteAltaInputCrudo } from '../src/commands/clienteAlta.js';
-import { ValidationError } from '../src/lib/errors.js';
+import { ejecutarClienteAlta, type ClienteAltaInputCrudo } from '../src/lib/clienteAlta.js';
 import type { Cliente } from '../src/types.js';
 import { crearClientesRepoFalso, crearSitiosRepoFalso } from './fakes.js';
+
+// Duck-typing en vez de `instanceof ValidationError` de errors.js: lib/
+// clienteAlta.ts tiene su propia clase local (mismo motivo que en ese
+// archivo -- Turbopack no resuelve un import de valor entre hermanos de
+// lib/). errors.ts ya reconoce el error así, ver esa nota.
+function esValidationError(err: unknown): err is { errores: string[] } {
+  return (
+    typeof err === 'object' &&
+    err !== null &&
+    (err as { name?: unknown }).name === 'ValidationError' &&
+    Array.isArray((err as { errores?: unknown }).errores)
+  );
+}
 
 function inputBase(overrides: Partial<ClienteAltaInputCrudo['cliente']> = {}): ClienteAltaInputCrudo {
   return {
@@ -32,8 +44,8 @@ test('rechaza sin --cliente-slug', async () => {
   input.cliente.slug = '  ';
 
   await assert.rejects(() => ejecutarClienteAlta(input, repos), (err: unknown) => {
-    assert.ok(err instanceof ValidationError);
-    assert.match(err.errores[0], /--cliente-slug/);
+    assert.ok(esValidationError(err));
+    assert.match(err.errores[0], /cliente\.slug/);
     return true;
   });
 });
@@ -45,10 +57,10 @@ test('rechaza sitio sin segmento/arquetipo/nombre-marca, listando cada campo', a
   input.sitio.arquetipo = '';
 
   await assert.rejects(() => ejecutarClienteAlta(input, repos), (err: unknown) => {
-    assert.ok(err instanceof ValidationError);
+    assert.ok(esValidationError(err));
     assert.equal(err.errores.length, 2);
-    assert.ok(err.errores.some((e) => e.includes('--sitio-segmento')));
-    assert.ok(err.errores.some((e) => e.includes('--sitio-arquetipo')));
+    assert.ok(err.errores.some((e) => e.includes('sitio.segmento')));
+    assert.ok(err.errores.some((e) => e.includes('sitio.arquetipo')));
     return true;
   });
 });
@@ -58,8 +70,8 @@ test('cliente nuevo sin --cliente-respaldo-legal se rechaza (nunca null silencio
   const input = inputBase({ respaldoLegalTipo: undefined });
 
   await assert.rejects(() => ejecutarClienteAlta(input, repos), (err: unknown) => {
-    assert.ok(err instanceof ValidationError);
-    assert.ok(err.errores.some((e) => e.includes('--cliente-respaldo-legal')));
+    assert.ok(esValidationError(err));
+    assert.ok(err.errores.some((e) => e.includes('cliente.respaldoLegalTipo')));
     return true;
   });
 });

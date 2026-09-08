@@ -27,6 +27,10 @@ export interface Cliente {
 // no inventados aparte.
 export type ConstruccionEstado = 'solicitada' | 'en_curso' | 'terminada';
 
+// Mismo ciclo de vida, clonado a propósito para la rutina de investigación
+// automática (Fase 1) -- ver db/scripts/fase1_investigacion_instrucciones.md.
+export type InvestigacionEstado = 'solicitada' | 'en_curso' | 'terminada';
+
 export interface Sitio {
   id: string;
   clienteId: string;
@@ -39,6 +43,8 @@ export interface Sitio {
   repoGithub: string | null;
   construccionEstado: ConstruccionEstado | null;
   construccionReporte: string | null;
+  investigacionEstado: InvestigacionEstado | null;
+  investigacionReporte: string | null;
   checklistFase3Url: string | null;
   checklistFase3Resultado: ChecklistFase3Resultado | null;
 }
@@ -64,6 +70,7 @@ export interface NuevoSitioInput {
 export interface ClientesRepo {
   buscarPorSlug(slug: string): Promise<Cliente | null>;
   buscarPorNombreSimilar(nombre: string): Promise<Cliente[]>;
+  listarTodos(): Promise<Cliente[]>;
   crear(input: NuevoClienteInput): Promise<Cliente>;
 }
 
@@ -113,6 +120,8 @@ export interface SitiosRepo {
   actualizarReferenciaUrl(id: string, url: string): Promise<void>;
   actualizarEstadoConstruccion(id: string, estado: ConstruccionEstado): Promise<void>;
   finalizarConstruccion(id: string, reporte: string, repoGithub: string): Promise<void>;
+  actualizarEstadoInvestigacion(id: string, estado: InvestigacionEstado): Promise<void>;
+  finalizarInvestigacion(id: string, reporte: string): Promise<void>;
   guardarResultadoChecklistFase3(id: string, url: string, resultado: ChecklistFase3Resultado): Promise<void>;
   listarPorCliente(clienteId: string): Promise<Sitio[]>;
   obtenerEstadoEntregablesFase2(sitioId: string): Promise<EstadoEntregablesFase2>;

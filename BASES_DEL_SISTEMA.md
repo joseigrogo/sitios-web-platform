@@ -491,9 +491,21 @@ pendiente a prerequisito.
   encontrados y corregidos en el camino, más un paso nuevo (Paso 2.5,
   copy + imágenes) ya graduado a permanente (ver Fase 2 y
   `db/scripts/fase2_direccion_visual.md`) — dónde vive dentro de spec.md
-  ya está resuelto (`db/scripts/fase2_formato_spec.md`, 2026-08-18). Sigue
-  pendiente aplicarlo dentro del sistema contra un cliente real por
-  primera vez (Capital Window sigue en 0/4 entregables de Fase 2).
+  ya está resuelto (`db/scripts/fase2_formato_spec.md`, 2026-08-18).
+  **Actualizado 2026-08-18:** los 4 entregables de Capital Window tienen
+  contenido borrador guardado (documentado retroactivamente contra el
+  sitio real en producción, no inventado — `guardar-contenido-fase2`), pero
+  **ninguno confirmado como terminado todavía** (`estado_gates.fase2` sigue
+  en 0/4 — Base 4, es juicio humano, no un olvido). El borrador dejó 4
+  preguntas reales sin resolver, señaladas para que alguien decida, no
+  resueltas en silencio: (1) `page_area` en el código real dice `'london'`,
+  el spec original pide explícitamente `'chelsea'`; (2) la taxonomía real
+  de eventos (`generate_lead`/`contact_click`/`segment_select`) no comparte
+  ningún nombre con el contrato mínimo de `Proceso_GENERAL`; (3) faltan la
+  tabla comparativa y el respaldo legal que Fase 2 pide — sin decidir si es
+  omisión a propósito del vertical o un hueco real; (4) la hipótesis real
+  de Fase 1 (página B2B dedicada) no se implementó tal cual, el sitio real
+  es una versión más tibia sin experimento montado para medirla.
 - **`leads`: dual-write vs. migración.** Dirección acordada: Supabase, con
   dual-write desde Sheets como paso intermedio. Tabla no creada.
 - ~~**RLS.**~~ **CERRADO el 2026-08-10.** La hipótesis ("activarlo sin

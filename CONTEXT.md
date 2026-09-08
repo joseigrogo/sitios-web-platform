@@ -6,6 +6,22 @@
 > no es un documento aparte del código, vive en el mismo repo y en el mismo
 > historial de commits.
 
+## Estado pendiente — leer antes de seguir (dejado así a propósito el 2026-08-19)
+
+**Hay trabajo real sin commitear en el working tree.** Correr `git status`
+antes de asumir que lo que describe este archivo ya está en el historial de
+git — no lo está todo. Sin commitear ahora mismo: la generalización del
+dashboard a multi-cliente, los formularios de Fase 0/1, y el arreglo del
+gotcha de Turbopack entre hermanos de `lib/` (ver §13 completo más abajo).
+Se dejó así a propósito, no por error — falta revisión antes de subirlo.
+
+**Próximo paso real, no inventado:** Capital Window tiene contenido
+borrador en los 4 entregables de Fase 2 (retroactivo, del sitio real en
+producción) con 4 preguntas señaladas sin resolver — ver Parte 4 de
+`BASES_DEL_SISTEMA.md`. Confirmarlos (o corregirlos) es lo que desbloquea
+probar la cadena de construcción automática (§12) contra un caso real por
+primera vez, en vez de seguir siendo infraestructura sin ejercitar.
+
 ## 0. Instrucción para Claude Code al leer este archivo por primera vez
 
 Este repo aún no existe como carpeta. Créala en:
@@ -485,3 +501,37 @@ vez de solo Supabase, que es lo único que necesita — recortar cuando haya
 tiempo. Y la precondición real: Capital Window sigue sin tener sus 4
 entregables de Fase 2 confirmados como terminados (Base 4, es juicio
 humano) — el trigger no le sirve a nadie hasta que eso pase primero.
+
+## 13. Checklist real de Fase 3, y el dashboard generalizado a Fase 0/1/multi-cliente (2026-08-19)
+
+**`cli sitio checklist-fase3 <url>`** — los 10 puntos literales de
+`Proceso_GENERAL_de_Lanzamiento_Sitios.md` (Fase 3), corridos contra una
+URL en vivo. 8 automatizados, 2 (taxonomía de eventos, Search Console)
+marcados como no verificables sin credenciales propias, nunca inventados.
+Diseño basado en el candidato ya identificado en Base 7
+(`AgriciDaniel/claude-seo`, `parse_html.py`/`fetch_page.py`), reimplementado
+en TypeScript (no se trae Python como runtime nuevo, Base 8). Integrado al
+dashboard (campo de URL + botón + resultado guardado en Supabase).
+
+**Dashboard generalizado a más de un cliente.** `cargarEstadoSistema()`
+pasó de un `CLIENTE_SLUG` hardcodeado a `clientes.listarTodos()` — el
+comentario original decía "generalizar cuando exista un segundo", y
+agregar el formulario de alta de Fase 0 era justo ese gatillo. Se sumaron
+también: formulario de alta de cliente+sitio (Fase 0), botón de gate-fase0,
+formulario de crear-hipótesis + botón de gate-fase1 (Fase 1) — antes solo
+existían por CLI.
+
+**Gotcha nuevo de Turbopack, variante del ya documentado en §10/12:** no
+solo falla un import de VALOR desde `types.ts` — también falla un import
+de valor entre dos archivos **hermanos dentro de `cli/src/lib/`** (ej.
+`clienteAlta.ts` importando `ValidationError` de `./errors.js`), aunque
+ninguno de los dos toque `types.ts` ni `commander`. Confirmado con
+`rm -rf .next node_modules/.cache` de por medio — no era caché viejo.
+
+Arreglo, sin duplicar `errors.ts` entero: `manejarErrorCli` pasó de
+`instanceof ValidationError` a duck-typing (`err.name === 'ValidationError'`
++ `Array.isArray(err.errores)`) — así los archivos que necesitan cruzar el
+alias (`clienteAlta.ts`, `crearHipotesis.ts`) pueden definir su propia
+clase `ValidationError` local, estructuralmente idéntica, sin romper cómo
+el CLI real la reconoce. Mismo criterio aplicado en los tests (ver
+`clienteAlta.test.ts`/`investigacionCrearHipotesis.test.ts`).

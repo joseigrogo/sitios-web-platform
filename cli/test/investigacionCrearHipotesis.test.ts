@@ -1,8 +1,18 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { ejecutarCrearHipotesis, type CrearHipotesisInput } from '../src/commands/investigacionCrearHipotesis.js';
-import { ValidationError } from '../src/lib/errors.js';
+import { ejecutarCrearHipotesis, type CrearHipotesisInput } from '../src/lib/crearHipotesis.js';
 import type { Hipotesis, HipotesisRepo, NuevaHipotesisInput } from '../src/types.js';
+
+// Duck-typing en vez de `instanceof ValidationError` de errors.js -- mismo
+// motivo y arreglo que clienteAlta.test.ts (ver esa nota).
+function esValidationError(err: unknown): err is { errores: string[] } {
+  return (
+    typeof err === 'object' &&
+    err !== null &&
+    (err as { name?: unknown }).name === 'ValidationError' &&
+    Array.isArray((err as { errores?: unknown }).errores)
+  );
+}
 
 function crearHipotesisRepoFalso(): HipotesisRepo & { creadas: NuevaHipotesisInput[] } {
   const creadas: NuevaHipotesisInput[] = [];
@@ -47,8 +57,8 @@ test('rechaza sin --dato-verificado (una hipótesis sin dato real es una opinió
   await assert.rejects(
     () => ejecutarCrearHipotesis(input, { hipotesis: repo }),
     (err: unknown) => {
-      assert.ok(err instanceof ValidationError);
-      assert.ok(err.errores.some((e) => e.includes('--dato-verificado')));
+      assert.ok(esValidationError(err));
+      assert.ok(err.errores.some((e) => e.includes('datoVerificado')));
       return true;
     }
   );
@@ -60,8 +70,8 @@ test('rechaza --horizonte fuera de corto_15d/largo_90_150d', async () => {
   await assert.rejects(
     () => ejecutarCrearHipotesis(input, { hipotesis: repo }),
     (err: unknown) => {
-      assert.ok(err instanceof ValidationError);
-      assert.ok(err.errores.some((e) => e.includes('--horizonte')));
+      assert.ok(esValidationError(err));
+      assert.ok(err.errores.some((e) => e.includes('horizonte debe ser uno de')));
       return true;
     }
   );
@@ -73,8 +83,8 @@ test('rechaza sin --criterio-exito', async () => {
   await assert.rejects(
     () => ejecutarCrearHipotesis(input, { hipotesis: repo }),
     (err: unknown) => {
-      assert.ok(err instanceof ValidationError);
-      assert.ok(err.errores.some((e) => e.includes('--criterio-exito')));
+      assert.ok(esValidationError(err));
+      assert.ok(err.errores.some((e) => e.includes('criterioExito')));
       return true;
     }
   );

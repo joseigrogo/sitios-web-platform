@@ -1,7 +1,17 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import type { EntregableFase2, EstadoContenidoFase2, EstadoEntregablesFase2, FaseActual, Keyword, Rol } from "@cli/types";
-import { confirmarGateFase2, correrChecklistFase3, guardarReferenciaUrl, solicitarConstruccion } from "./actions";
+import type { Cliente, EntregableFase2, EstadoContenidoFase2, EstadoEntregablesFase2, FaseActual, Keyword, Rol } from "@cli/types";
+import {
+  altaCliente,
+  confirmarGateFase0,
+  confirmarGateFase1,
+  confirmarGateFase2,
+  correrChecklistFase3,
+  crearSitioParaCliente,
+  guardarReferenciaUrl,
+  solicitarConstruccion,
+  solicitarInvestigacion,
+} from "./actions";
 import { COOKIE_NAME, sesionValida } from "@/lib/auth";
 import { cargarEstadoSistema, type EstadoSitio } from "@/lib/estado-sistema";
 
@@ -22,12 +32,20 @@ const ETIQUETAS_ENTREGABLES_FASE2: Record<EntregableFase2, string> = {
   taxonomia_eventos: "Taxonomía de eventos",
 };
 
+const CAMPO = "rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-sm text-neutral-100";
+const BOTON_PRIMARIO = "rounded bg-emerald-500 px-3 py-1.5 text-xs font-medium text-emerald-950 hover:bg-emerald-400";
+const BOTON_SECUNDARIO = "rounded border border-neutral-700 px-3 py-1.5 text-xs text-neutral-300 hover:bg-neutral-800";
+
 function contarPorRol(keywords: Keyword[], rol: Rol): number {
   return keywords.filter((k) => !k.esDescarte && k.rol === rol).length;
 }
 
+function indiceFase(fase: FaseActual): number {
+  return FASES.findIndex((f) => f.valor === fase);
+}
+
 function BarraFases({ actual }: { actual: FaseActual }) {
-  const indiceActual = FASES.findIndex((f) => f.valor === actual);
+  const indiceActual = indiceFase(actual);
   // "Avance general": cuántas fases quedaron atrás sobre el total -- dato
   // real, ya calculable con fase_actual. No dice nada de qué falta DENTRO
   // de la fase actual (eso es ProgresoFaseActual, y no siempre hay dato).
@@ -64,6 +82,86 @@ function BarraFases({ actual }: { actual: FaseActual }) {
   );
 }
 
+function SeccionGateFase0({ sitio }: { sitio: EstadoSitio["sitio"] }) {
+  if (sitio.faseActual !== "encuadre") return null;
+
+  // Mismo criterio que ejecutarGateFase0 (Base 4: mecánico, no inventa una
+  // condición nueva acá) -- si difiere, el gate real del Server Action manda.
+  const pasaGate = Boolean(sitio.nombreMarca?.trim() && sitio.arquetipo?.trim() && sitio.segmento?.trim());
+
+  return (
+    <div className="rounded border border-neutral-800 p-3">
+      {pasaGate ? (
+        <form action={confirmarGateFase0} className="flex items-center gap-2">
+          <input type="hidden" name="sitioId" value={sitio.id} />
+          <button type="submit" className={BOTON_PRIMARIO}>
+            Confirmar y pasar a Investigación
+          </button>
+          <span className="text-xs text-neutral-500">Gate de Fase 0: PASA — falta tu confirmación.</span>
+        </form>
+      ) : (
+        <p className="text-xs text-neutral-600">
+          Faltan datos básicos del sitio (nombre de marca, arquetipo o segmento) antes de poder pasar el gate.
+        </p>
+      )}
+    </div>
+  );
+}
+
+function SeccionFase1({ estado }: { estado: EstadoSitio }) {
+  const { sitio, keywords } = estado;
+  if (sitio.faseActual !== "investigacion") return null;
+
+  const pilares = keywords.filter((k) => !k.esDescarte && k.rol === "pilar").length;
+  const clasificadasNoPilar = keywords.filter(
+    (k) => !k.esDescarte && (k.rol === "secundaria" || k.rol === "long_tail")
+  ).length;
+  // Mismo criterio que ejecutarGateFase1 (Base 4) -- >=1 pilar y >=1 keyword
+  // clasificada como secundaria o long_tail (hipótesis salió del proceso).
+  const pasaGate = pilares >= 1 && clasificadasNoPilar >= 1;
+
+  return (
+    <div className="space-y-3 rounded border border-neutral-800 p-3">
+      {!sitio.investigacionEstado && (
+        <form action={solicitarInvestigacion} className="flex items-center gap-2 border-b border-neutral-800 pb-3">
+          <input type="hidden" name="sitioId" value={sitio.id} />
+          <button type="submit" className={BOTON_PRIMARIO}>
+            Solicitar investigación
+          </button>
+          <span className="text-xs text-neutral-500">
+            Corre la investigación real (SEO + clasificación de keywords) sin supervisión — no confirma el gate.
+          </span>
+        </form>
+      )}
+
+      {(sitio.investigacionEstado === "solicitada" || sitio.investigacionEstado === "en_curso") && (
+        <p className="border-b border-neutral-800 pb-3 text-xs text-neutral-400">
+          {sitio.investigacionEstado === "solicitada"
+            ? "Investigación solicitada — esperando que la rutina la tome."
+            : "Investigación en curso."}
+        </p>
+      )}
+
+      {sitio.investigacionEstado === "terminada" && sitio.investigacionReporte && (
+        <div className="space-y-1 border-b border-neutral-800 pb-3">
+          <p className="text-xs text-emerald-500">Investigación automática terminada.</p>
+          <p className="whitespace-pre-wrap text-xs text-neutral-400">{sitio.investigacionReporte}</p>
+        </div>
+      )}
+
+      {pasaGate && (
+        <form action={confirmarGateFase1} className="flex items-center gap-2 border-t border-neutral-800 pt-3">
+          <input type="hidden" name="sitioId" value={sitio.id} />
+          <button type="submit" className={BOTON_PRIMARIO}>
+            Confirmar y pasar a Spec
+          </button>
+          <span className="text-xs text-neutral-500">Gate de Fase 1: PASA — falta tu confirmación.</span>
+        </form>
+      )}
+    </div>
+  );
+}
+
 function ProgresoFaseActual({
   sitio,
   entregablesFase2,
@@ -73,7 +171,7 @@ function ProgresoFaseActual({
   entregablesFase2: EstadoEntregablesFase2;
   contenidoFase2: EstadoContenidoFase2;
 }) {
-  if (sitio.faseActual !== "spec") {
+  if (indiceFase(sitio.faseActual) < indiceFase("spec")) {
     return (
       <p className="text-xs text-neutral-600">
         Sin seguimiento detallado todavía para "{FASES.find((f) => f.valor === sitio.faseActual)?.etiqueta}" —
@@ -82,13 +180,18 @@ function ProgresoFaseActual({
     );
   }
 
+  // Activa solo en la fase exacta -- ya pasada (construcción en adelante),
+  // el contenido sigue existiendo en la base (estado-sistema.ts lo carga
+  // siempre) pero se muestra colapsado en vez de desaparecer.
+  const esFaseActiva = sitio.faseActual === "spec";
+
   const claves = Object.keys(entregablesFase2) as EntregableFase2[];
   const completados = claves.filter((c) => entregablesFase2[c]).length;
   // Mismo criterio que ejecutarGateFase2 (Base 4: mecánico, no inventa una
   // condición nueva acá) -- si difiere, el gate real del Server Action manda.
   const pasaGate = completados === claves.length;
 
-  return (
+  const contenido = (
     <div className="space-y-3">
       <p className="text-xs text-neutral-500">
         Progreso de Spec: <b className="text-neutral-300">{completados}/{claves.length} entregables</b>
@@ -107,7 +210,12 @@ function ProgresoFaseActual({
               {ETIQUETAS_ENTREGABLES_FASE2[c]}
             </span>
             {contenidoFase2[c] ? (
-              <p className="mt-2 whitespace-pre-wrap text-sm text-neutral-300">{contenidoFase2[c]}</p>
+              <details className="mt-2">
+                <summary className="cursor-pointer text-xs text-neutral-500 hover:text-neutral-300">
+                  Ver contenido
+                </summary>
+                <p className="mt-2 whitespace-pre-wrap text-sm text-neutral-300">{contenidoFase2[c]}</p>
+              </details>
             ) : (
               <p className="mt-2 text-xs text-neutral-600">Sin contenido guardado todavía.</p>
             )}
@@ -115,13 +223,10 @@ function ProgresoFaseActual({
         ))}
       </div>
 
-      {pasaGate && (
+      {esFaseActiva && pasaGate && (
         <form action={confirmarGateFase2} className="flex items-center gap-2 pt-1">
           <input type="hidden" name="sitioId" value={sitio.id} />
-          <button
-            type="submit"
-            className="rounded bg-emerald-500 px-3 py-1.5 text-xs font-medium text-emerald-950 hover:bg-emerald-400"
-          >
+          <button type="submit" className={BOTON_PRIMARIO}>
             Confirmar y pasar a Construcción
           </button>
           <span className="text-xs text-neutral-500">Gate de Fase 2: PASA — falta tu confirmación.</span>
@@ -129,15 +234,31 @@ function ProgresoFaseActual({
       )}
     </div>
   );
+
+  if (esFaseActiva) return contenido;
+
+  return (
+    <details>
+      <summary className="cursor-pointer text-sm text-neutral-400 hover:text-neutral-200">
+        Spec ({completados}/{claves.length} entregables) — fase cerrada, click para ver
+      </summary>
+      <div className="mt-3">{contenido}</div>
+    </details>
+  );
 }
 
 function SeccionConstruccion({ sitio }: { sitio: EstadoSitio["sitio"] }) {
   // Capturar la referencia sirve desde Spec (la usa dirección visual,
   // db/scripts/fase2_formato_spec.md §5) -- pero solicitar construcción
   // solo tiene sentido una vez que el sitio ya está en esa fase de verdad.
-  if (sitio.faseActual !== "spec" && sitio.faseActual !== "construccion") return null;
+  if (indiceFase(sitio.faseActual) < indiceFase("spec")) return null;
 
-  return (
+  // Activa en spec/construcción (donde tiene sentido seguir escribiendo);
+  // deploy en adelante queda colapsada pero visible, no desaparece.
+  const esActiva = sitio.faseActual === "spec" || sitio.faseActual === "construccion";
+  const enConstruccionOPosterior = indiceFase(sitio.faseActual) >= indiceFase("construccion");
+
+  const contenido = (
     <div className="space-y-3 rounded border border-neutral-800 p-3">
       <h2 className="text-sm font-medium text-neutral-300">Sitio de referencia y construcción</h2>
 
@@ -148,25 +269,22 @@ function SeccionConstruccion({ sitio }: { sitio: EstadoSitio["sitio"] }) {
           name="referenciaUrl"
           defaultValue={sitio.referenciaUrl ?? ""}
           placeholder="https://sitio-de-referencia.com"
-          className="flex-1 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-sm text-neutral-100"
+          className={`flex-1 ${CAMPO}`}
         />
-        <button
-          type="submit"
-          className="rounded border border-neutral-700 px-3 py-1.5 text-xs text-neutral-300 hover:bg-neutral-800"
-        >
+        <button type="submit" className={BOTON_SECUNDARIO}>
           Guardar
         </button>
       </form>
 
-      {sitio.faseActual === "construccion" && (
+      {enConstruccionOPosterior && (
         <div className="pt-1">
-          {!sitio.construccionEstado && (
+          {!sitio.construccionEstado && sitio.faseActual === "construccion" && (
             <form action={solicitarConstruccion} className="flex items-center gap-2">
               <input type="hidden" name="sitioId" value={sitio.id} />
               <button
                 type="submit"
                 disabled={!sitio.referenciaUrl}
-                className="rounded bg-emerald-500 px-3 py-1.5 text-xs font-medium text-emerald-950 hover:bg-emerald-400 disabled:cursor-not-allowed disabled:opacity-40"
+                className={`${BOTON_PRIMARIO} disabled:cursor-not-allowed disabled:opacity-40`}
               >
                 Solicitar construcción
               </button>
@@ -205,16 +323,28 @@ function SeccionConstruccion({ sitio }: { sitio: EstadoSitio["sitio"] }) {
       )}
     </div>
   );
+
+  if (esActiva) return contenido;
+
+  return (
+    <details>
+      <summary className="cursor-pointer text-sm text-neutral-400 hover:text-neutral-200">
+        Sitio de referencia y construcción — fase cerrada, click para ver
+      </summary>
+      <div className="mt-3">{contenido}</div>
+    </details>
+  );
 }
 
 function SeccionChecklistFase3({ sitio }: { sitio: EstadoSitio["sitio"] }) {
   // Mismo criterio de fase que SeccionConstruccion: el checklist recién
   // tiene sentido una vez que hay algo construido para verificar.
-  if (sitio.faseActual !== "construccion") return null;
+  if (indiceFase(sitio.faseActual) < indiceFase("construccion")) return null;
 
   const resultado = sitio.checklistFase3Resultado;
+  const esActiva = sitio.faseActual === "construccion";
 
-  return (
+  const contenido = (
     <div className="space-y-3 rounded border border-neutral-800 p-3">
       <h2 className="text-sm font-medium text-neutral-300">Checklist de Fase 3 (verificación técnica/SEO)</h2>
 
@@ -225,12 +355,9 @@ function SeccionChecklistFase3({ sitio }: { sitio: EstadoSitio["sitio"] }) {
           name="checklistUrl"
           defaultValue={sitio.checklistFase3Url ?? ""}
           placeholder="https://preview-del-sitio.vercel.app"
-          className="flex-1 rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-sm text-neutral-100"
+          className={`flex-1 ${CAMPO}`}
         />
-        <button
-          type="submit"
-          className="rounded border border-neutral-700 px-3 py-1.5 text-xs text-neutral-300 hover:bg-neutral-800"
-        >
+        <button type="submit" className={BOTON_SECUNDARIO}>
           Correr checklist
         </button>
       </form>
@@ -260,6 +387,17 @@ function SeccionChecklistFase3({ sitio }: { sitio: EstadoSitio["sitio"] }) {
         </div>
       )}
     </div>
+  );
+
+  if (esActiva) return contenido;
+
+  return (
+    <details>
+      <summary className="cursor-pointer text-sm text-neutral-400 hover:text-neutral-200">
+        Checklist de Fase 3 — fase cerrada, click para ver
+      </summary>
+      <div className="mt-3">{contenido}</div>
+    </details>
   );
 }
 
@@ -297,27 +435,157 @@ function SeccionKeywords({ keywords }: { keywords: Keyword[] }) {
   );
 }
 
-function SeccionHipotesis({ estado }: { estado: EstadoSitio }) {
-  if (estado.hipotesis.length === 0) {
-    return <p className="text-sm text-neutral-500">Sin hipótesis todavía.</p>;
-  }
+function SelectorSitios({
+  todos,
+  actualId,
+}: {
+  todos: { cliente: Cliente; estadoSitio: EstadoSitio }[];
+  actualId: string;
+}) {
   return (
-    <div className="space-y-3">
-      {estado.hipotesis.map((h) => (
-        <div key={h.id} className="rounded border border-neutral-800 p-3">
-          <div className="mb-1 flex gap-2 text-xs text-neutral-500">
-            <span className="rounded bg-neutral-800 px-2 py-0.5">{h.horizonte}</span>
-            <span className="rounded bg-neutral-800 px-2 py-0.5">{h.etapa}</span>
-          </div>
-          <p className="text-sm text-neutral-100">{h.enunciado}</p>
-          <p className="mt-1 text-xs text-neutral-400">Criterio: {h.criterioExito}</p>
+    <details className="relative">
+      <summary className={`${BOTON_SECUNDARIO} inline-block cursor-pointer list-none`}>
+        Cambiar de sitio ▾
+      </summary>
+      <div className="absolute right-0 z-10 mt-1 w-64 space-y-1 rounded border border-neutral-700 bg-neutral-900 p-2 shadow-lg">
+        {todos.map(({ cliente, estadoSitio }) => (
+          <a
+            key={estadoSitio.sitio.id}
+            href={`/?sitioId=${estadoSitio.sitio.id}`}
+            className={
+              "block rounded px-2 py-1.5 text-sm " +
+              (estadoSitio.sitio.id === actualId
+                ? "bg-emerald-500 text-emerald-950"
+                : "text-neutral-300 hover:bg-neutral-800")
+            }
+          >
+            {estadoSitio.sitio.nombreMarca}
+            <span className="block text-xs text-neutral-500">{cliente.nombre}</span>
+          </a>
+        ))}
+      </div>
+    </details>
+  );
+}
+
+// Atajo liviano frente a FormularioAltaCliente: ese formulario pide todos los
+// campos de cliente (obligatorios si el slug no existe todavía); acá el
+// cliente ya está resuelto (viene seleccionado en la UI), así que solo se
+// piden los campos del sitio nuevo.
+function FormularioNuevoSitio({ cliente }: { cliente: Cliente }) {
+  return (
+    <details className="rounded-lg border border-neutral-800 p-5">
+      <summary className="cursor-pointer text-sm font-medium text-neutral-300">
+        + Nuevo sitio para {cliente.nombre}
+      </summary>
+      <p className="mt-2 text-xs text-neutral-500">
+        Para sumar otro sitio a este cliente, que ya existe — no vuelve a pedir sus datos.
+      </p>
+      <form action={crearSitioParaCliente} className="mt-4 space-y-3">
+        <input type="hidden" name="clienteSlug" value={cliente.slug} />
+        <div className="grid grid-cols-2 gap-3">
+          <input name="sitioNombreMarca" placeholder="Nombre de marca del sitio" required className={CAMPO} />
+          <input name="sitioArquetipo" placeholder="Arquetipo" required className={CAMPO} />
+          <input name="sitioSegmento" placeholder="Segmento (con evidencia real)" required className={`col-span-2 ${CAMPO}`} />
+          <input name="sitioDominio" placeholder="Dominio tentativo (opcional)" className={`col-span-2 ${CAMPO}`} />
         </div>
-      ))}
+        <button type="submit" className={BOTON_PRIMARIO}>
+          Crear sitio
+        </button>
+      </form>
+    </details>
+  );
+}
+
+function FormularioAltaCliente() {
+  return (
+    <details className="rounded-lg border border-neutral-800 p-5">
+      <summary className="cursor-pointer text-sm font-medium text-neutral-300">+ Alta de cliente nuevo (Fase 0)</summary>
+      <p className="mt-2 text-xs text-neutral-500">
+        Para un negocio que todavía no existe en el sistema — crea el cliente y su primer sitio juntos.
+      </p>
+      <form action={altaCliente} className="mt-4 space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <input name="clienteSlug" placeholder="slug del cliente (único)" required className={CAMPO} />
+          <input name="clienteNombre" placeholder="Nombre del negocio" className={CAMPO} />
+          <input name="clienteVertical" placeholder="Vertical" className={CAMPO} />
+          <select name="clienteModelo" defaultValue="unico" className={CAMPO}>
+            <option value="unico">unico</option>
+            <option value="red">red</option>
+          </select>
+          <input
+            name="clienteRespaldoLegal"
+            placeholder='Respaldo legal (o "Ninguno -- confirmado sin X vigente")'
+            className={`col-span-2 ${CAMPO}`}
+          />
+          <label className="flex items-center gap-2 text-xs text-neutral-400">
+            <input type="checkbox" name="clienteMarcaOculta" /> Marca oculta en el sitio
+          </label>
+          <label className="flex items-center gap-2 text-xs text-neutral-400">
+            <input type="checkbox" name="clienteCrossLinkingExcepcion" /> Excepción a sin-cross-linking
+          </label>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 border-t border-neutral-800 pt-3">
+          <input name="sitioNombreMarca" placeholder="Nombre de marca del sitio" required className={CAMPO} />
+          <input name="sitioArquetipo" placeholder="Arquetipo" required className={CAMPO} />
+          <input name="sitioSegmento" placeholder="Segmento (con evidencia real)" required className={`col-span-2 ${CAMPO}`} />
+          <input name="sitioDominio" placeholder="Dominio tentativo (opcional)" className={`col-span-2 ${CAMPO}`} />
+        </div>
+
+        <button type="submit" className={BOTON_PRIMARIO}>
+          Crear cliente + sitio
+        </button>
+      </form>
+    </details>
+  );
+}
+
+function DetalleSitio({ cliente, estadoSitio }: { cliente: Cliente; estadoSitio: EstadoSitio }) {
+  const { sitio } = estadoSitio;
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <p className="text-sm text-neutral-500">Cliente</p>
+        <p className="text-lg text-neutral-100">
+          {cliente.nombre} <span className="text-neutral-500">({cliente.modelo}, {cliente.vertical})</span>
+        </p>
+      </div>
+
+      <FormularioNuevoSitio cliente={cliente} />
+
+      <section className="space-y-4 rounded-lg border border-neutral-800 p-5">
+        <div>
+          <p className="text-base text-neutral-100">{sitio.nombreMarca}</p>
+          <p className="text-xs text-neutral-500">{sitio.dominio ?? "sin dominio decidido"}</p>
+        </div>
+
+        <BarraFases actual={sitio.faseActual} />
+        <SeccionGateFase0 sitio={sitio} />
+        <SeccionFase1 estado={estadoSitio} />
+        <ProgresoFaseActual
+          sitio={sitio}
+          entregablesFase2={estadoSitio.entregablesFase2}
+          contenidoFase2={estadoSitio.contenidoFase2}
+        />
+        <SeccionConstruccion sitio={sitio} />
+        <SeccionChecklistFase3 sitio={sitio} />
+
+        <div>
+          <h2 className="mb-2 text-sm font-medium text-neutral-300">Fase 1 — Keywords</h2>
+          <SeccionKeywords keywords={estadoSitio.keywords} />
+        </div>
+      </section>
     </div>
   );
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ sitioId?: string }>;
+}) {
   // Defensa en profundidad -- el proxy ya filtra esto, pero los docs de
   // Next 16 son explícitos: cada Server Function/página tiene que verificar
   // la sesión de nuevo, no confiar solo en Proxy.
@@ -327,53 +595,36 @@ export default async function DashboardPage() {
   }
 
   const estado = await cargarEstadoSistema();
+  const { sitioId } = await searchParams;
+
+  // Plano en vez de agrupado por cliente -- el selector elige un sitio
+  // directamente (Base: la mayoría de las acciones ya giran en torno a
+  // sitioId, no clienteId).
+  const todos = estado.flatMap(({ cliente, sitios }) => sitios.map((estadoSitio) => ({ cliente, estadoSitio })));
+  const seleccionado = todos.find((t) => t.estadoSitio.sitio.id === sitioId) ?? todos[0];
 
   return (
     <main className="mx-auto max-w-3xl space-y-8 px-6 py-10">
-      <h1 className="text-xl font-medium text-neutral-100">Sitios Web — Estado por fase</h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-xl font-medium text-neutral-100">Sitios Web — Estado por fase</h1>
+        {seleccionado && <SelectorSitios todos={todos} actualId={seleccionado.estadoSitio.sitio.id} />}
+      </div>
 
-      {!estado ? (
-        <p className="text-neutral-400">Sin clientes reales todavía.</p>
+      <FormularioAltaCliente />
+
+      {!seleccionado ? (
+        <p className="text-neutral-400">Sin clientes todavía — creá el primero arriba.</p>
       ) : (
-        <div className="space-y-8">
-          <div>
-            <p className="text-sm text-neutral-500">Cliente</p>
-            <p className="text-lg text-neutral-100">
-              {estado.cliente.nombre} <span className="text-neutral-500">({estado.cliente.modelo}, {estado.cliente.vertical})</span>
-            </p>
-          </div>
-
-          {estado.sitios.map((s) => (
-            <section key={s.sitio.id} className="space-y-4 rounded-lg border border-neutral-800 p-5">
-              <div>
-                <p className="text-base text-neutral-100">{s.sitio.nombreMarca}</p>
-                <p className="text-xs text-neutral-500">{s.sitio.dominio ?? "sin dominio decidido"}</p>
-              </div>
-
-              <BarraFases actual={s.sitio.faseActual} />
-              <ProgresoFaseActual sitio={s.sitio} entregablesFase2={s.entregablesFase2} contenidoFase2={s.contenidoFase2} />
-              <SeccionConstruccion sitio={s.sitio} />
-              <SeccionChecklistFase3 sitio={s.sitio} />
-
-              <div>
-                <h2 className="mb-2 text-sm font-medium text-neutral-300">Fase 1 — Keywords</h2>
-                <SeccionKeywords keywords={s.keywords} />
-              </div>
-
-              <div>
-                <h2 className="mb-2 text-sm font-medium text-neutral-300">Fase 1 — Hipótesis</h2>
-                <SeccionHipotesis estado={s} />
-              </div>
-            </section>
-          ))}
-        </div>
+        <DetalleSitio cliente={seleccionado.cliente} estadoSitio={seleccionado.estadoSitio} />
       )}
 
       <p className="text-xs text-neutral-600">
-        Mayormente solo lectura — la escritura posible desde acá es confirmar el gate de Fase 2,
-        guardar el sitio de referencia, y solicitar construcción (que solo marca la intención en
-        Supabase — quién reacciona a eso es aparte). El resto (marcar entregables, gates de otras
-        fases, promover keywords, correr la construcción en sí) sigue siendo por CLI o por la rutina.
+        Mayormente solo lectura — la escritura posible desde acá: alta de cliente/sitio nuevo, sitio
+        nuevo para el cliente actual, confirmar los gates de Fase 0/1/2, guardar el
+        sitio de referencia, solicitar investigación o construcción (ambas solo marcan la intención en
+        Supabase — la investigación corre sin supervisión pero nunca confirma el gate, la construcción
+        nunca hace merge a main), y correr el checklist de Fase 3. El resto (marcar entregables de Fase
+        2, promover keywords a mano, correr la construcción en sí) sigue siendo por CLI o por la rutina.
       </p>
     </main>
   );

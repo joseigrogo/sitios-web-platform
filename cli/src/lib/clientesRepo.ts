@@ -28,6 +28,12 @@ export function crearClientesRepoSupabase(client: SupabaseClient): ClientesRepo 
       return (data ?? []).map(filaACliente);
     },
 
+    async listarTodos() {
+      const { data, error } = await client.from('clientes').select('*').order('created_at', { ascending: true });
+      if (error) throw new Error(`Error listando clientes: ${error.message}`);
+      return (data ?? []).map(filaACliente);
+    },
+
     async crear(input: NuevoClienteInput) {
       const { data, error } = await client
         .from('clientes')

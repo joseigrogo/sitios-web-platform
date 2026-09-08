@@ -1,41 +1,8 @@
 import type { Command } from 'commander';
 import { manejarErrorCli } from '../lib/errors.js';
+import { ejecutarGateFase0 } from '../lib/gateFase0.js';
 import { crearSitiosRepoSupabase } from '../lib/sitiosRepo.js';
 import { crearSupabaseClient } from '../lib/supabaseClient.js';
-import type { Sitio, SitiosRepo } from '../types.js';
-
-export interface GateFase0Resultado {
-  sitio: Sitio;
-  camposFaltantes: string[];
-  pasaGate: boolean;
-  flipeado: boolean;
-}
-
-export async function ejecutarGateFase0(
-  sitioId: string,
-  confirmar: boolean,
-  repos: { sitios: SitiosRepo }
-): Promise<GateFase0Resultado> {
-  const sitio = await repos.sitios.obtenerPorId(sitioId);
-  if (!sitio) {
-    throw new Error(`No existe un sitio con id ${sitioId}`);
-  }
-
-  const camposFaltantes: string[] = [];
-  if (!sitio.nombreMarca?.trim()) camposFaltantes.push('nombre_marca');
-  if (!sitio.arquetipo?.trim()) camposFaltantes.push('arquetipo');
-  if (!sitio.segmento?.trim()) camposFaltantes.push('segmento');
-
-  const pasaGate = camposFaltantes.length === 0;
-  let flipeado = false;
-
-  if (pasaGate && confirmar && sitio.faseActual === 'encuadre') {
-    await repos.sitios.actualizarFaseActual(sitioId, 'investigacion');
-    flipeado = true;
-  }
-
-  return { sitio, camposFaltantes, pasaGate, flipeado };
-}
 
 export function registrarComandoSitioGateFase0(program: Command): void {
   program

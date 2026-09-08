@@ -6,6 +6,7 @@ import type {
   EntregableFase2,
   EstadoContenidoFase2,
   FaseActual,
+  InvestigacionEstado,
   NuevoClienteInput,
   NuevoSitioInput,
   Sitio,
@@ -29,6 +30,9 @@ export function crearClientesRepoFalso(iniciales: Cliente[] = []): ClientesRepo 
       const objetivo = nombre.toLowerCase();
       return clientes.filter((c) => c.nombre.toLowerCase().includes(objetivo));
     },
+    async listarTodos() {
+      return [...clientes];
+    },
     async crear(input: NuevoClienteInput) {
       const cliente: Cliente = { id: idFalso('cliente'), ...input };
       clientes.push(cliente);
@@ -51,6 +55,8 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
         repoGithub: null,
         construccionEstado: null,
         construccionReporte: null,
+        investigacionEstado: null,
+        investigacionReporte: null,
         checklistFase3Url: null,
         checklistFase3Resultado: null,
         ...input,
@@ -79,6 +85,17 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
         sitio.construccionEstado = 'terminada';
         sitio.construccionReporte = reporte;
         sitio.repoGithub = repoGithub;
+      }
+    },
+    async actualizarEstadoInvestigacion(id: string, estado: InvestigacionEstado) {
+      const sitio = sitios.find((s) => s.id === id);
+      if (sitio) sitio.investigacionEstado = estado;
+    },
+    async finalizarInvestigacion(id: string, reporte: string) {
+      const sitio = sitios.find((s) => s.id === id);
+      if (sitio) {
+        sitio.investigacionEstado = 'terminada';
+        sitio.investigacionReporte = reporte;
       }
     },
     async guardarResultadoChecklistFase3(id: string, url: string, resultado: ChecklistFase3Resultado) {

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { ejecutarGateFase1 } from '../src/commands/sitioGateFase1.js';
+import { ejecutarGateFase1 } from '../src/lib/gateFase1.js';
 import type { FaseActual, KeywordsRepo, Sitio } from '../src/types.js';
 import { crearSitiosRepoFalso } from './fakes.js';
 
@@ -17,6 +17,8 @@ function sitioBase(overrides: Partial<Sitio> = {}): Sitio {
     repoGithub: null,
     construccionEstado: null,
     construccionReporte: null,
+    investigacionEstado: null,
+    investigacionReporte: null,
     checklistFase3Url: null,
     checklistFase3Resultado: null,
     ...overrides,

@@ -6,6 +6,7 @@ import type {
   EstadoContenidoFase2,
   EstadoEntregablesFase2,
   FaseActual,
+  InvestigacionEstado,
   NuevoSitioInput,
   Sitio,
   SitiosRepo,
@@ -37,6 +38,8 @@ function filaASitio(fila: Record<string, unknown>): Sitio {
     repoGithub: (fila.repo_github as string | null) ?? null,
     construccionEstado: (fila.construccion_estado as ConstruccionEstado | null) ?? null,
     construccionReporte: (fila.construccion_reporte as string | null) ?? null,
+    investigacionEstado: (fila.investigacion_estado as InvestigacionEstado | null) ?? null,
+    investigacionReporte: (fila.investigacion_reporte as string | null) ?? null,
     checklistFase3Url: (fila.checklist_fase3_url as string | null) ?? null,
     checklistFase3Resultado: (fila.checklist_fase3_resultado as ChecklistFase3Resultado | null) ?? null,
   };
@@ -87,6 +90,19 @@ export function crearSitiosRepoSupabase(client: SupabaseClient): SitiosRepo {
         .update({ construccion_estado: 'terminada', construccion_reporte: reporte, repo_github: repoGithub })
         .eq('id', id);
       if (error) throw new Error(`Error finalizando construcción: ${error.message}`);
+    },
+
+    async actualizarEstadoInvestigacion(id, estado) {
+      const { error } = await client.from('sitios').update({ investigacion_estado: estado }).eq('id', id);
+      if (error) throw new Error(`Error actualizando investigacion_estado: ${error.message}`);
+    },
+
+    async finalizarInvestigacion(id, reporte) {
+      const { error } = await client
+        .from('sitios')
+        .update({ investigacion_estado: 'terminada', investigacion_reporte: reporte })
+        .eq('id', id);
+      if (error) throw new Error(`Error finalizando investigación: ${error.message}`);
     },
 
     async guardarResultadoChecklistFase3(id, url, resultado) {
