@@ -162,6 +162,14 @@ de CLI para esto — no hace falta uno nuevo, Base 8):
    Si el segmento tiene varias líneas de negocio (p. ej. rinoplastia +
    liposucción + aumento), apuntar a ese rango **por línea**, no en total.
 
+   Para `landing_intermediaria` o `directorio_hub` (multipágina): el rango
+   es **por página prevista** — una línea de negocio = una página de
+   servicio + su propio cluster (1–2 pilar, 3–7 secundaria, 3–5 long_tail),
+   más un puñado de secundaria de categoría para la home. Se promueven más
+   keywords en total que en un `landing_directa`. La asignación
+   keyword→página no la hace esta rutina — es de Fase 2 (spec); acá solo se
+   clasifica y se deja el `rol` bien puesto.
+
    Cada decisión se escribe como una fila en `keywords` vía el conector
    Supabase (`INSERT`), no por CLI — el sandbox de esta rutina no tiene
    `SUPABASE_SERVICE_ROLE_KEY` (ver nota al pie). Columnas:
