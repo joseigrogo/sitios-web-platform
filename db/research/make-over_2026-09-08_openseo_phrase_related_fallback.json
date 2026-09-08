@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "proveedor": "openseo",
+    "reporte": "phrase_related",
+    "clienteSlug": "make-over",
+    "fecha": "2026-09-08",
+    "usedFallback": true
+  },
+  "datos": {
+    "results": [
+      {
+        "seed": "aumento de senos colombia",
+        "ok": true,
+        "rowCount": 38,
+        "source": "suggestions",
+        "usedFallback": true,
+        "rows": [
+          {
+            "keyword": "aumento de senos colombia",
+            "searchVolume": null,
+            "cpc": null,
+            "competition": null,
+            "keywordDifficulty": null,
+            "intent": "informational"
+          },
+          {
+            "keyword": "precio de aumento de senos en colombia",
+            "searchVolume": 90,
+            "cpc": 0.67,
+            "competition": 0.44,
+            "keywordDifficulty": 0,
+            "intent": "commercial"
+          },
+          {
+            "keyword": "precio de aumento de senos colombia",
+            "searchVolume": 90,
+            "cpc": 0.67,
+            "competition": 0.44,
+            "keywordDifficulty": 0,
+            "intent": "commercial"
+          },
+          {
+            "keyword": "cuanto vale el aumento de senos en colombia",
+            "searchVolume": 40,
+            "cpc": 0.53,
+            "competition": 0.35,
+            "keywordDifficulty": null,
+            "intent": "informational"
+          },
+          {
+            "keyword": "cuanto vale aumento de senos en colombia",
+            "searchVolume": 10,
+            "cpc": 0.47,
+            "competition": 0.36,
+            "keywordDifficulty": null,
+            "intent": "commercial"
+          },
+          {
+            "keyword": "aumento de senos sin implantes colombia",
+            "searchVolume": 10,
+            "cpc": null,
+            "competition": 0,
+            "keywordDifficulty": null,
+            "intent": "commercial"
+          },
+          {
+            "keyword": "cirugia de aumento de senos colombia",
+            "searchVolume": 10,
+            "cpc": null,
+            "competition": null,
+            "keywordDifficulty": null,
+            "intent": "commercial"
+          },
+          {
+            "keyword": "aumento de senos precio en colombia",
+            "searchVolume": 10,
+            "cpc": null,
+            "competition": 0.31,
+            "keywordDifficulty": 0,
+            "intent": "informational"
+          }
+        ],
+        "nota_captura": "rowCount=38; se listan las primeras 8 filas con searchVolume no nulo/mas relevantes de la respuesta cruda completa para mantener el archivo manejable. El resto del rowCount son variantes long-tail con searchVolume=null (sin datos suficientes). Ninguna fila de este seed se promueve: usedFallback=true activa el gate de Base 3 (motivo_descarte='modo degradado de OpenSEO, revisar a mano')."
+      }
+    ]
+  }
+}

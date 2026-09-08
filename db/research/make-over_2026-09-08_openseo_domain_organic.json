@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "proveedor": "openseo",
+    "reporte": "domain_organic",
+    "clienteSlug": "make-over",
+    "fecha": "2026-09-08",
+    "usedFallback": null
+  },
+  "datos": {
+    "domain": "drluisdevoz.com",
+    "locationCode": 2170,
+    "languageCode": "es",
+    "razon_eleccion": "Identificado en el SERP real de phrase_organic (make-over_2026-09-08_openseo_phrase_organic.json), rank 2 organico para 'rinoplastia precio en colombia' (seed pilar, 1900 vol/mes) — no elegido al azar.",
+    "organicTraffic": 3824,
+    "organicKeywords": 66,
+    "backlinks": null,
+    "referringDomains": null,
+    "hasData": true,
+    "fetchedAt": "2026-09-08T19:19:56.828Z"
+  }
+}
