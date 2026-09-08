@@ -1,7 +1,8 @@
 # Fase 1 — instrucciones de investigación (rutina automática)
 
-Prompt que ejecuta la rutina de Claude Code disparada por el webhook de
-`investigacion_estado = 'solicitada'`, dado un `sitio_id`. No reemplaza
+Prompt que ejecuta la rutina de Claude Code. Corre por cron (cada hora) y
+busca ella misma los sitios con `investigacion_estado = 'solicitada'` (ver
+Input) — no la dispara ningún webhook. No reemplaza
 juicio humano — hace el mismo trabajo que antes hacía un agente en sesión
 interactiva (Base 4: "toda la investigación de Fase 1 se corrió por
 agente... es el estado de bootstrap esperado, no una desviación"), ahora
@@ -22,8 +23,32 @@ juicio deja de ser delegable.
 
 ## Input
 
-Leído de Supabase (conector MCP, no hay comando de CLI para esto — no
-hace falta uno nuevo, Base 8):
+**Cómo se elige el sitio.** Esta rutina corre por cron, sin `sitio_id` en
+el disparo. Al arrancar, consultar Supabase (conector MCP) por sitios
+pendientes:
+
+```sql
+select id, cliente_id from sitios
+where investigacion_estado = 'solicitada' and fase_actual = 'investigacion'
+order by created_at asc
+limit 1;
+```
+
+- **Cero filas → salir en silencio.** Es el caso normal la mayoría de las
+  horas. No es una anomalía: no escribir reporte, no notificar, terminar.
+- **Una o más → tomar la más vieja** (el `limit 1` de arriba) y procesarla.
+  Si hay varias en `solicitada`, las demás las levanta la corrida
+  siguiente — una por hora alcanza.
+- Si el disparo trae un `sitio_id` explícito (corrida manual), usar ese y
+  saltear la consulta.
+- **Recuperación de colgados.** Si no hay ninguno en `solicitada` pero hay
+  uno en `investigacion_estado = 'en_curso'` cuyo `updated_at` (o el
+  timestamp del heartbeat en `investigacion_reporte`) es de hace más de 3
+  horas, es una corrida anterior que murió a mitad: retomarlo como si
+  estuviera en `solicitada`.
+
+Con el `sitio_id` elegido, leer de Supabase (conector MCP, no hay comando
+de CLI para esto — no hace falta uno nuevo, Base 8):
 
 - `sitios`: `nombre_marca`, `dominio`, `arquetipo`, `segmento`,
   `referencia_url`, `fase_actual`.
@@ -35,23 +60,25 @@ hace falta uno nuevo, Base 8):
 
 ## Output esperado
 
-- Hasta 7 archivos en `db/research/` (uno por cada valor de `--reporte`
-  guardado — `phrase_related`, `phrase_this` o `phrase_these`,
-  `phrase_organic`, `phrase_kdi`, `domain_organic`, y `phrase_questions`
-  solo si hay de dónde sacarlo, ver paso 5).
-- Filas nuevas en `keywords`: promovidas con `rol`, o descartadas con
-  `motivo_descarte` — nunca sin uno de los dos. Para pasar el gate hace
-  falta >=1 con `rol='pilar'` y >=1 con `rol='secundaria'` o `'long_tail'`.
+- Hasta 7 archivos en `db/research/` (uno por cada `reporte` guardado —
+  `phrase_related`, `phrase_this` o `phrase_these`, `phrase_organic`,
+  `phrase_kdi`, `domain_organic`, y `phrase_questions` solo si hay de
+  dónde sacarlo), commiteados en un PR (best-effort, ver paso 4).
+- Filas nuevas en `keywords` (vía conector Supabase): promovidas con
+  `rol`, o descartadas con `motivo_descarte` — nunca sin uno de los dos.
+  Para pasar el gate hace falta >=1 con `rol='pilar'` y >=1 con
+  `rol='secundaria'` o `'long_tail'`.
 - `sitios.investigacion_reporte` con el resumen de qué se hizo.
-- **Lo que NO produce:** ningún cambio a `sitios.fase_actual`. Ese flip
-  sigue siendo `cli sitio gate-fase1 --confirmar`, apretado por un humano
-  desde el dashboard.
+- **Lo que NO produce:** ningún cambio a `sitios.fase_actual`. Ese flip lo
+  aprieta un humano desde el dashboard ("Confirmar y pasar a Spec").
 
 ## Proceso, paso a paso
 
-1. **Heartbeat mínimo.** Flip a `investigacion_estado = 'en_curso'` antes
-   de hacer nada más — señal de que la rutina arrancó de verdad (Base 7:
-   "el silencio es alarmante, no tranquilizador").
+1. **Heartbeat mínimo.** Apenas elegido el sitio (Input), flip a
+   `investigacion_estado = 'en_curso'` antes de hacer nada más — señal de
+   que la rutina arrancó de verdad (Base 7: "el silencio es alarmante, no
+   tranquilizador") y candado para que una corrida siguiente no agarre el
+   mismo sitio mientras este está en proceso.
 
 2. **Reusar antes de gastar.** Revisar `db/research/` por archivos ya
    existentes para el `clienteSlug` de este sitio antes de llamar a
@@ -86,10 +113,22 @@ hace falta uno nuevo, Base 8):
      2026-08-11 (confirmado, no reintentar). Si el conector Semrush
      todavía responde, usarlo; si no, dejarlo como TODO explícito en el
      reporte final — nunca inventar preguntas.
-   - Cada respuesta cruda se guarda primero como archivo, después vía
-     `cd cli && npm run dev -- investigacion guardar-reporte --proveedor openseo --reporte <tipo> --cliente-slug <slug> --entrada <ruta-al-json> [--used-fallback true|false]`
-     (`--used-fallback` obligatorio solo para `phrase_related` /
-     `phrase_this` / `phrase_these` / `phrase_kdi` con `--proveedor openseo`).
+   - Cada respuesta cruda se guarda como archivo en
+     `db/research/<slug>_<fecha>_<proveedor>_<reporte>.json` (fecha
+     `YYYY-MM-DD`), con este envelope:
+     `{ "metadata": { "proveedor", "reporte", "clienteSlug", "fecha", "usedFallback" }, "datos": <json crudo> }`.
+     Reglas (las que antes validaba `guardar-reporte`, que esta rutina ya
+     no usa — ver nota al pie): `proveedor` ∈ {`openseo`, `semrush`};
+     `reporte` ∈ {`phrase_related`, `phrase_this`/`phrase_these`,
+     `phrase_organic`, `phrase_kdi`, `domain_organic`, `phrase_questions`};
+     `usedFallback` es un booleano obligatorio para `phrase_related` /
+     `phrase_this` / `phrase_these` / `phrase_kdi` de `openseo` (gate de
+     Base 3), y `null` para todo lo demás.
+   - Al terminar, commitear esos archivos en la rama propia y abrir un PR
+     (nunca a `main`). Si el push/PR falla por permisos, dejar la lista de
+     archivos generados escrita en `investigacion_reporte` y seguir — no
+     abortar la corrida por eso; las keywords y el reporte, que sí van a
+     Supabase, son lo que destraba el gate.
 
 5. **Clasificar `rol` — el paso de juicio real, no mecanizado.** De cada
    fila cruda a una fila en `keywords` hace falta decidir `pilar` /
@@ -100,10 +139,25 @@ hace falta uno nuevo, Base 8):
    real del sitio (`arquetipo`/`segmento`/spec, si ya hay contenido de
    Fase 2 cargado) por sobre el volumen bruto — una keyword genérica de
    mayor volumen no le gana automáticamente a una más específica alineada
-   al negocio. Cada decisión, vía
-   `investigacion promover-keyword --sitio-id <id> --cliente-id <id> --keyword "<texto>" --fuente-validacion openseo_dataforseo [--rol <rol> | --descarte --motivo-descarte "<texto>"] [--ciudad <texto>] [--volumen <n>] [--kd <n>]`
-   — `--fuente-validacion` siempre `openseo_dataforseo` explícito, nunca
-   el default de columna (`semrush_co`).
+   al negocio.
+
+   Cada decisión se escribe como una fila en `keywords` vía el conector
+   Supabase (`INSERT`), no por CLI — el sandbox de esta rutina no tiene
+   `SUPABASE_SERVICE_ROLE_KEY` (ver nota al pie). Columnas:
+   - `sitio_id`, `cliente_id`: los del sitio elegido.
+   - `keyword`: el texto tal cual viene de la fuente.
+   - `fuente_validacion`: **siempre** el literal `'openseo_dataforseo'` —
+     nunca dejar que caiga en el default de columna (`'semrush_co'`).
+   - `ciudad`, `volumen`, `kd`: si los hay; si no, `null`.
+   - **Regla dura (la que validaba `promover-keyword`): cada fila es una de
+     dos cosas, nunca a medias ni las dos.**
+     - Promovida: `rol` ∈ {`'pilar'`, `'secundaria'`, `'long_tail'`},
+       `es_descarte = false`, `motivo_descarte = null`.
+     - Descartada: `rol = null`, `es_descarte = true`, `motivo_descarte`
+       con el texto de la razón (un descarte sin razón no es consciente).
+   - Un seed que quedó en `usedFallback: true` se inserta como descarte con
+     `motivo_descarte = 'modo degradado de OpenSEO, revisar a mano'` — no
+     se promueve nada de ahí sin decisión humana posterior.
 
 6. **Lo que no se puede resolver — no inventar, reportar.** Si algún
    reporte no se consiguió, si la clasificación de algún seed quedó
@@ -117,12 +171,14 @@ hace falta uno nuevo, Base 8):
    **"gate de Fase 1 no confirmado — revisar en el dashboard"**. Flip
    final a `investigacion_estado = 'terminada'`.
 
-8. **Límite duro, nunca cruzarlo.** Nunca `cli sitio gate-fase1
-   --confirmar`. Nunca escribir `sitios.fase_actual` directo (ni siquiera
-   como atajo). Nunca inventar `rol`, `locationCode`/`languageCode`, o
-   contenido de `phrase_questions`. Nunca tocar nada fuera de
-   `db/research/` (esta rutina no escribe código ni toca ningún otro
-   archivo del repo).
+8. **Límite duro, nunca cruzarlo.** Nunca confirmar el gate de Fase 1.
+   Nunca escribir `sitios.fase_actual` (ni por conector, ni por CLI, ni
+   como atajo) — ese flip lo aprieta un humano desde el dashboard. Nunca
+   inventar `rol`, `locationCode`/`languageCode`, o contenido de
+   `phrase_questions`. En el repo, no tocar nada fuera de `db/research/`
+   (esta rutina no escribe código ni ningún otro archivo). Los únicos
+   escritos permitidos a Supabase son: `investigacion_estado` (heartbeat y
+   cierre), `investigacion_reporte`, y filas nuevas en `keywords`.
 
 ---
 
@@ -137,3 +193,27 @@ ese documento cambia (nuevo proveedor, nuevos costos, `phrase_questions`
 resuelto), esta rutina hereda el cambio automáticamente porque referencia
 el método, no lo copia — mismo principio que ya aplica
 `fase3_construccion_instrucciones.md` con el formato de spec.
+
+---
+
+## Nota — por qué esta rutina escribe a Supabase por conector y no por el CLI
+
+El CLI (`investigacion guardar-reporte`, `investigacion promover-keyword`,
+`sitio gate-fase1`) sigue siendo la vía canónica para uso interactivo o
+humano. Esta rutina no lo usa porque su sandbox no tiene
+`SUPABASE_SERVICE_ROLE_KEY` en el entorno y no hubo forma de inyectárselo:
+el `update` de la API de rutinas no aplica `environment_variables`, y la
+rutina se creó por `http_api` (no es editable desde claude.ai). La
+decisión (2026-09-08) fue que la rutina replique el comportamiento de esos
+comandos —que para `promover-keyword` y `guardar-reporte` es un `INSERT` o
+un write de archivo mecánico, con la validación descrita en los pasos 4 y
+5— usando el conector Supabase MCP que sí tiene. El juicio real
+(clasificación de `rol`, gate `usedFallback`, no inventar datos) es
+idéntico y sigue siendo lo que importa. Si la rutina recupera el CLI,
+volver a los comandos.
+
+El disparo también cambió: antes se esperaba un webhook de
+`investigacion_estado = 'solicitada'` que nunca llegó a andar (pg_net dio
+401; `RemoteTrigger` no existe dentro del sandbox). Ahora la rutina corre
+por cron y se autodescubre el trabajo (ver Input). El poller
+`trig_01D9rzwwkkecFgVXNPgW28YL` queda sin función.
