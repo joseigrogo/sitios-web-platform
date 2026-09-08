@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "proveedor": "openseo",
+    "reporte": "domain_organic",
+    "clienteSlug": "make-over",
+    "fecha": "2026-09-08",
+    "usedFallback": null
+  },
+  "datos": {
+    "domain": "dralinafranco.com",
+    "organicTraffic": 3775,
+    "organicKeywords": 159,
+    "backlinks": null,
+    "referringDomains": null,
+    "hasData": true,
+    "fetchedAt": "2026-09-08T21:44:15.211Z",
+    "identificadoEn": "phrase_organic de 'liposuccion colombia', rank 1 (primer resultado organico real)"
+  }
+}
