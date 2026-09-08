@@ -37,15 +37,27 @@ order by created_at asc;
 
 Para cada fila, mirar `estado_gates -> 'fase2'`: si `estructura`,
 `contenido` y `taxonomia_eventos` **no** están los 3 en `true`, el sitio
-tiene spec pendiente. Tomar el más viejo con pendiente.
+tiene spec pendiente.
 
-- **Cero sitios con pendiente → salir en silencio.** Caso normal la
-  mayoría de las horas. No es anomalía: no escribir nada, terminar.
-- **Si el disparo trae un `sitio_id` explícito** (corrida manual), usar ese.
+**Elegir el candidato: recorrer los sitios con pendiente del más viejo al
+más nuevo y quedarse con el primero que se pueda trabajar.** Un sitio que
+falla una precondición (sin `referencia_url`, `fase_actual` ya no es
+`'spec'`) o que quedó `bloqueado` en una corrida anterior **se saltea** —
+NO frena el run. Si ya tiene la marca `'bloqueado: …'` en `fase2_estado`,
+ni re-escribir la marca; pasar al siguiente. Solo un error real de
+herramienta (Supabase caído, etc.) frena.
+
+- **Cero sitios trabajables → salir en silencio.** Caso normal la mayoría
+  de las horas (incluye "todos los pendientes están bloqueados por falta
+  de `referencia_url`"). No es anomalía: no escribir nada, terminar.
+- **Si el disparo trae un `sitio_id` explícito** (corrida manual), usar
+  ese y saltear el recorrido.
 - **Recuperación de colgados.** Si `estado_gates ->> 'fase2_estado'` es
-  `'en_curso'` y su timestamp (`estado_gates -> 'fase2_estado_ts'`, o el
-  heartbeat) es de hace más de 3 horas, es una corrida anterior que murió:
-  retomarlo.
+  `'en_curso'` y su timestamp (`estado_gates -> 'fase2_estado_ts'`) es de
+  hace más de 3 horas, es una corrida anterior que murió: es un candidato
+  trabajable, retomarlo.
+- **Un sitio por corrida.** Elegido uno trabajable, se procesa ese y se
+  termina; los demás pendientes los toma la corrida siguiente.
 
 Con el `sitio_id` elegido, leer de Supabase:
 
@@ -55,13 +67,15 @@ Con el `sitio_id` elegido, leer de Supabase:
   `regla_no_cross_linking`, `respaldo_legal_tipo`.
 - `keywords` promovidas del sitio:
   `select keyword, rol, ciudad, volumen, kd from keywords where sitio_id = <id> and es_descarte = false`.
-- **Precondición 1.** `fase_actual` debe ser `'spec'`. Si no, abortar sin
-  escribir nada.
+- **Precondición 1.** `fase_actual` debe ser `'spec'`. Si no, saltear ese
+  sitio (ver "Elegir el candidato").
 - **Precondición 2.** `referencia_url` no vacío — el spec necesita una
   referencia real para el mapeo obligatorio (`fase2_formato_spec.md` §1).
-  Si falta, abortar: escribir en `estado_gates -> 'fase2_estado'` el valor
-  `'bloqueado: falta referencia_url'` y terminar. **No** marcar
-  entregables. La `referencia_url` la carga un humano desde el dashboard.
+  Si falta: dejar la marca `estado_gates -> 'fase2_estado' = 'bloqueado:
+  falta referencia_url'` **solo si no la tiene ya**, y **saltear** al
+  siguiente candidato (no frenar el run). **No** marcar entregables. La
+  `referencia_url` la carga un humano desde el dashboard; cuando esté, el
+  sitio vuelve a ser trabajable solo.
 
 ## Output esperado
 
