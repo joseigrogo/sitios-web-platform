@@ -1,0 +1,24 @@
+-- Aplicada a Supabase (proyecto aoowwztkitctnwbbwbwk, "Sitios Web") el
+-- 2026-09-08 via execute_sql. Este archivo documenta lo ya aplicado.
+--
+-- Decision: se saca "hipotesis" del proceso -- ya no se crean. Alcance
+-- acotado ("solo dejar de crearlas"): la tabla `hipotesis` y el comando
+-- `cli investigacion crear-hipotesis` se CONSERVAN (deprecados, sin uso),
+-- no se dropean. Esto solo vacia las 2 filas existentes.
+--
+-- Filas borradas (contenido preservado en git para referencia):
+--   1. Capital Window Cleaning -- hipotesis B2B real, descrita ademas en
+--      BASES_DEL_SISTEMA.md (Fase 1), asi que no se pierde informacion.
+--   2. Sitio de prueba Fase 1 -- placeholder de prueba de humo.
+--
+-- Cambios que acompanan esta decision (en otros commits):
+--   - Gate de salida de Fase 1: deja de exigir >=1 hipotesis; pasa a
+--     (>=1 keyword rol=pilar) Y (>=1 keyword secundaria o long_tail).
+--   - fase1_investigacion_instrucciones.md: se quita el paso de crear
+--     hipotesis y la referencia en el gate.
+--   - Dashboard: se quita el form/panel de hipotesis.
+--
+-- Reversible: no hay DDL que revertir; para volver atras se vuelven a
+-- insertar filas con `cli investigacion crear-hipotesis`.
+
+delete from hipotesis;
