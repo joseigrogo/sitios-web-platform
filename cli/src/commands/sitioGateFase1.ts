@@ -1,42 +1,44 @@
 import type { Command } from 'commander';
 import { manejarErrorCli } from '../lib/errors.js';
-import { crearHipotesisRepoSupabase } from '../lib/hipotesisRepo.js';
 import { crearKeywordsRepoSupabase } from '../lib/keywordsRepo.js';
 import { crearSitiosRepoSupabase } from '../lib/sitiosRepo.js';
 import { crearSupabaseClient } from '../lib/supabaseClient.js';
-import type { HipotesisRepo, KeywordsRepo, Sitio, SitiosRepo } from '../types.js';
+import type { KeywordsRepo, Sitio, SitiosRepo } from '../types.js';
 
 export interface GateFase1Resultado {
   sitio: Sitio;
   pilares: number;
-  hipotesis: number;
+  clasificadasNoPilar: number;
   condicionesFaltantes: string[];
   pasaGate: boolean;
   flipeado: boolean;
 }
 
-// Condición propuesta y confirmada 2026-08-10 (ver BASES_DEL_SISTEMA.md, Fase
-// 1): >=1 keyword rol=pilar para el sitio, y >=1 fila en hipotesis -- refleja
-// el "Qué" de Fase 1 tal como está escrito (reportes -> keywords con rol, más
-// hipótesis falsificables con criterio de éxito), no una regla inventada acá.
+// Condición actualizada 2026-09-08: se sacó "hipótesis" del proceso (ver
+// db/migrations/20260908_hipotesis_vaciar_deprecar.sql). El gate ahora es
+// >=1 keyword rol=pilar Y >=1 keyword clasificada como secundaria o
+// long_tail para el sitio -- obliga a que hubo una clasificación real de la
+// investigación, no solo una fila suelta. Antes la segunda condición era
+// >=1 fila en hipotesis.
 export async function ejecutarGateFase1(
   sitioId: string,
   confirmar: boolean,
-  repos: { sitios: SitiosRepo; keywords: KeywordsRepo; hipotesis: HipotesisRepo }
+  repos: { sitios: SitiosRepo; keywords: KeywordsRepo }
 ): Promise<GateFase1Resultado> {
   const sitio = await repos.sitios.obtenerPorId(sitioId);
   if (!sitio) {
     throw new Error(`No existe un sitio con id ${sitioId}`);
   }
 
-  const [pilares, hipotesisCount] = await Promise.all([
+  const [pilares, clasificadasNoPilar] = await Promise.all([
     repos.keywords.contarPilaresPorSitio(sitioId),
-    repos.hipotesis.contarPorSitio(sitioId),
+    repos.keywords.contarClasificadasNoPilarPorSitio(sitioId),
   ]);
 
   const condicionesFaltantes: string[] = [];
   if (pilares < 1) condicionesFaltantes.push('sin keyword con rol=pilar');
-  if (hipotesisCount < 1) condicionesFaltantes.push('sin ninguna hipótesis creada');
+  if (clasificadasNoPilar < 1)
+    condicionesFaltantes.push('sin keyword clasificada como secundaria o long_tail');
 
   const pasaGate = condicionesFaltantes.length === 0;
   let flipeado = false;
@@ -46,15 +48,15 @@ export async function ejecutarGateFase1(
     flipeado = true;
   }
 
-  return { sitio, pilares, hipotesis: hipotesisCount, condicionesFaltantes, pasaGate, flipeado };
+  return { sitio, pilares, clasificadasNoPilar, condicionesFaltantes, pasaGate, flipeado };
 }
 
 export function registrarComandoSitioGateFase1(program: Command): void {
   program
     .command('gate-fase1 <sitioId>')
     .description(
-      'Verifica el gate de salida de Fase 1 (>=1 keyword rol=pilar, >=1 hipótesis). ' +
-        'Sin --confirmar, solo verifica — no escribe nada.'
+      'Verifica el gate de salida de Fase 1 (>=1 keyword rol=pilar, ' +
+        '>=1 keyword secundaria o long_tail). Sin --confirmar, solo verifica — no escribe nada.'
     )
     .option('--confirmar', 'si el gate pasa, hace el flip explícito a fase_actual = spec', false)
     .action(async (sitioId: string, opts) => {
@@ -63,12 +65,13 @@ export function registrarComandoSitioGateFase1(program: Command): void {
         const repos = {
           sitios: crearSitiosRepoSupabase(supabase),
           keywords: crearKeywordsRepoSupabase(supabase),
-          hipotesis: crearHipotesisRepoSupabase(supabase),
         };
 
         const resultado = await ejecutarGateFase1(sitioId, Boolean(opts.confirmar), repos);
 
-        console.log(`Pilares: ${resultado.pilares}, hipótesis: ${resultado.hipotesis}`);
+        console.log(
+          `Pilares: ${resultado.pilares}, secundarias/long_tail: ${resultado.clasificadasNoPilar}`
+        );
         if (resultado.pasaGate) {
           console.log(`Gate de Fase 1: PASA (sitio ${sitioId})`);
           if (resultado.flipeado) {

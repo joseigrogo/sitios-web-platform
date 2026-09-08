@@ -50,6 +50,18 @@ export function crearKeywordsRepoSupabase(client: SupabaseClient): KeywordsRepo 
       return count ?? 0;
     },
 
+    async contarClasificadasNoPilarPorSitio(sitioId: string) {
+      const { count, error } = await client
+        .from('keywords')
+        .select('*', { count: 'exact', head: true })
+        .eq('sitio_id', sitioId)
+        .eq('es_descarte', false)
+        .in('rol', ['secundaria', 'long_tail']);
+      if (error)
+        throw new Error(`Error contando keywords secundarias/long_tail: ${error.message}`);
+      return count ?? 0;
+    },
+
     async listarPorSitio(sitioId: string) {
       const { data, error } = await client
         .from('keywords')

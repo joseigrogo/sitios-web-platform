@@ -16,6 +16,14 @@ function crearKeywordsRepoFalso(): KeywordsRepo & { creadas: NuevaKeywordInput[]
     async contarPilaresPorSitio(sitioId) {
       return creadas.filter((k) => k.sitioId === sitioId && k.rol === 'pilar').length;
     },
+    async contarClasificadasNoPilarPorSitio(sitioId) {
+      return creadas.filter(
+        (k) =>
+          k.sitioId === sitioId &&
+          !k.esDescarte &&
+          (k.rol === 'secundaria' || k.rol === 'long_tail')
+      ).length;
+    },
     async listarPorSitio(sitioId) {
       return creadas
         .filter((k) => k.sitioId === sitioId)

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { ejecutarGateFase1 } from '../src/commands/sitioGateFase1.js';
-import type { FaseActual, HipotesisRepo, KeywordsRepo, Sitio } from '../src/types.js';
+import type { FaseActual, KeywordsRepo, Sitio } from '../src/types.js';
 import { crearSitiosRepoFalso } from './fakes.js';
 
 function sitioBase(overrides: Partial<Sitio> = {}): Sitio {
@@ -23,7 +23,7 @@ function sitioBase(overrides: Partial<Sitio> = {}): Sitio {
   };
 }
 
-function repoKeywordsFalso(pilares: number): KeywordsRepo {
+function repoKeywordsFalso(pilares: number, clasificadasNoPilar: number): KeywordsRepo {
   return {
     async crear() {
       throw new Error('no usado en este test');
@@ -31,19 +31,8 @@ function repoKeywordsFalso(pilares: number): KeywordsRepo {
     async contarPilaresPorSitio() {
       return pilares;
     },
-    async listarPorSitio() {
-      return [];
-    },
-  };
-}
-
-function repoHipotesisFalso(cantidad: number): HipotesisRepo {
-  return {
-    async crear() {
-      throw new Error('no usado en este test');
-    },
-    async contarPorSitio() {
-      return cantidad;
+    async contarClasificadasNoPilarPorSitio() {
+      return clasificadasNoPilar;
     },
     async listarPorSitio() {
       return [];
@@ -54,17 +43,15 @@ function repoHipotesisFalso(cantidad: number): HipotesisRepo {
 test('falla si el sitio no existe', async () => {
   const repos = {
     sitios: crearSitiosRepoFalso(),
-    keywords: repoKeywordsFalso(0),
-    hipotesis: repoHipotesisFalso(0),
+    keywords: repoKeywordsFalso(0, 0),
   };
   await assert.rejects(() => ejecutarGateFase1('no-existe', false, repos), /No existe un sitio/);
 });
 
-test('NO pasa sin pilar ni hipótesis, lista ambas condiciones faltantes', async () => {
+test('NO pasa sin pilar ni secundarias, lista ambas condiciones faltantes', async () => {
   const repos = {
     sitios: crearSitiosRepoFalso([sitioBase()]),
-    keywords: repoKeywordsFalso(0),
-    hipotesis: repoHipotesisFalso(0),
+    keywords: repoKeywordsFalso(0, 0),
   };
   const resultado = await ejecutarGateFase1('sitio-1', false, repos);
 
@@ -72,23 +59,23 @@ test('NO pasa sin pilar ni hipótesis, lista ambas condiciones faltantes', async
   assert.equal(resultado.condicionesFaltantes.length, 2);
 });
 
-test('NO pasa con pilar pero sin hipótesis', async () => {
+test('NO pasa con pilar pero sin keyword secundaria/long_tail', async () => {
   const repos = {
     sitios: crearSitiosRepoFalso([sitioBase()]),
-    keywords: repoKeywordsFalso(1),
-    hipotesis: repoHipotesisFalso(0),
+    keywords: repoKeywordsFalso(1, 0),
   };
   const resultado = await ejecutarGateFase1('sitio-1', false, repos);
 
   assert.equal(resultado.pasaGate, false);
-  assert.deepEqual(resultado.condicionesFaltantes, ['sin ninguna hipótesis creada']);
+  assert.deepEqual(resultado.condicionesFaltantes, [
+    'sin keyword clasificada como secundaria o long_tail',
+  ]);
 });
 
-test('pasa con >=1 pilar y >=1 hipótesis, pero sin --confirmar no flipea', async () => {
+test('pasa con >=1 pilar y >=1 secundaria/long_tail, pero sin --confirmar no flipea', async () => {
   const repos = {
     sitios: crearSitiosRepoFalso([sitioBase()]),
-    keywords: repoKeywordsFalso(1),
-    hipotesis: repoHipotesisFalso(1),
+    keywords: repoKeywordsFalso(1, 1),
   };
   const resultado = await ejecutarGateFase1('sitio-1', false, repos);
 
@@ -101,8 +88,7 @@ test('pasa con >=1 pilar y >=1 hipótesis, pero sin --confirmar no flipea', asyn
 test('pasa + --confirmar: flip explícito a spec', async () => {
   const repos = {
     sitios: crearSitiosRepoFalso([sitioBase()]),
-    keywords: repoKeywordsFalso(2),
-    hipotesis: repoHipotesisFalso(1),
+    keywords: repoKeywordsFalso(2, 5),
   };
   const resultado = await ejecutarGateFase1('sitio-1', true, repos);
 
@@ -115,8 +101,7 @@ test('pasa + --confirmar: flip explícito a spec', async () => {
 test('pasa + --confirmar pero fase_actual no es investigacion: no flipea', async () => {
   const repos = {
     sitios: crearSitiosRepoFalso([sitioBase({ faseActual: 'encuadre' as FaseActual })]),
-    keywords: repoKeywordsFalso(1),
-    hipotesis: repoHipotesisFalso(1),
+    keywords: repoKeywordsFalso(1, 1),
   };
   const resultado = await ejecutarGateFase1('sitio-1', true, repos);
 

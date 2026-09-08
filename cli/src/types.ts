@@ -153,6 +153,7 @@ export interface NuevaKeywordInput {
 export interface KeywordsRepo {
   crear(input: NuevaKeywordInput): Promise<Keyword>;
   contarPilaresPorSitio(sitioId: string): Promise<number>;
+  contarClasificadasNoPilarPorSitio(sitioId: string): Promise<number>;
   listarPorSitio(sitioId: string): Promise<Keyword[]>;
 }
 
