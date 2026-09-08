@@ -102,9 +102,19 @@ Con el `sitio_id` elegido, leer de Supabase:
 3. **Leer el formato y la referencia.**
    - Leer `db/scripts/fase2_formato_spec.md` y la sección Fase 2 de
      `Proceso_GENERAL_de_Lanzamiento_Sitios.md` completas.
-   - `WebFetch` de `referencia_url`. Describir su estructura sección por
-     sección (orden, qué contiene cada una, si es multipágina y qué
-     páginas tiene). Esto alimenta el mapeo obligatorio del paso 4.
+   - Intentar `WebFetch` de `referencia_url`. Si trae contenido: describir
+     su estructura sección por sección (orden, qué contiene, si es
+     multipágina y qué páginas tiene). Eso alimenta el mapeo del paso 4.
+   - **Si `WebFetch` falla por política de egress del sandbox** (rechazo
+     del proxy, "organization policy" — el sandbox no tiene salida a
+     internet general): **no frenar.** Usar `WebSearch` sobre el dominio de
+     la referencia para juntar las pistas que haya (páginas indexadas,
+     descripciones, secciones), y marcar la tabla de mapeo del paso 4 como
+     **PARCIAL — estructura de la referencia no verificada (sandbox sin
+     egress); confirmar en revisión humana**. El resto de los entregables
+     (inventario de páginas, secciones, contenido, taxonomía) sale de los
+     keywords + el arquetipo + el formato, no de la referencia — se
+     redactan igual.
 
 4. **Entregable ESTRUCTURA** (`fase2_formato_spec.md` §1, §5, §6 +
    `Proceso_GENERAL` §1):
@@ -131,15 +141,21 @@ Con el `sitio_id` elegido, leer de Supabase:
      contraparte**) · dónde (selector/zona) · qué se toma (patrón /
      estructura, **nunca** el copy ni las imágenes reales). "Sin
      contraparte" es una respuesta válida y esperada — lo que no se
-     permite es dejarlo implícito.
-   - **§5 Dirección visual.** La estructura y el orden de secciones de la
-     referencia sí se pueden describir desde el `WebFetch`. Los **tokens**
-     (paleta, tipografía, espaciado, sombras, radios) necesitan el skill
-     `direccion-visual` (dembrandt + Chromium), que **no corre en este
-     sandbox**. Dejar el bloque de tokens con la nota literal: *"Pendiente:
-     tokens de dirección visual — correr el skill `direccion-visual`
-     contra la referencia aparte (sesión interactiva). No inventar
-     colores/tamaños."* Completar solo la parte de estructura/composición.
+     permite es dejarlo implícito. **Si no se pudo `WebFetch` la
+     referencia** (paso 3): encabezar la tabla con **"PARCIAL — no
+     verificada contra la referencia real (sandbox sin egress)"**,
+     llenarla con lo mejor que dé `WebSearch` + el patrón típico del
+     arquetipo/vertical, y **no** afirmar contrapartes que no se
+     verificaron — marcarlas "por confirmar".
+   - **§5 Dirección visual.** Si hubo `WebFetch`, describir estructura y
+     orden de secciones de la referencia; si no, la parte de estructura
+     queda con la misma nota "PARCIAL" que la tabla de mapeo. Los
+     **tokens** (paleta, tipografía, espaciado, sombras, radios) necesitan
+     el skill `direccion-visual` (dembrandt + Chromium), que **no corre en
+     este sandbox** en ningún caso. Dejar el bloque de tokens con la nota
+     literal: *"Pendiente: tokens de dirección visual — correr el skill
+     `direccion-visual` contra la referencia aparte (sesión interactiva).
+     No inventar colores/tamaños."*
    - **§6 Bitácora de cambios.** Arranca con una fila `v1 del spec` +
      una fila por cada exclusión de alcance (líneas sin keywords, etc.).
    - **Variantes de layout** (ex-entregable "experimentos", ahora acá):
