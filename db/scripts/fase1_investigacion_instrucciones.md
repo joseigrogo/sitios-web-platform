@@ -10,10 +10,11 @@ ambiguo, se detiene y lo reporta — nunca inventa (Base 3, "cero datos
 inventados", aplicada acá igual que en cualquier otra fase).
 
 **Límite central de esta rutina, distinto del de Fase 3:** deja los datos
-listos, pero **nunca confirma el gate de Fase 1**. El criterio de éxito de
-cada hipótesis es un gate humano irreducible (`CONTEXT.md` §5) — eso lo
-sigue revisando una persona desde el botón "Confirmar y pasar a Spec" que
-ya existe en el dashboard. Mismo espíritu que el límite duro de Fase 3
+listos, pero **nunca confirma el gate de Fase 1**. Que la clasificación de
+keywords por `rol` esté bien hecha y que la investigación de verdad quede
+cerrada es juicio humano irreducible (`CONTEXT.md` §5) — eso lo sigue
+revisando una persona desde el botón "Confirmar y pasar a Spec" que ya
+existe en el dashboard. Mismo espíritu que el límite duro de Fase 3
 ("nunca hace merge a `main`"), aplicado al punto de esta fase donde el
 juicio deja de ser delegable.
 
@@ -39,9 +40,8 @@ hace falta uno nuevo, Base 8):
   `phrase_organic`, `phrase_kdi`, `domain_organic`, y `phrase_questions`
   solo si hay de dónde sacarlo, ver paso 5).
 - Filas nuevas en `keywords`: promovidas con `rol`, o descartadas con
-  `motivo_descarte` — nunca sin uno de los dos.
-- Al menos 1 fila en `hipotesis`, con `dato_verificado` anclado a un
-  hallazgo real de esta corrida, no genérico.
+  `motivo_descarte` — nunca sin uno de los dos. Para pasar el gate hace
+  falta >=1 con `rol='pilar'` y >=1 con `rol='secundaria'` o `'long_tail'`.
 - `sitios.investigacion_reporte` con el resumen de qué se hizo.
 - **Lo que NO produce:** ningún cambio a `sitios.fase_actual`. Ese flip
   sigue siendo `cli sitio gate-fase1 --confirmar`, apretado por un humano
@@ -105,30 +105,24 @@ hace falta uno nuevo, Base 8):
    — `--fuente-validacion` siempre `openseo_dataforseo` explícito, nunca
    el default de columna (`semrush_co`).
 
-6. **Hipótesis.** Al menos una, vía
-   `investigacion crear-hipotesis --sitio-id <id> --enunciado "<texto>" --criterio-exito "<texto>" --horizonte <horizonte> --dato-verificado "<texto>"`
-   — `--dato-verificado` tiene que citar un hallazgo real de ESTA
-   corrida (un patrón en el SERP, un dato de volumen, un competidor real
-   encontrado), nunca una afirmación genérica sin número ni fuente.
-
-7. **Lo que no se puede resolver — no inventar, reportar.** Si algún
+6. **Lo que no se puede resolver — no inventar, reportar.** Si algún
    reporte no se consiguió, si la clasificación de algún seed quedó
    ambigua, o si `usedFallback` bloqueó una keyword central: dejarlo
    explícito en `investigacion_reporte`, nunca completarlo con un
    supuesto para que el conteo cierre.
 
-8. **Reporte y cierre.** `investigacion_reporte` con: reportes
+7. **Reporte y cierre.** `investigacion_reporte` con: reportes
    logrados/faltantes, conteo de keywords por rol + descartes con motivo,
-   hipótesis creadas, créditos de OpenSEO gastados (autoreportado), y la
-   línea explícita **"gate de Fase 1 no confirmado — revisar en el
-   dashboard"**. Flip final a `investigacion_estado = 'terminada'`.
+   créditos de OpenSEO gastados (autoreportado), y la línea explícita
+   **"gate de Fase 1 no confirmado — revisar en el dashboard"**. Flip
+   final a `investigacion_estado = 'terminada'`.
 
-9. **Límite duro, nunca cruzarlo.** Nunca `cli sitio gate-fase1
+8. **Límite duro, nunca cruzarlo.** Nunca `cli sitio gate-fase1
    --confirmar`. Nunca escribir `sitios.fase_actual` directo (ni siquiera
-   como atajo). Nunca inventar `rol`, `criterio_exito`, `dato_verificado`,
-   `locationCode`/`languageCode`, o contenido de `phrase_questions`. Nunca
-   tocar nada fuera de `db/research/` (esta rutina no escribe código ni
-   toca ningún otro archivo del repo).
+   como atajo). Nunca inventar `rol`, `locationCode`/`languageCode`, o
+   contenido de `phrase_questions`. Nunca tocar nada fuera de
+   `db/research/` (esta rutina no escribe código ni toca ningún otro
+   archivo del repo).
 
 ---
 
