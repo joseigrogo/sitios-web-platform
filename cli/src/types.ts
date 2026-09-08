@@ -74,11 +74,13 @@ export interface ClientesRepo {
   crear(input: NuevoClienteInput): Promise<Cliente>;
 }
 
-// Los 4 entregables de Fase 2 (BASES_DEL_SISTEMA.md, "Qué"). Rastreados en
+// Los entregables de Fase 2 (BASES_DEL_SISTEMA.md, "Qué"). Rastreados en
 // sitios.estado_gates (jsonb) bajo la clave "fase2" -- la columna existía sin
 // usarse (confirmado {} en la fila real de Capital Window, 2026-08-14) antes
 // de este rastreo, no es una columna nueva inventada para la ocasión.
-export type EntregableFase2 = 'estructura' | 'contenido' | 'experimentos' | 'taxonomia_eventos';
+// 'experimentos' salió del proceso junto con hipótesis (2026-09-08) -- Fase 2
+// ya no define experimentos porque no hay hipótesis que traducir. Quedan 3.
+export type EntregableFase2 = 'estructura' | 'contenido' | 'taxonomia_eventos';
 
 export type EstadoEntregablesFase2 = Record<EntregableFase2, boolean>;
 
@@ -90,7 +92,6 @@ export type EstadoEntregablesFase2 = Record<EntregableFase2, boolean>;
 export const ENTREGABLES_FASE2: readonly EntregableFase2[] = [
   'estructura',
   'contenido',
-  'experimentos',
   'taxonomia_eventos',
 ];
 
@@ -99,7 +100,7 @@ export function esEntregableFase2Valido(valor: string): valor is EntregableFase2
 }
 
 export function estadoFase2Vacio(): EstadoEntregablesFase2 {
-  return { estructura: false, contenido: false, experimentos: false, taxonomia_eventos: false };
+  return { estructura: false, contenido: false, taxonomia_eventos: false };
 }
 
 // Contenido real de cada entregable (el texto en sí, no el flag de
@@ -110,7 +111,7 @@ export function estadoFase2Vacio(): EstadoEntregablesFase2 {
 export type EstadoContenidoFase2 = Record<EntregableFase2, string | null>;
 
 export function contenidoFase2Vacio(): EstadoContenidoFase2 {
-  return { estructura: null, contenido: null, experimentos: null, taxonomia_eventos: null };
+  return { estructura: null, contenido: null, taxonomia_eventos: null };
 }
 
 export interface SitiosRepo {

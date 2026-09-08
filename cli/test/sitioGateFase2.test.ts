@@ -31,7 +31,7 @@ test('falla si el sitio no existe', async () => {
   await assert.rejects(() => ejecutarGateFase2('no-existe', false, repos), /No existe un sitio/);
 });
 
-test('NO pasa con 0/4 entregables, lista las 4 condiciones faltantes', async () => {
+test('NO pasa con 0/3 entregables, lista las 3 condiciones faltantes', async () => {
   const repos = { sitios: crearSitiosRepoFalso([sitioBase()]) };
   const resultado = await ejecutarGateFase2('sitio-1', false, repos);
 
@@ -39,11 +39,10 @@ test('NO pasa con 0/4 entregables, lista las 4 condiciones faltantes', async () 
   assert.equal(resultado.condicionesFaltantes.length, ENTREGABLES_FASE2.length);
 });
 
-test('NO pasa con 3/4 entregables, lista solo el que falta', async () => {
+test('NO pasa con 2/3 entregables, lista solo el que falta', async () => {
   const repos = { sitios: crearSitiosRepoFalso([sitioBase()]) };
   await repos.sitios.marcarEntregableFase2('sitio-1', 'estructura');
   await repos.sitios.marcarEntregableFase2('sitio-1', 'contenido');
-  await repos.sitios.marcarEntregableFase2('sitio-1', 'experimentos');
 
   const resultado = await ejecutarGateFase2('sitio-1', false, repos);
 

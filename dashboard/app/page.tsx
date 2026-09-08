@@ -28,9 +28,18 @@ const FASES: { valor: FaseActual; etiqueta: string }[] = [
 const ETIQUETAS_ENTREGABLES_FASE2: Record<EntregableFase2, string> = {
   estructura: "Estructura del sitio",
   contenido: "Contenido",
-  experimentos: "Experimentos a validar",
   taxonomia_eventos: "Taxonomía de eventos",
 };
+
+// Catálogo de arquetipos (BASES_DEL_SISTEMA.md -- "extensible, se puede
+// sumar uno nuevo"). Se guarda como texto libre en sitios.arquetipo; el
+// select acota a los conocidos sin volverlo un enum de schema. Sumar uno
+// acá es el mismo evento de proceso que definirle su formato de spec.
+const ARQUETIPOS: { valor: string; hint: string }[] = [
+  { valor: "landing_directa", hint: "1 página, 1 servicio" },
+  { valor: "landing_intermediaria", hint: "entrada + subpáginas por servicio" },
+  { valor: "directorio_hub", hint: "hub + varias páginas" },
+];
 
 const CAMPO = "rounded border border-neutral-700 bg-neutral-900 px-2 py-1 text-sm text-neutral-100";
 const BOTON_PRIMARIO = "rounded bg-emerald-500 px-3 py-1.5 text-xs font-medium text-emerald-950 hover:bg-emerald-400";
@@ -38,6 +47,21 @@ const BOTON_SECUNDARIO = "rounded border border-neutral-700 px-3 py-1.5 text-xs 
 
 function contarPorRol(keywords: Keyword[], rol: Rol): number {
   return keywords.filter((k) => !k.esDescarte && k.rol === rol).length;
+}
+
+// Mismo patrón que el <select> de clienteModelo: no controlado, defaultValue
+// al más común. Se usa en los dos formularios de alta (cliente+sitio nuevo,
+// y sitio para cliente existente).
+function SelectArquetipo() {
+  return (
+    <select name="sitioArquetipo" defaultValue="landing_directa" required className={CAMPO}>
+      {ARQUETIPOS.map((a) => (
+        <option key={a.valor} value={a.valor}>
+          {a.valor} — {a.hint}
+        </option>
+      ))}
+    </select>
+  );
 }
 
 function indiceFase(fase: FaseActual): number {
@@ -485,7 +509,7 @@ function FormularioNuevoSitio({ cliente }: { cliente: Cliente }) {
         <input type="hidden" name="clienteSlug" value={cliente.slug} />
         <div className="grid grid-cols-2 gap-3">
           <input name="sitioNombreMarca" placeholder="Nombre de marca del sitio" required className={CAMPO} />
-          <input name="sitioArquetipo" placeholder="Arquetipo" required className={CAMPO} />
+          <SelectArquetipo />
           <input name="sitioSegmento" placeholder="Segmento (con evidencia real)" required className={`col-span-2 ${CAMPO}`} />
           <input name="sitioDominio" placeholder="Dominio tentativo (opcional)" className={`col-span-2 ${CAMPO}`} />
         </div>
@@ -528,7 +552,7 @@ function FormularioAltaCliente() {
 
         <div className="grid grid-cols-2 gap-3 border-t border-neutral-800 pt-3">
           <input name="sitioNombreMarca" placeholder="Nombre de marca del sitio" required className={CAMPO} />
-          <input name="sitioArquetipo" placeholder="Arquetipo" required className={CAMPO} />
+          <SelectArquetipo />
           <input name="sitioSegmento" placeholder="Segmento (con evidencia real)" required className={`col-span-2 ${CAMPO}`} />
           <input name="sitioDominio" placeholder="Dominio tentativo (opcional)" className={`col-span-2 ${CAMPO}`} />
         </div>

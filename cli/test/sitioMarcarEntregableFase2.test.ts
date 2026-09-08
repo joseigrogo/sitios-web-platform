@@ -16,12 +16,12 @@ test('rechaza un entregable que no existe', async () => {
   );
 });
 
-test('marca un entregable y cuenta 1/4', async () => {
+test('marca un entregable y cuenta 1/3', async () => {
   const repos = { sitios: crearSitiosRepoFalso() };
   const resultado = await ejecutarMarcarEntregableFase2('sitio-1', 'estructura', repos);
 
   assert.equal(resultado.completados, 1);
-  assert.equal(resultado.total, 4);
+  assert.equal(resultado.total, 3);
   assert.equal(resultado.estado.estructura, true);
   assert.equal(resultado.estado.contenido, false);
 });
@@ -34,18 +34,16 @@ test('marcar el mismo entregable dos veces no lo duplica en el conteo', async ()
   assert.equal(resultado.completados, 1);
 });
 
-test('marcar los 4 entregables llega a 4/4', async () => {
+test('marcar los 3 entregables llega a 3/3', async () => {
   const repos = { sitios: crearSitiosRepoFalso() };
   await ejecutarMarcarEntregableFase2('sitio-1', 'estructura', repos);
   await ejecutarMarcarEntregableFase2('sitio-1', 'contenido', repos);
-  await ejecutarMarcarEntregableFase2('sitio-1', 'experimentos', repos);
   const resultado = await ejecutarMarcarEntregableFase2('sitio-1', 'taxonomia_eventos', repos);
 
-  assert.equal(resultado.completados, 4);
+  assert.equal(resultado.completados, 3);
   assert.deepEqual(resultado.estado, {
     estructura: true,
     contenido: true,
-    experimentos: true,
     taxonomia_eventos: true,
   });
 });

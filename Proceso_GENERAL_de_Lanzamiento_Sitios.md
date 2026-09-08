@@ -58,7 +58,7 @@ Antes de escribir una sola línea de copy: se define, con datos reales, si la de
 
 ## FASE 2 · Diseño del layout (spec.md)
 
-Con la demanda y las hipótesis en mano, se diseña el sitio en papel antes de escribir código. Todo queda en un solo documento — spec.md — que la construcción implementa al pie de la letra. Cuatro entregables, en este orden.
+Con la demanda en mano, se diseña el sitio en papel antes de escribir código. Todo queda en un solo documento — spec.md — que la construcción implementa al pie de la letra. Tres entregables, en este orden (era cuatro; `experimentos` salió con hipótesis, ver §3).
 
 ### 1 · Estructura del sitio (secciones)
 
@@ -80,9 +80,9 @@ Cada sección se llena con contenido diseñado para posicionar y ser citable por
 - **Sin cross-linking** artificial entre sitios de la red.
 - **Identidad propia** — diseño, voz editorial y datos de contacto distintos por sitio.
 
-### 3 · Experimentos a validar
+### 3 · Experimentos a validar — sacado del proceso (2026-09-08)
 
-Cada hipótesis se traduce en un experimento concreto que el layout debe soportar: un elemento variable (sección A vs. B, formulario con selector) que el motor de experimentación pueda intercambiar. El experimento se diseña aquí; se monta más adelante.
+Salió junto con hipótesis (ya no hay hipótesis que traducir en experimento). El gate de Fase 2 son 3 entregables: estructura, contenido, taxonomía de eventos. Ver `db/scripts/fase2_formato_spec.md` §3. Las variantes de layout, si las hay, se deciden en §1 (Estructura), no como entregable aparte.
 
 ### 4 · Taxonomía de eventos
 
@@ -90,7 +90,7 @@ La lista cerrada de eventos que el sitio va a emitir — nombres, parámetros y 
 
 > **Salida de esta fase**
 >
-> Un spec.md por sitio, listo para ejecutar sin interpretar: secciones, contenido bloque por bloque, experimentos con su criterio de éxito numérico fijado antes de ejecutar, y la taxonomía de eventos completa.
+> Un spec.md por sitio, listo para ejecutar sin interpretar: secciones, contenido bloque por bloque, y la taxonomía de eventos completa.
 
 ---
 

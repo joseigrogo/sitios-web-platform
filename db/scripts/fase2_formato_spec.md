@@ -1,17 +1,19 @@
 # Fase 2 — formato de spec.md
 
 Origen: **la estructura real ya viene definida en
-`Proceso_GENERAL_de_Lanzamiento_Sitios.md`, Fase 2** — cuatro entregables,
-con reglas de contenido y hasta una tabla de eventos ya concretas, no un
-esqueleto vacío. Ese documento manda; esto no lo reemplaza, lo completa con
-tres disciplinas que faltaban, encontradas analizando el único spec real que
-llegó a producción (`capital-window/SPEC.md`, 770 líneas, contra los 60
-commits que produjo — git log completo, comparado línea por línea).
+`Proceso_GENERAL_de_Lanzamiento_Sitios.md`, Fase 2** — cuatro entregables
+ahí, **tres vigentes** (`experimentos` salió con hipótesis, 2026-09-08 —
+ver §3), con reglas de contenido y hasta una tabla de eventos ya
+concretas, no un esqueleto vacío. Ese documento manda; esto no lo
+reemplaza, lo completa con tres disciplinas que faltaban, encontradas
+analizando el único spec real que llegó a producción
+(`capital-window/SPEC.md`, 770 líneas, contra los 60 commits que produjo —
+git log completo, comparado línea por línea).
 
 **Resultado del análisis:** de esos 60 commits, ~32 resolvieron decisiones
 que el spec nunca registró como cambio — más de la mitad del trabajo real.
 Tres huecos concretos lo explican, y son los que este documento agrega
-*dentro* de los cuatro entregables de `Proceso_GENERAL`, no al lado.
+*dentro* de los entregables de `Proceso_GENERAL`, no al lado.
 
 **Nota aparte, sin resolver:** el `SPEC.md` real de capital-window tiene 14
 secciones, y varias (Stack, Estructura del repo, Variables de entorno) no
@@ -77,15 +79,19 @@ estaba en estructura y dirección visual, no en el contenido en sí.
 
 ---
 
-## 3 · Experimentos a validar
+## 3 · Experimentos a validar — SACADO DEL PROCESO (2026-09-08)
 
-**Ya definido en `Proceso_GENERAL`:** cada hipótesis se traduce en un
-experimento concreto que el layout debe soportar — un elemento variable
-(sección A vs. B, formulario con selector) que el motor de experimentación
-pueda intercambiar. Se diseña acá; se monta en el Puente 3→4.
+Este entregable existía para traducir cada **hipótesis falsificable** en un
+experimento concreto que el layout debía soportar. El proyecto sacó
+hipótesis (`db/migrations/20260908_hipotesis_vaciar_deprecar.sql`), y sin
+hipótesis que traducir este entregable no tiene contenido propio. Se quitó
+de `ENTREGABLES_FASE2` (CLI + dashboard) — el gate de Fase 2 son ahora
+**3 entregables**: estructura, contenido, taxonomía de eventos.
 
-Sin cambios — no fue foco del análisis de capital-window (esa fase del
-proceso, GrowthBook, sigue sin construirse — ver `BASES_DEL_SISTEMA.md`).
+El layout todavía puede tener variantes (hero A/B, form corto/largo), pero
+eso se decide dentro de §1 (Estructura) como parte del diseño, no como un
+entregable con criterio numérico fijado antes. Si vuelve un mecanismo de
+experimentación, se re-agrega acá y en `cli/src/types.ts`.
 
 ---
 

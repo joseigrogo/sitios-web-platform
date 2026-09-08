@@ -11,7 +11,7 @@ import type { EntregableFase2, SitiosRepo } from '../types.js';
 // dashboard (mismo gotcha de sitioGateFase2.ts / sitiosRepo.ts, CONTEXT.md
 // §10). Este comando no lo usa el dashboard todavía, pero se deja a salvo
 // del mismo tropiezo si eso cambia.
-const ENTREGABLES_FASE2_LOCAL = ['estructura', 'contenido', 'experimentos', 'taxonomia_eventos'] as const;
+const ENTREGABLES_FASE2_LOCAL = ['estructura', 'contenido', 'taxonomia_eventos'] as const;
 
 function esEntregableFase2Valido(valor: string): valor is EntregableFase2 {
   return (ENTREGABLES_FASE2_LOCAL as readonly string[]).includes(valor);

@@ -18,11 +18,11 @@ import type {
 // Confirmado con varias formas de import y cachés limpios antes de este
 // workaround (2026-08-14); tsc/tsx nativos del CLI no tienen el problema.
 function estadoFase2VacioLocal(): EstadoEntregablesFase2 {
-  return { estructura: false, contenido: false, experimentos: false, taxonomia_eventos: false };
+  return { estructura: false, contenido: false, taxonomia_eventos: false };
 }
 
 function contenidoFase2VacioLocal(): EstadoContenidoFase2 {
-  return { estructura: null, contenido: null, experimentos: null, taxonomia_eventos: null };
+  return { estructura: null, contenido: null, taxonomia_eventos: null };
 }
 
 function filaASitio(fila: Record<string, unknown>): Sitio {
