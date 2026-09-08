@@ -476,7 +476,20 @@ regla explícita del spec, sin que nadie lo reconciliara).
 
 **Disparador automático de Fase 3 — cableado de punta a punta (2026-08-18).**
 Una primera pasada de construcción (~80%, resto a mano) usando spec + sitio
-de referencia como input. Cadena real, ya conectada:
+de referencia como input.
+
+> **Actualización 2026-09-08:** la cadena `pg_net` → API de rutina de abajo
+> nunca funcionó (mismo **401** que Fase 1 desde Postgres; el trigger
+> `trigger_construccion_fase3` ni existe en la DB). Reemplazada por el
+> mismo patrón que Fase 1/2: **cron en la propia rutina `trig_0117…`
+> (`26 * * * *`) + autodescubrimiento** de sitios en
+> `fase_actual='construccion'` AND `construccion_estado='solicitada'`. El
+> botón del dashboard sigue poniendo `'solicitada'`; solo cambió quién lo
+> levanta. Instructivo reescrito (3 entregables, sin dembrandt autónomo,
+> output `sites/<slug>/` + PR, escritura por conector). Sin probar
+> todavía. El resto de esta sección queda como referencia histórica.
+
+Cadena original (histórica):
 
 `sitios.construccion_estado = 'solicitada'` (desde el dashboard o el CLI) →
 trigger de Postgres (`trigger_construccion_fase3`, tabla `sitios`) → `pg_net`
