@@ -65,9 +65,11 @@ de CLI para esto — no hace falta uno nuevo, Base 8):
   `phrase_kdi`, `domain_organic`, y `phrase_questions` solo si hay de
   dónde sacarlo), commiteados en un PR (best-effort, ver paso 4).
 - Filas nuevas en `keywords` (vía conector Supabase): promovidas con
-  `rol`, o descartadas con `motivo_descarte` — nunca sin uno de los dos.
-  Para pasar el gate hace falta >=1 con `rol='pilar'` y >=1 con
-  `rol='secundaria'` o `'long_tail'`.
+  `rol`, o descartadas con `motivo_descarte` — nunca sin uno de los dos,
+  y **todas** las filas del research clasificadas (no un puñado). Rango
+  objetivo por línea de negocio: ~1–2 `pilar`, 3–7 `secundaria`, 3–5
+  `long_tail` (ver paso 5). Para pasar el gate hace falta >=1 con
+  `rol='pilar'` y >=1 con `rol='secundaria'` o `'long_tail'`.
 - `sitios.investigacion_reporte` con el resumen de qué se hizo.
 - **Lo que NO produce:** ningún cambio a `sitios.fase_actual`. Ese flip lo
   aprieta un humano desde el dashboard ("Confirmar y pasar a Spec").
@@ -141,6 +143,25 @@ de CLI para esto — no hace falta uno nuevo, Base 8):
    mayor volumen no le gana automáticamente a una más específica alineada
    al negocio.
 
+   **Cobertura — revisar el set entero, no quedarse con un puñado.** El
+   research crudo trae decenas o cientos de filas por seed. Cada una se
+   promueve o se descarta con motivo — **ninguna queda sin clasificar**.
+   El objetivo, para un sitio `landing_directa` de una línea de negocio:
+   - `pilar`: **1–2** — la intención central de la página.
+   - `secundaria`: **3–7** — cada una da para una sección real (variantes
+     de precio, ciudad, sub-procedimiento, comparativas). Estas son las
+     "principales" sobre las que se construye el cuerpo.
+   - `long_tail`: **3–5** — preguntas de FAQ, variantes de cola, términos
+     muy específicos de bajo volumen pero alta intención.
+   - El resto → descarte, cada uno con su motivo.
+   No es un piso rígido: si el mercado real no da para 3 secundarias
+   decentes, se reportan las que hay y se explica por qué en
+   `investigacion_reporte` (nunca rellenar con ruido para llegar al
+   número). Pero promover solo 1–2 en total cuando el research trajo un
+   set amplio es sub-clasificar — hay que pasar por todas.
+   Si el segmento tiene varias líneas de negocio (p. ej. rinoplastia +
+   liposucción + aumento), apuntar a ese rango **por línea**, no en total.
+
    Cada decisión se escribe como una fila en `keywords` vía el conector
    Supabase (`INSERT`), no por CLI — el sandbox de esta rutina no tiene
    `SUPABASE_SERVICE_ROLE_KEY` (ver nota al pie). Columnas:
@@ -166,10 +187,14 @@ de CLI para esto — no hace falta uno nuevo, Base 8):
    supuesto para que el conteo cierre.
 
 7. **Reporte y cierre.** `investigacion_reporte` con: reportes
-   logrados/faltantes, conteo de keywords por rol + descartes con motivo,
-   créditos de OpenSEO gastados (autoreportado), y la línea explícita
-   **"gate de Fase 1 no confirmado — revisar en el dashboard"**. Flip
-   final a `investigacion_estado = 'terminada'`.
+   logrados/faltantes, **cuántas filas crudas trajo el research vs.
+   cuántas se clasificaron** (promovidas + descartadas debe cubrir el
+   total — si no, decir qué quedó afuera y por qué), conteo de keywords
+   por rol + descartes con motivo, si el rango objetivo del paso 5 se
+   alcanzó por línea de negocio (y si no, por qué), créditos de OpenSEO
+   gastados (autoreportado), y la línea explícita **"gate de Fase 1 no
+   confirmado — revisar en el dashboard"**. Flip final a
+   `investigacion_estado = 'terminada'`.
 
 8. **Límite duro, nunca cruzarlo.** Nunca confirmar el gate de Fase 1.
    Nunca escribir `sitios.fase_actual` (ni por conector, ni por CLI, ni
