@@ -4,6 +4,22 @@ import { crearDependenciasFetchReal, ejecutarChecklistFase3 } from '../lib/check
 import { crearSitiosRepoSupabase } from '../lib/sitiosRepo.js';
 import { crearSupabaseClient } from '../lib/supabaseClient.js';
 
+// Un redirect a otro dominio significa que no medimos el sitio: el caso real
+// es Vercel con Deployment Protection, que manda la preview a vercel.com/login
+// y devuelve un 200 con SU html -- el checklist entonces "pasa" o "falla"
+// puntos sobre una pantalla de login ajena. Guardar eso es peor que no tener
+// nada, porque el dashboard lo muestra como veredicto del sitio (Base 3: no
+// dar por bueno un dato que no es el que se pidió).
+// apex -> www no cuenta como otro sitio, que es un redirect legítimo y común.
+function mismoSitio(pedida: string, final: string): boolean {
+  const host = (u: string) => new URL(u).host.replace(/^www\./, '').toLowerCase();
+  try {
+    return host(pedida) === host(final);
+  } catch {
+    return false;
+  }
+}
+
 export function registrarComandoChecklistFase3(program: Command): void {
   program
     .command('checklist-fase3 <url>')
@@ -25,6 +41,15 @@ export function registrarComandoChecklistFase3(program: Command): void {
         }
 
         const resultado = await ejecutarChecklistFase3(url, crearDependenciasFetchReal());
+
+        if (!mismoSitio(url, resultado.url)) {
+          throw new ValidationError([
+            `La verificación terminó en ${resultado.url}, que no es ${url}.`,
+            'No se midió el sitio, así que no se guarda nada.',
+            'Causa típica: Deployment Protection de Vercel en la preview — se apaga en',
+            'Project Settings → Deployment Protection → Vercel Authentication → Disabled.',
+          ]);
+        }
 
         const sitioId = opciones.sitio?.trim();
         if (sitioId) {

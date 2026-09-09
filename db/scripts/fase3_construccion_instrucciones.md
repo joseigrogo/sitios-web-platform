@@ -262,6 +262,14 @@ El repo es un proyecto Next.js (en su raíz) con:
      lee, con la URL clickeable para mirar el sitio. Anotar en la bitácora
      cuántos pasaron.
 
+     **Si el comando falla diciendo que terminó en otro dominio**, la
+     preview tiene **Deployment Protection** de Vercel (el default en
+     proyectos nuevos): la URL redirige a `vercel.com/login` y lo que se
+     mediría es esa pantalla, no el sitio. El comando se niega a guardar a
+     propósito. Anotar en la bitácora `preview protegida: apagar Vercel
+     Authentication para verificar` y seguir — es una config de la cuenta
+     del humano, no algo que la rutina pueda ni deba cambiar.
+
      **Si la preview no aparece** (el repo todavía no está conectado a
      Vercel — es el caso al crear un sitio nuevo, y conectarlo es un acto
      humano de Fase 4): anotar en la bitácora `sin preview: repo no
