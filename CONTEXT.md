@@ -6,21 +6,25 @@
 > no es un documento aparte del código, vive en el mismo repo y en el mismo
 > historial de commits.
 
-## Estado pendiente — leer antes de seguir (dejado así a propósito el 2026-08-19)
+## Estado pendiente — leer antes de seguir (actualizado el 2026-09-09)
 
-**Hay trabajo real sin commitear en el working tree.** Correr `git status`
-antes de asumir que lo que describe este archivo ya está en el historial de
-git — no lo está todo. Sin commitear ahora mismo: la generalización del
-dashboard a multi-cliente, los formularios de Fase 0/1, y el arreglo del
-gotcha de Turbopack entre hermanos de `lib/` (ver §13 completo más abajo).
-Se dejó así a propósito, no por error — falta revisión antes de subirlo.
+**Leer §14 primero: la ejecución ya no vive en claude.ai.** Las 3 fases
+corren en GitHub Actions con OpenCode + DeepSeek, y las 3 rutinas de
+claude.ai están apagadas. Cualquier cosa en este archivo que hable de "la
+rutina" y sus limitaciones de sandbox (sin service key, sin egress, sin
+navegador) describe el entorno **viejo** — sigue siendo cierta solo como
+modo degradado, no como el camino normal.
 
-**Próximo paso real, no inventado:** Capital Window tiene contenido
-borrador en los 4 entregables de Fase 2 (retroactivo, del sitio real en
-producción) con 4 preguntas señaladas sin resolver — ver Parte 4 de
-`BASES_DEL_SISTEMA.md`. Confirmarlos (o corregirlos) es lo que desbloquea
-probar la cadena de construcción automática (§12) contra un caso real por
-primera vez, en vez de seguir siendo infraestructura sin ejercitar.
+**Ya no aplica** el aviso de trabajo sin commitear del 2026-08-19: está
+todo en el historial. Y los entregables de Fase 2 son **3**, no 4 —
+`experimentos` salió del gate.
+
+**Próximo paso real, no inventado:** las tres cosas que se escribieron pero
+ninguna corrida ejercitó todavía — el checklist automático dentro de Fase 3,
+las bitácoras de las 3 fases, y la reproducción cercana de la referencia
+(los 6 pasos de `direccion-visual`). Se prueban solas en la próxima corrida
+de cada fase; hasta entonces son instrucciones, no comportamiento
+verificado. Ver "Pendiente al cierre" en §14.
 
 ## 0. Instrucción para Claude Code al leer este archivo por primera vez
 
@@ -548,3 +552,127 @@ alias (`clienteAlta.ts`, `crearHipotesis.ts`) pueden definir su propia
 clase `ValidationError` local, estructuralmente idéntica, sin romper cómo
 el CLI real la reconoce. Mismo criterio aplicado en los tests (ver
 `clienteAlta.test.ts`/`investigacionCrearHipotesis.test.ts`).
+
+## 14. La ejecución se fue a un runner propio, y Fase 3 corrió de verdad por primera vez (2026-09-09)
+
+**Por qué:** las 3 fases corrían como rutinas de claude.ai y chocaban contra
+rate-limit y costo (corridas de 8–16 min throttled). Se movieron a
+**OpenCode + DeepSeek en GitHub Actions** — repo público, minutos gratis,
+cron horario. Las 3 rutinas de claude.ai quedaron **apagadas**
+(`trig_01PP5…`, `trig_01V1pm6J…`, `trig_0117…`, `enabled: false`); son
+reversibles si hiciera falta volver.
+
+Lo que el runner propio destrabó, y que el sandbox de claude.ai no podía:
+`SUPABASE_SERVICE_ROLE_KEY` (escribir por CLI en vez de conector), **egress
+real** (WebFetch de verdad, sin degradar a "PARCIAL"), y **Chromium** — o
+sea el skill `direccion-visual` corriendo de verdad.
+
+**Piezas:** `.github/workflows/deepseek-fases.yml`, `runner/run-fase.sh`,
+`runner/opencode.json`, `runner/uso-tokens.mjs`, `runner/SETUP.md`. Los 3
+instructivos ganaron una sección **"Entorno de ejecución"**: el agente
+detecta si está en runner propio o en el sandbox, y un solo documento sirve
+para los dos.
+
+Verificado, para no volver a dudarlo: OpenCode **sí** interpola `{env:VAR}`
+dentro de `mcp.*.environment`; **sí** respeta el env var `OPENCODE_CONFIG`
+apuntando a un path; los slugs del gateway son `opencode-go/deepseek-v4-*`.
+**OpenSEO no lleva token** — `openseo.lab.whitelabel.lat/mcp` es
+self-hosted (`local-admin`) y responde sin auth; lo que rompía el arranque
+de OpenCode era un header `Authorization` de más, no el bloque `remote`.
+
+**El bloqueo largo fue ajeno al código:** DeepSeek V4 en OpenCode Zen corre
+hosteado en China y exige un opt-in explícito del workspace. Sin él,
+`opencode run` muere a los 8 segundos. Se activa en la pestaña **`Go`** del
+workspace — no en `Zen`, cuyos toggles son permisos por modelo, cosa
+distinta.
+
+### Fase 3, probada end-to-end contra Makeover
+
+Primera corrida real de la fase que nunca se había ejecutado: se
+autodescubrió el sitio, **creó su propio repo** (`joseigrogo/makeovercol`,
+un repo por sitio), extrajo tokens visuales reales de la referencia con
+dembrandt, compiló antes de pushear, abrió PR y **se detuvo en el gate
+humano**. `vercel_project_id` intacto, `fase_actual` sin tocar. 13 min 36 s.
+
+### De un PR a una preview verificable — las 4 trampas
+
+La rutina **nunca deploya** (es el gate de Fase 4): el humano conecta el
+repo a Vercel una vez y desde ahí cada PR genera preview solo. Las 4 cosas
+que rompieron en el camino, todas ya cubiertas en los instructivos:
+
+1. **Faltaba `package-lock.json`.** El build en el job era genuinamente
+   limpio, pero el push dejaba el lockfile atrás. Vercel corre `npm ci`, que
+   sin lockfile falla antes de compilar — y lo desplegado deja de ser lo
+   verificado.
+2. **Framework Preset en "Other"** → Next compila y después Vercel busca un
+   `public/` que no existe. Se resuelve con `vercel.json` (`"framework":
+   "nextjs"`) **dentro del repo del sitio**, independiente de cómo se creó
+   el proyecto.
+3. **Deployment Protection** (default): la preview redirige a
+   `vercel.com/login` y devuelve 200 con el HTML de Vercel. El checklist
+   midió esa pantalla y guardó "3/8 pasan" con canonical
+   `https://vercel.com/login`. Ahora `sitio checklist-fase3` compara host
+   pedido contra host final y **se niega a guardar** si difieren.
+4. **`www.<host>` de una preview no existe en DNS** →
+   `chequearDominioCanonico` probaba las 4 variantes sin `try/catch` y todo
+   el checklist moría con `fetch failed`. Ahora tolera las caídas y las
+   reporta.
+
+Resultado final: **7/8 puntos verificables pasan**, con `og:image` como
+único hallazgo.
+
+### Objetivo de fidelidad: reproducción cercana (decisión del usuario)
+
+El sitio salió con la paleta y tipografías correctas de la referencia pero
+una composición sin relación. Causa: de los 6 pasos del skill
+`direccion-visual` solo corría el **Paso 1** (tokens). Los pasos 2
+(estructura/composición) y 2.5 (copy real e imágenes) — los que dan el
+parecido — nunca se pedían, y el 2.5 está condicionado a *"solo si el
+objetivo es reproducción cercana"*, objetivo que **no estaba declarado en
+ningún lado**. Agravado porque el spec de Makeover se hizo en el sandbox con
+`EGRESS_BLOCKED`: nunca vio la referencia.
+
+Ahora está declarado (sección "Objetivo de fidelidad" en
+`fase2_spec_instrucciones.md`). **Se reproduce** composición, orden y peso
+de secciones, diferencias desktop/mobile, tokens y efectos. **No se copia**
+el copy literal ni las imágenes: son de un tercero, se extraen como insumo
+estructural. Fase 2 es la dueña del skill; Fase 3 lo **rescata** si la §5
+viene "PARCIAL".
+
+### Visibilidad: bitácora, link al sitio, y gasto
+
+- **Bitácora en las 3 fases.** El reporte de cada rutina dejó de ser solo el
+  informe final: ahora es un log que se **agrega al final**, una línea por
+  hito, con el dato concreto. El dashboard lo muestra en vivo mientras el
+  estado es `en_curso` (último hito al frente, el resto plegado).
+  **Trampa que salió de ahí:** la recuperación de colgados leía la
+  *primera* línea del reporte — con bitácora acumulativa esa nunca cambia,
+  así que una corrida larga y sana se habría reiniciado sola. Corregido en
+  Fase 1 y Fase 3: se lee la **última**.
+- **Sección "Ver el sitio"** en el dashboard: producción
+  (`https://<dominio>` desde `deploy`) y la preview verificada en Fase 3.
+  Solo URLs que se sabe que existen — un link que da 404 es peor que no
+  mostrar nada.
+- **`runner/uso-tokens.mjs`** reporta tokens y costo de cada corrida
+  (`if: always()`, porque una corrida fallida igual gastó). No asume el
+  esquema de OpenCode: si no lo reconoce, imprime rutas y nombres de claves
+  para ajustarlo. **Nunca imprime valores** — la primera versión volcaba
+  JSON crudo e incluía `auth.json` con la API key en claro; GitHub enmascara
+  el secreto completo, no una subcadena suya.
+
+### Pendiente al cierre del 2026-09-09
+
+- El paso del checklist automático dentro de la rutina de Fase 3 **se
+  escribió pero ninguna corrida lo recorrió sola** — se probó a mano, paso
+  por paso.
+- Las bitácoras de las 3 fases son instrucciones nuevas: **ninguna rutina
+  escribió una todavía**.
+- Fase 4 y Fase 5 siguen sin automatización.
+- Rotar la key de OpenCode Go (`sk-eyg5hd…`), expuesta al debuggear el
+  secreto `OPENCODE_AUTH_JSON`.
+- **No usar el conector MCP de Vercel para crear proyectos.** Un
+  `create_git_project` creó un proyecto en una cuenta de Vercel ajena
+  (el conector no apuntaba a la del usuario), enlazado al repo privado, que
+  lo clonó y compiló en cada push hasta que se cortó el acceso. El conector
+  ya apunta a `joseigrogo22`, y se usa para **leer**, no para escribir:
+  crear el proyecto Vercel es acto humano y gate de Fase 4.
