@@ -152,7 +152,7 @@ El repo es un proyecto Next.js (en su raíz) con:
    este formato exacto:
 
    ```
-   <timestamp ISO> — <paso>: <qué pasó, una línea>
+   <timestamp ISO con offset de Bogotá, -05:00> — <paso>: <qué pasó, una línea>
    ```
 
    Escribir una línea al **terminar** cada uno de los pasos 2 a 9 —
@@ -164,10 +164,10 @@ El repo es un proyecto Next.js (en su raíz) con:
    Ejemplo de cómo se ve a mitad de camino:
 
    ```
-   2026-09-09T19:57:13.635Z — arranque: sitio tomado, en_curso
-   2026-09-09T19:58:02.001Z — precondición: gate de Fase 2 3/3, sigo
-   2026-09-09T20:03:44.120Z — dirección visual: tokens neutros (spec sin tokens), TODO dejado
-   2026-09-09T20:11:09.887Z — estructura: 5 páginas, 4 con mapeo verificado
+   2026-09-09T14:57:13.635-05:00 — arranque: sitio tomado, en_curso
+   2026-09-09T14:58:02.001-05:00 — precondición: gate de Fase 2 3/3, sigo
+   2026-09-09T15:03:44.120-05:00 — dirección visual: tokens neutros (spec sin tokens), TODO dejado
+   2026-09-09T15:11:09.887-05:00 — estructura: 5 páginas, 4 con mapeo verificado
    ```
 
    Es append, nunca reescritura: **no borrar las líneas anteriores**, el

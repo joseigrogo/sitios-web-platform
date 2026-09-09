@@ -145,15 +145,16 @@ Si en algún sitio el objetivo fuera otro, se cambia acá y en el paso 4 de
 
 1. **Heartbeat y bitácora.** Apenas elegido el sitio, escribir
    `estado_gates -> 'fase2_estado' = 'en_curso'` y
-   `estado_gates -> 'fase2_estado_ts' = <ISO ahora>` — señal de arranque y
-   candado para que otra corrida no agarre el mismo sitio.
+   `estado_gates -> 'fase2_estado_ts' = <ISO ahora, con offset de Bogotá
+   -05:00>` — señal de arranque y candado para que otra corrida no agarre el
+   mismo sitio.
 
    **El spec tarda y desde afuera no se ve nada.** Así que
    `estado_gates -> 'fase2_reporte'` no es solo el informe final: es una
    bitácora que se va **agregando al final**, una línea por hito:
 
    ```
-   <timestamp ISO> — <paso>: <qué pasó, una línea>
+   <timestamp ISO con offset de Bogotá, -05:00> — <paso>: <qué pasó, una línea>
    ```
 
    Una línea al terminar cada paso — reuso de entregables previos, lectura
@@ -164,9 +165,9 @@ Si en algún sitio el objetivo fuera otro, se cambia acá y en el paso 4 de
    quedaron como "Consultar".
 
    ```
-   2026-09-09T18:11:02.417Z — arranque: sitio tomado, en_curso
-   2026-09-09T18:13:55.900Z — referencia: WebFetch OK, 6 secciones mapeadas
-   2026-09-09T18:21:10.233Z — entregable estructura: 5 páginas, guardado
+   2026-09-09T13:11:02.417-05:00 — arranque: sitio tomado, en_curso
+   2026-09-09T13:13:55.900-05:00 — referencia: WebFetch OK, 6 secciones mapeadas
+   2026-09-09T13:21:10.233-05:00 — entregable estructura: 5 páginas, guardado
    ```
 
    Es append, nunca reescritura: **no borrar las líneas anteriores**. El

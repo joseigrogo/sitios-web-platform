@@ -111,7 +111,7 @@ de CLI para esto — no hace falta uno nuevo, Base 8):
    se va **agregando al final**, una línea por hito, con este formato:
 
    ```
-   <timestamp ISO> — <paso>: <qué pasó, una línea>
+   <timestamp ISO con offset de Bogotá, -05:00> — <paso>: <qué pasó, una línea>
    ```
 
    Una línea al terminar cada paso de los de abajo — reuso de
@@ -120,9 +120,9 @@ de CLI para esto — no hace falta uno nuevo, Base 8):
    "listo": cuántas filas, cuántas keywords por rol, cuántos descartes.
 
    ```
-   2026-09-09T14:02:11.004Z — arranque: sitio tomado, en_curso
-   2026-09-09T14:02:40.881Z — reuso: 3 archivos previos en db/research/, no se regasta
-   2026-09-09T14:05:03.120Z — openseo phrase_related: 115 filas, usedFallback=false
+   2026-09-09T09:02:11.004-05:00 — arranque: sitio tomado, en_curso
+   2026-09-09T09:02:40.881-05:00 — reuso: 3 archivos previos en db/research/, no se regasta
+   2026-09-09T09:05:03.120-05:00 — openseo phrase_related: 115 filas, usedFallback=false
    ```
 
    Es append, nunca reescritura: **no borrar las líneas anteriores**, el

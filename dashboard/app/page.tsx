@@ -14,6 +14,7 @@ import {
 } from "./actions";
 import { COOKIE_NAME, sesionValida } from "@/lib/auth";
 import { AutoRefresh } from "./auto-refresh";
+import { bitacoraEnHoraBogota } from "@/lib/fecha";
 import { cargarEstadoSistema, type EstadoSitio } from "@/lib/estado-sistema";
 
 const FASES: { valor: FaseActual; etiqueta: string }[] = [
@@ -330,7 +331,9 @@ function Bitacora({ reporte, sinSenal }: { reporte: string | null; sinSenal: str
   const lineas = (reporte ?? "")
     .split("\n")
     .map((l) => l.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    // Las rutinas escriben ISO; la persona que mira lee hora de Bogotá.
+    .map(bitacoraEnHoraBogota);
 
   if (lineas.length === 0) {
     return <p className="text-xs text-neutral-400">{sinSenal}</p>;

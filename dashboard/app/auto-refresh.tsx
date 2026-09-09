@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { horaBogota } from "@/lib/fecha";
 
 // El dashboard es server-side: sin esto, una rutina puede estar escribiendo su
 // bitácora en Supabase y la pantalla se queda congelada hasta que alguien
@@ -29,7 +30,7 @@ export function AutoRefresh({ activo, segundos = 15 }: { activo: boolean; segund
   return (
     <p className="text-xs text-neutral-600">
       Hay una rutina corriendo — esta página se actualiza sola cada {segundos}s
-      {ultimo && ` · último refresco ${ultimo.toLocaleTimeString("es")}`}
+      {ultimo && ` · último refresco ${horaBogota(ultimo)}`}
     </p>
   );
 }
