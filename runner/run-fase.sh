@@ -5,7 +5,9 @@
 # Auth de OpenCode: ~/.local/share/opencode/auth.json recreado desde el
 #   secreto OPENCODE_AUTH_JSON (lo hace el workflow, no este script).
 # Env requerido: SUPABASE_ACCESS_TOKEN, GH_PAT, SUPABASE_URL,
-#   SUPABASE_SERVICE_ROLE_KEY, (opcional) OPENSEO_TOKEN.
+#   SUPABASE_SERVICE_ROLE_KEY. OpenSEO no lleva token: la instancia
+#   openseo.lab.whitelabel.lat es self-hosted (local-admin) y su MCP no
+#   pide auth (verificado 2026-09-09: initialize/tools/list/whoami en 200).
 set -euo pipefail
 
 FASE="${1:?uso: run-fase.sh <1|2|3>}"

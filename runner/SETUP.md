@@ -24,15 +24,41 @@ están. Solo hace falta portar la auth y sumar 3 tokens.
 | **`SUPABASE_URL`** | Fijo: `https://aoowwztkitctnwbbwbwk.supabase.co` | El CLI. |
 | **`SUPABASE_SERVICE_ROLE_KEY`** | Ya la tenés en `cli/.env` (`sb_secret_…`). | El CLI escribe con ella (validación incluida). |
 | **`GH_PAT`** | github.com/settings/tokens → *Generate new token (classic)* con scope **`repo`** (permite crear repos bajo tu cuenta). O fine-grained con acceso a `joseigrogo/*` + *Administration: write*. | Fase 3 crea un repo por sitio y abre PRs. El `GITHUB_TOKEN` de Actions no puede crear repos, por eso un PAT. |
-| **`OPENSEO_TOKEN`** (opcional) | Tu instancia `openseo.lab.whitelabel.lat`. Si el MCP no pide auth, poné un placeholder (o quitá el bloque `headers` de `runner/opencode.json`). | Solo Fase 1. |
+
+**OpenSEO no lleva secreto.** Verificado el 2026-09-09: el MCP de
+`openseo.lab.whitelabel.lat/mcp` es self-hosted (`local-admin`,
+`mode: self-hosted`) y responde `initialize` / `tools/list` / `whoami` sin
+auth. Va en `runner/opencode.json` como MCP `remote` **sin `headers`** — un
+`Authorization` de más rompía el arranque de OpenCode. El secreto
+`OPENSEO_TOKEN` quedó obsoleto; se puede borrar del repo.
 
 ---
 
 ## 2. Cargar los secretos en el repo
 
 GitHub → repo `sitios-web-platform` → **Settings → Secrets and variables →
-Actions → New repository secret**. Los 6 de la tabla de arriba, con esos
+Actions → New repository secret**. Los 5 de la tabla de arriba, con esos
 nombres exactos. `OPENCODE_AUTH_JSON` es multilínea — pegá el JSON entero.
+
+### 2b. Opt-in de modelos hosteados en China (obligatorio para DeepSeek)
+
+DeepSeek V4 en OpenCode Zen corre en infraestructura en China y el workspace
+tiene que consentirlo explícitamente. Sin eso, `opencode run` muere a los 8
+segundos con:
+
+```
+> build · deepseek-v4-flash
+Error: The latest version of this model is only available hosted in China
+       and requires explicit opt in: https://opencode.ai/workspace/<wrk_id>/go
+```
+
+Se activa en **opencode.ai → tu workspace → pestaña `Go`** (no en `Zen`: los
+toggles de `Zen` son *permisos por modelo* para los miembros, cosa distinta —
+un modelo puede estar habilitado ahí y aun así rebotar por falta de opt-in).
+
+Si preferís no dar ese consentimiento, el `workflow_dispatch` tiene un input
+**`modelo`** que fuerza otro slug del gateway (ej. `opencode-go/gpt-5.6-luna`)
+sin tocar el repo.
 
 ---
 
