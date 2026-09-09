@@ -395,12 +395,20 @@ function SeccionConstruccion({ sitio }: { sitio: EstadoSitio["sitio"] }) {
 }
 
 function SeccionChecklistFase3({ sitio }: { sitio: EstadoSitio["sitio"] }) {
-  // Mismo criterio de fase que SeccionConstruccion: el checklist recién
-  // tiene sentido una vez que hay algo construido para verificar.
-  if (indiceFase(sitio.faseActual) < indiceFase("construccion")) return null;
+  // Los 8 chequeos corren con fetches reales contra una URL viva, así que la
+  // sección solo tiene sentido cuando ya hay algo desplegado que mirar: la
+  // preview del PR que abrió la rutina de Fase 3 (de ahí
+  // construccionEstado === 'terminada'), o el deploy real de Fase 4 en
+  // adelante. Estar en 'construccion' no alcanza -- mientras la rutina
+  // construye no hay URL, y el campo vacío solo confunde.
+  const construccionTerminada = sitio.construccionEstado === "terminada";
+  const enDeployOPosterior = indiceFase(sitio.faseActual) >= indiceFase("deploy");
+  if (!construccionTerminada && !enDeployOPosterior) return null;
 
   const resultado = sitio.checklistFase3Resultado;
-  const esActiva = sitio.faseActual === "construccion";
+  // El checklist informa el gate de Fase 3, así que sigue activo mientras el
+  // sitio está en construcción o recién desplegado.
+  const esActiva = sitio.faseActual === "construccion" || sitio.faseActual === "deploy";
 
   const contenido = (
     <div className="space-y-3 rounded border border-neutral-800 p-3">
