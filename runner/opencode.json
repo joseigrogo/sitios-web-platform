@@ -33,14 +33,7 @@
       "environment": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "{env:GH_PAT}"
       }
-    },
-    "openseo": {
-      "type": "remote",
-      "enabled": true,
-      "url": "https://openseo.lab.whitelabel.lat/mcp",
-      "headers": {
-        "Authorization": "Bearer {env:OPENSEO_TOKEN}"
-      }
     }
   }
 }
+
