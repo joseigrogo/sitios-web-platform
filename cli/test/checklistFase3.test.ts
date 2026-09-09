@@ -161,3 +161,49 @@ test('dominio_canonico falla si www y no-www terminan en destinos distintos', as
   assert.equal(item.pasa, false);
   assert.equal(resultado.pasaTodo, false);
 });
+
+// Caso real: en una preview de Vercel el host es efímero y `www.<host>` no
+// existe en DNS, así que fetch tira. Antes eso tumbaba el checklist entero
+// ("Error: fetch failed") y no se obtenía ningún veredicto.
+test('dominio_canonico tolera variantes que no resuelven, no tumba la corrida', async () => {
+  const deps: DependenciasChecklistFase3 = {
+    async fetchPagina(url) {
+      if (url.includes('/robots.txt')) return respuesta({ html: 'Sitemap: https://ejemplo.com/sitemap.xml', urlFinal: url });
+      if (url.includes('/sitemap.xml')) return respuesta({ html: '<urlset><url><loc>https://ejemplo.com/</loc></url></urlset>', urlFinal: url });
+      if (url.includes('/esto-no-deberia-existir-')) return respuesta({ status: 404, html: '', urlFinal: url });
+      if (url.includes('www.ejemplo.com')) throw new TypeError('fetch failed');
+      return respuesta({ html: htmlCompleto(), urlFinal: 'https://ejemplo.com/' });
+    },
+  };
+
+  const resultado = await ejecutarChecklistFase3('https://ejemplo.com/', deps);
+  const item = resultado.items.find((i) => i.id === 'dominio_canonico')!;
+  // Las que responden convergen en un solo destino, así que pasa...
+  assert.equal(item.pasa, true);
+  // ...pero las caídas quedan dichas en el detalle, no escondidas.
+  assert.match(item.detalle, /No respondieron/);
+  assert.match(item.detalle, /www\.ejemplo\.com/);
+});
+
+test('dominio_canonico falla, sin romper, si ninguna variante responde', async () => {
+  // La primera lectura de la página tiene que andar (si no, no hay checklist
+  // que correr); lo que se cae después es la red, ya en pleno chequeo.
+  let paginaInicialServida = false;
+  const deps: DependenciasChecklistFase3 = {
+    async fetchPagina(url) {
+      if (url.includes('/robots.txt')) return respuesta({ html: 'Sitemap: https://ejemplo.com/sitemap.xml', urlFinal: url });
+      if (url.includes('/sitemap.xml')) return respuesta({ html: '<urlset><url><loc>https://ejemplo.com/</loc></url></urlset>', urlFinal: url });
+      if (url.includes('/esto-no-deberia-existir-')) return respuesta({ status: 404, html: '', urlFinal: url });
+      if (url === 'https://ejemplo.com/' && !paginaInicialServida) {
+        paginaInicialServida = true;
+        return respuesta({ html: htmlCompleto(), urlFinal: url });
+      }
+      throw new TypeError('fetch failed');
+    },
+  };
+
+  const resultado = await ejecutarChecklistFase3('https://ejemplo.com/', deps);
+  const item = resultado.items.find((i) => i.id === 'dominio_canonico')!;
+  assert.equal(item.pasa, false);
+  assert.match(item.detalle, /Ninguna/);
+});

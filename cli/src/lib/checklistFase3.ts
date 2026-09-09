@@ -215,11 +215,34 @@ function construirVariantesDominio(original: URL): string[] {
 async function chequearDominioCanonico(url: string, deps: DependenciasChecklistFase3): Promise<ResultadoItem> {
   const variantes = construirVariantesDominio(new URL(url));
   const destinos = new Set<string>();
+  const inalcanzables: string[] = [];
 
   for (const variante of variantes) {
-    const respuesta = await deps.fetchPagina(variante, { seguirRedirects: true });
-    const u = new URL(respuesta.urlFinal);
-    destinos.add(`${u.protocol}//${u.host}`);
+    // Una variante que no resuelve NO puede tumbar el checklist entero: en una
+    // preview de Vercel el `www.` del host efímero no existe en DNS, y es lo
+    // normal, no un defecto del sitio. Se registra y se sigue.
+    try {
+      const respuesta = await deps.fetchPagina(variante, { seguirRedirects: true });
+      const u = new URL(respuesta.urlFinal);
+      destinos.add(`${u.protocol}//${u.host}`);
+    } catch {
+      inalcanzables.push(variante);
+    }
+  }
+
+  // El veredicto se juzga sobre las que sí respondieron; las caídas se dicen,
+  // no se esconden -- en un dominio de producción que `www` no resuelva sí es
+  // un hallazgo, y quien lee el reporte tiene que poder distinguir los casos.
+  const nota =
+    inalcanzables.length > 0 ? ` No respondieron (DNS o conexión): ${inalcanzables.join(', ')}.` : '';
+
+  if (destinos.size === 0) {
+    return {
+      id: 'dominio_canonico',
+      nombre: 'Un solo dominio canónico',
+      pasa: false,
+      detalle: `Ninguna de las ${variantes.length} variantes respondió.${nota}`,
+    };
   }
 
   const pasa = destinos.size === 1;
@@ -228,8 +251,8 @@ async function chequearDominioCanonico(url: string, deps: DependenciasChecklistF
     nombre: 'Un solo dominio canónico',
     pasa,
     detalle: pasa
-      ? `Las ${variantes.length} variantes (http/https, con/sin www) terminan en el mismo destino: ${[...destinos][0]}.`
-      : `Las variantes terminan en destinos distintos: ${[...destinos].join(', ')} -- falta forzar la redirección a uno solo.`,
+      ? `Las ${destinos.size === 1 ? variantes.length - inalcanzables.length : 0} variantes que respondieron terminan en el mismo destino: ${[...destinos][0]}.${nota}`
+      : `Las variantes terminan en destinos distintos: ${[...destinos].join(', ')} -- falta forzar la redirección a uno solo.${nota}`,
   };
 }
 
