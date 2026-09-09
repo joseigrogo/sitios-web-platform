@@ -20,6 +20,34 @@ nada de Fase 4/5**. Esos gates humanos siguen intactos (Base 6).
 
 ---
 
+## Entorno de ejecución — detectar antes de empezar
+
+Dos entornos:
+
+- **Runner propio** (OpenCode/DeepSeek en GitHub Actions, o local): `cli/.env`
+  o el env tienen `SUPABASE_SERVICE_ROLE_KEY`; hay salida a internet; ya
+  estás dentro del repo `sitios-web-platform` clonado (para leer instructivos
+  — el sitio construido va a **otro** repo, ver Output). Acá:
+  - Escribir `construccion_estado` / `construccion_reporte` / `repo_github`
+    con un `UPDATE` vía CLI de `psql`/tsx o el cliente de Supabase con la
+    service key — no por conector MCP.
+  - `WebFetch` funciona; si podés instalar Chromium
+    (`npx playwright install --with-deps chromium`), correr `direccion-visual`
+    contra `referencia_url` para **tokens reales** antes de tematizar — no
+    quedarte con el sistema neutro si podés hacer el real.
+  - `npm ci && npm run build` del sitio corre de verdad — **usalo para
+    verificar que compila** antes de abrir el PR; si no compila, arreglar o
+    dejar el error como `TODO(construcción)` en el reporte, no abrir un PR
+    roto en silencio.
+- **Sandbox de claude.ai** (rutina RemoteTrigger): sin service key, sin
+  egress, sin navegador, sin poder correr el build. Ahí valen las
+  degradaciones (conector MCP, sistema visual neutro, PR sin verificar el
+  build).
+
+Detección: `printenv SUPABASE_SERVICE_ROLE_KEY` con valor → runner propio.
+
+---
+
 ## Input
 
 **Cómo se elige el sitio.** Corre por cron, sin `sitio_id` en el disparo.

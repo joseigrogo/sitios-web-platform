@@ -22,6 +22,34 @@ antes de redactar — no repetir de memoria.
 
 ---
 
+## Entorno de ejecución — detectar antes de empezar
+
+Dos entornos:
+
+- **Runner propio** (OpenCode/DeepSeek en GitHub Actions, o local): `cli/.env`
+  o el env tienen `SUPABASE_SERVICE_ROLE_KEY`; hay salida a internet; ya
+  estás dentro del repo clonado. Acá:
+  - Escribir por **CLI** (`cd cli && npm ci`; después
+    `node node_modules/tsx/dist/cli.mjs src/index.ts sitio guardar-contenido-fase2 <sitioId> <entregable> --archivo <ruta>`
+    y `… sitio marcar-entregable-fase2 <sitioId> <entregable>`), **no** por
+    conector MCP. `fase2_estado` / `fase2_reporte` sí se escriben con un
+    `UPDATE` (no hay comando CLI para eso).
+  - `WebFetch` de `referencia_url` **funciona** — hacerlo de verdad; la
+    tabla de mapeo va completa y verificada, **no** "PARCIAL".
+  - Si podés instalar Chromium (`npx playwright install --with-deps chromium`):
+    correr el skill `direccion-visual` contra `referencia_url` y poner los
+    **tokens reales** (paleta, tipografía, escala) en el spec — no dejar el
+    bloque como "pendiente".
+- **Sandbox de claude.ai** (rutina RemoteTrigger): sin service key, sin
+  egress, sin navegador. Ahí valen todas las degradaciones descritas más
+  abajo (conector MCP, mapeo PARCIAL, tokens "pendiente").
+
+Detección: `printenv SUPABASE_SERVICE_ROLE_KEY` con valor, o `cli/.env` con
+esa clave → runner propio. `WebFetch https://example.com` con contenido →
+hay egress.
+
+---
+
 ## Input
 
 **Cómo se elige el sitio.** Corre por cron, sin `sitio_id` en el disparo.

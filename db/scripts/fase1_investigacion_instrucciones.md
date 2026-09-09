@@ -21,6 +21,29 @@ juicio deja de ser delegable.
 
 ---
 
+## Entorno de ejecución — detectar antes de empezar
+
+Este instructivo corre en dos entornos:
+
+- **Runner propio** (OpenCode/DeepSeek en GitHub Actions, o local): `cli/.env`
+  o el env tienen `SUPABASE_SERVICE_ROLE_KEY`; hay salida a internet; ya
+  estás dentro del repo clonado (no re-clonar). Acá:
+  - Escribir a Supabase **con el CLI** (`cd cli && npm ci` una vez, después
+    `node node_modules/tsx/dist/cli.mjs src/index.ts investigacion guardar-reporte …`
+    y `… investigacion promover-keyword …`), **no** por conector MCP — el CLI
+    trae la validación. El `git`/PR van con el CLI o `gh` normal.
+  - `WebFetch` funciona — no apliques degradaciones por "falta de egress".
+  - OpenSEO se llama por su conector/MCP igual que en el otro entorno.
+- **Sandbox de claude.ai** (rutina RemoteTrigger): sin
+  `SUPABASE_SERVICE_ROLE_KEY`, sin egress general. Ahí valen las
+  degradaciones de cada paso (conector MCP, PR best-effort) — marcar y
+  seguir, nunca inventar.
+
+Detección: si `printenv SUPABASE_SERVICE_ROLE_KEY` devuelve algo o `cli/.env`
+tiene esa clave → runner propio.
+
+---
+
 ## Input
 
 **Cómo se elige el sitio.** Esta rutina corre por cron, sin `sitio_id` en
