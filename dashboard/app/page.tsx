@@ -158,12 +158,19 @@ function SeccionFase1({ estado }: { estado: EstadoSitio }) {
         </form>
       )}
 
-      {(sitio.investigacionEstado === "solicitada" || sitio.investigacionEstado === "en_curso") && (
+      {sitio.investigacionEstado === "solicitada" && (
         <p className="border-b border-neutral-800 pb-3 text-xs text-neutral-400">
-          {sitio.investigacionEstado === "solicitada"
-            ? "Investigación solicitada — esperando que la rutina la tome."
-            : "Investigación en curso."}
+          Investigación solicitada — esperando que la rutina la tome.
         </p>
+      )}
+
+      {sitio.investigacionEstado === "en_curso" && (
+        <div className="border-b border-neutral-800 pb-3">
+          <Bitacora
+            reporte={sitio.investigacionReporte}
+            sinSenal="Investigación en curso — sin señal todavía."
+          />
+        </div>
       )}
 
       {sitio.investigacionEstado === "terminada" && sitio.investigacionReporte && (
@@ -244,13 +251,20 @@ function ProgresoFaseActual({
               {reporteEstadoLabel[reporteFase2.estado] ?? reporteFase2.estado}
             </p>
           )}
-          {reporteFase2.texto && (
-            <details>
-              <summary className="cursor-pointer text-xs text-neutral-500 hover:text-neutral-300">
-                Ver reporte de la rutina (huecos y TODOs)
-              </summary>
-              <p className="mt-2 whitespace-pre-wrap text-xs text-neutral-400">{reporteFase2.texto}</p>
-            </details>
+          {/* Mientras la rutina corre, el reporte es bitácora y lo que importa
+              es el último hito; una vez terminada es el informe final y va
+              plegado, que es texto largo de consulta. */}
+          {reporteFase2.estado === "en_curso" ? (
+            <Bitacora reporte={reporteFase2.texto} sinSenal="Spec en curso — sin señal todavía." />
+          ) : (
+            reporteFase2.texto && (
+              <details>
+                <summary className="cursor-pointer text-xs text-neutral-500 hover:text-neutral-300">
+                  Ver reporte de la rutina (huecos y TODOs)
+                </summary>
+                <p className="mt-2 whitespace-pre-wrap text-xs text-neutral-400">{reporteFase2.texto}</p>
+              </details>
+            )
           )}
         </div>
       )}
@@ -305,20 +319,20 @@ function ProgresoFaseActual({
   );
 }
 
-// La construcción tarda decenas de minutos y desde afuera no se ve nada, así
-// que mientras corre mostramos la bitácora que la rutina va agregando a
-// construccion_reporte (una línea por hito, ver
-// db/scripts/fase3_construccion_instrucciones.md paso 1). El último hito va
-// al frente porque es la respuesta a "¿en qué va?"; el resto queda a un
-// click. Si la rutina todavía no escribió nada, no inventamos progreso.
-function BitacoraConstruccion({ reporte }: { reporte: string | null }) {
+// Las 3 rutinas tardan y desde afuera no se ve nada, así que mientras corren
+// mostramos la bitácora que cada una va agregando a su reporte (una línea por
+// hito -- ver el paso "Heartbeat y bitácora" de cada instructivo en
+// db/scripts/). El último hito va al frente porque es la respuesta a "¿en qué
+// va?"; el resto queda a un click. Si la rutina todavía no escribió nada, no
+// inventamos progreso: lo decimos.
+function Bitacora({ reporte, sinSenal }: { reporte: string | null; sinSenal: string }) {
   const lineas = (reporte ?? "")
     .split("\n")
     .map((l) => l.trim())
     .filter(Boolean);
 
   if (lineas.length === 0) {
-    return <p className="text-xs text-neutral-400">Construcción en curso — sin señal todavía.</p>;
+    return <p className="text-xs text-neutral-400">{sinSenal}</p>;
   }
 
   const ultima = lineas[lineas.length - 1];
@@ -396,7 +410,10 @@ function SeccionConstruccion({ sitio }: { sitio: EstadoSitio["sitio"] }) {
           )}
 
           {sitio.construccionEstado === "en_curso" && (
-            <BitacoraConstruccion reporte={sitio.construccionReporte} />
+            <Bitacora
+              reporte={sitio.construccionReporte}
+              sinSenal="Construcción en curso — sin señal todavía."
+            />
           )}
 
           {sitio.construccionEstado === "terminada" && (
@@ -656,6 +673,44 @@ function FormularioAltaCliente() {
   );
 }
 
+// "Quiero verlo con mis ojos" -- va arriba de todo, apenas hay algo desplegado.
+// Solo linkeamos URLs que sabemos que existen: producción cuando el sitio ya
+// pasó a 'deploy' y tiene dominio, y la preview de Fase 3 cuando el checklist
+// corrió de verdad contra ella (ese campo lo escribe la verificación, así que
+// si está, esa URL respondió). Nada de armar links a mano que den 404 --
+// prometer un sitio que no está es peor que no mostrar nada.
+function SeccionSitioEnVivo({ sitio }: { sitio: EstadoSitio["sitio"] }) {
+  const produccion =
+    indiceFase(sitio.faseActual) >= indiceFase("deploy") && sitio.dominio
+      ? `https://${sitio.dominio}`
+      : null;
+  const preview = sitio.checklistFase3Url;
+
+  if (!produccion && !preview) return null;
+
+  return (
+    <div className="space-y-1 rounded border border-emerald-900/60 bg-emerald-950/20 p-3">
+      <h2 className="text-sm font-medium text-neutral-300">Ver el sitio</h2>
+      {produccion && (
+        <p className="text-xs">
+          <span className="text-neutral-500">Producción: </span>
+          <a href={produccion} target="_blank" rel="noreferrer" className="text-emerald-400 underline">
+            {produccion}
+          </a>
+        </p>
+      )}
+      {preview && (
+        <p className="text-xs">
+          <span className="text-neutral-500">Preview verificada en Fase 3: </span>
+          <a href={preview} target="_blank" rel="noreferrer" className="text-emerald-400 underline">
+            {preview}
+          </a>
+        </p>
+      )}
+    </div>
+  );
+}
+
 function DetalleSitio({ cliente, estadoSitio }: { cliente: Cliente; estadoSitio: EstadoSitio }) {
   const { sitio } = estadoSitio;
 
@@ -677,6 +732,7 @@ function DetalleSitio({ cliente, estadoSitio }: { cliente: Cliente; estadoSitio:
         </div>
 
         <BarraFases actual={sitio.faseActual} />
+        <SeccionSitioEnVivo sitio={sitio} />
         <SeccionGateFase0 sitio={sitio} />
         <SeccionFase1 estado={estadoSitio} />
         <ProgresoFaseActual

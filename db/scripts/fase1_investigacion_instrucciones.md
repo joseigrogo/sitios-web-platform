@@ -66,9 +66,10 @@ limit 1;
   saltear la consulta.
 - **Recuperación de colgados.** Si no hay ninguno en `solicitada` pero hay
   uno en `investigacion_estado = 'en_curso'` cuyo `updated_at` (o el
-  timestamp del heartbeat en `investigacion_reporte`) es de hace más de 3
-  horas, es una corrida anterior que murió a mitad: retomarlo como si
-  estuviera en `solicitada`.
+  timestamp de la **última** línea de la bitácora en
+  `investigacion_reporte` — no la primera, que es la del arranque y nunca
+  cambia) es de hace más de 3 horas, es una corrida anterior que murió a
+  mitad: retomarlo como si estuviera en `solicitada`.
 
 Con el `sitio_id` elegido, leer de Supabase (conector MCP, no hay comando
 de CLI para esto — no hace falta uno nuevo, Base 8):
@@ -99,11 +100,35 @@ de CLI para esto — no hace falta uno nuevo, Base 8):
 
 ## Proceso, paso a paso
 
-1. **Heartbeat mínimo.** Apenas elegido el sitio (Input), flip a
+1. **Heartbeat y bitácora.** Apenas elegido el sitio (Input), flip a
    `investigacion_estado = 'en_curso'` antes de hacer nada más — señal de
    que la rutina arrancó de verdad (Base 7: "el silencio es alarmante, no
    tranquilizador") y candado para que una corrida siguiente no agarre el
    mismo sitio mientras este está en proceso.
+
+   **La investigación tarda y desde afuera no se ve nada.** Así que
+   `investigacion_reporte` no es solo el resumen final: es una bitácora que
+   se va **agregando al final**, una línea por hito, con este formato:
+
+   ```
+   <timestamp ISO> — <paso>: <qué pasó, una línea>
+   ```
+
+   Una línea al terminar cada paso de los de abajo — reuso de
+   `db/research/`, cada llamada a OpenSEO (qué reporte y cuántos créditos),
+   la clasificación, la escritura de `keywords`. Con el dato concreto, no
+   "listo": cuántas filas, cuántas keywords por rol, cuántos descartes.
+
+   ```
+   2026-09-09T14:02:11.004Z — arranque: sitio tomado, en_curso
+   2026-09-09T14:02:40.881Z — reuso: 3 archivos previos en db/research/, no se regasta
+   2026-09-09T14:05:03.120Z — openseo phrase_related: 115 filas, usedFallback=false
+   ```
+
+   Es append, nunca reescritura: **no borrar las líneas anteriores**, el
+   valor está en la secuencia. El dashboard muestra esta bitácora en vivo
+   mientras el estado es `en_curso`, y la recuperación de colgados lee el
+   timestamp de la **última** línea.
 
 2. **Reusar antes de gastar.** Revisar `db/research/` por archivos ya
    existentes para el `clienteSlug` de este sitio antes de llamar a

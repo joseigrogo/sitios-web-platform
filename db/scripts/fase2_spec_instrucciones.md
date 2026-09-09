@@ -118,10 +118,37 @@ Con el `sitio_id` elegido, leer de Supabase:
 
 ## Proceso, paso a paso
 
-1. **Heartbeat.** Apenas elegido el sitio, escribir
+1. **Heartbeat y bitácora.** Apenas elegido el sitio, escribir
    `estado_gates -> 'fase2_estado' = 'en_curso'` y
    `estado_gates -> 'fase2_estado_ts' = <ISO ahora>` — señal de arranque y
    candado para que otra corrida no agarre el mismo sitio.
+
+   **El spec tarda y desde afuera no se ve nada.** Así que
+   `estado_gates -> 'fase2_reporte'` no es solo el informe final: es una
+   bitácora que se va **agregando al final**, una línea por hito:
+
+   ```
+   <timestamp ISO> — <paso>: <qué pasó, una línea>
+   ```
+
+   Una línea al terminar cada paso — reuso de entregables previos, lectura
+   del formato, `WebFetch` de la referencia (y si salió completo o
+   PARCIAL), dirección visual (tokens reales o pendientes), y **cada uno de
+   los 3 entregables al guardarse**. Con el dato concreto: cuántas páginas
+   tiene la estructura, cuántos eventos la taxonomía, cuántos huecos
+   quedaron como "Consultar".
+
+   ```
+   2026-09-09T18:11:02.417Z — arranque: sitio tomado, en_curso
+   2026-09-09T18:13:55.900Z — referencia: WebFetch OK, 6 secciones mapeadas
+   2026-09-09T18:21:10.233Z — entregable estructura: 5 páginas, guardado
+   ```
+
+   Es append, nunca reescritura: **no borrar las líneas anteriores**. El
+   dashboard muestra esta bitácora en vivo mientras `fase2_estado` es
+   `en_curso`; cuando pasa a `terminada`, el mismo campo se lee como
+   informe final. `fase2_estado_ts` se sigue actualizando en cada línea,
+   que es lo que mira la recuperación de colgados.
 
 2. **Reusar antes de re-escribir.** Si un entregable ya tiene contenido en
    `estado_gates -> 'fase2_contenido'` y su flag en `true`, no re-hacerlo
