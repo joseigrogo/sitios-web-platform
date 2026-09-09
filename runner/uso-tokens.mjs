@@ -18,9 +18,17 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { homedir } from 'node:os';
 
+// La primera corrida real (34408985859) no encontró nada en las dos primeras:
+// OpenCode guarda las sesiones en otro lado. Se amplían las raíces en vez de
+// adivinar cuál es la buena, y si igual no aparece se imprime el árbol de
+// directorios para saberlo de una vez (ver el bloque de diagnóstico al final).
 const RAICES = [
   join(homedir(), '.local', 'share', 'opencode'),
   join(homedir(), '.config', 'opencode'),
+  join(homedir(), '.opencode'),
+  join(homedir(), '.cache', 'opencode'),
+  ...(process.env.XDG_DATA_HOME ? [join(process.env.XDG_DATA_HOME, 'opencode')] : []),
+  ...(process.env.GITHUB_WORKSPACE ? [join(process.env.GITHUB_WORKSPACE, '.opencode')] : []),
 ];
 const IGNORAR = new Set(['node_modules', '.git', 'bin', 'cache', 'log']);
 // auth.json guarda la API key del gateway en texto plano. GitHub enmascara el
@@ -114,10 +122,42 @@ console.log(`archivos JSON leídos: ${archivos}`);
 if (conUso === 0) {
   console.log('');
   console.log('No se encontró ningún bloque de uso con la forma esperada.');
-  console.log('El esquema de OpenCode debe ser otro. Claves de primer nivel vistas:');
-  console.log('  ' + [...clavesVistas].sort().slice(0, 60).join(', '));
   console.log('Archivos vistos (solo rutas y nombres de claves, nunca valores):');
   for (const m of muestras) console.log('  ' + m);
+
+  // Sin esto quedaríamos adivinando dónde guarda OpenCode las sesiones. El
+  // árbol de directorios (solo nombres de carpeta, ningún contenido) alcanza
+  // para saberlo y ajustar las raíces en la corrida siguiente.
+  console.log('');
+  console.log('Árbol de directorios de OpenCode (solo carpetas, para ubicar las sesiones):');
+  const listarDirs = (dir, prof = 0) => {
+    if (prof > 3) return;
+    let entradas;
+    try {
+      entradas = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const e of entradas) {
+      if (!e.isDirectory()) continue;
+      const p = join(dir, e.name);
+      let cuantos = 0;
+      try {
+        cuantos = readdirSync(p).length;
+      } catch {}
+      console.log(`  ${'  '.repeat(prof)}${e.name}/  (${cuantos} entradas)`);
+      listarDirs(p, prof + 1);
+    }
+  };
+  for (const raiz of RAICES) {
+    try {
+      statSync(raiz);
+    } catch {
+      continue;
+    }
+    console.log(`  ${raiz}`);
+    listarDirs(raiz);
+  }
 } else {
   const suma = total.input + total.output + total.reasoning;
   console.log(`mensajes con uso:  ${conUso}`);
