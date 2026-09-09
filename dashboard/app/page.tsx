@@ -305,6 +305,43 @@ function ProgresoFaseActual({
   );
 }
 
+// La construcción tarda decenas de minutos y desde afuera no se ve nada, así
+// que mientras corre mostramos la bitácora que la rutina va agregando a
+// construccion_reporte (una línea por hito, ver
+// db/scripts/fase3_construccion_instrucciones.md paso 1). El último hito va
+// al frente porque es la respuesta a "¿en qué va?"; el resto queda a un
+// click. Si la rutina todavía no escribió nada, no inventamos progreso.
+function BitacoraConstruccion({ reporte }: { reporte: string | null }) {
+  const lineas = (reporte ?? "")
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+
+  if (lineas.length === 0) {
+    return <p className="text-xs text-neutral-400">Construcción en curso — sin señal todavía.</p>;
+  }
+
+  const ultima = lineas[lineas.length - 1];
+  const anteriores = lineas.slice(0, -1);
+
+  return (
+    <div className="space-y-1">
+      <p className="text-xs text-neutral-300">
+        <span className="text-neutral-500">En curso — </span>
+        {ultima}
+      </p>
+      {anteriores.length > 0 && (
+        <details>
+          <summary className="cursor-pointer text-xs text-neutral-500 hover:text-neutral-300">
+            Ver los {anteriores.length} pasos anteriores
+          </summary>
+          <p className="mt-1 whitespace-pre-wrap text-xs text-neutral-500">{anteriores.join("\n")}</p>
+        </details>
+      )}
+    </div>
+  );
+}
+
 function SeccionConstruccion({ sitio }: { sitio: EstadoSitio["sitio"] }) {
   // Capturar la referencia sirve desde Spec (la usa dirección visual,
   // db/scripts/fase2_formato_spec.md §5) -- pero solicitar construcción
@@ -352,12 +389,14 @@ function SeccionConstruccion({ sitio }: { sitio: EstadoSitio["sitio"] }) {
             </form>
           )}
 
-          {(sitio.construccionEstado === "solicitada" || sitio.construccionEstado === "en_curso") && (
+          {sitio.construccionEstado === "solicitada" && (
             <p className="text-xs text-neutral-400">
-              {sitio.construccionEstado === "solicitada"
-                ? "Construcción solicitada — esperando que la rutina la tome."
-                : "Construcción en curso."}
+              Construcción solicitada — esperando que la rutina la tome.
             </p>
+          )}
+
+          {sitio.construccionEstado === "en_curso" && (
+            <BitacoraConstruccion reporte={sitio.construccionReporte} />
           )}
 
           {sitio.construccionEstado === "terminada" && (

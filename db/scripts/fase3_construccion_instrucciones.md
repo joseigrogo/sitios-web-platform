@@ -68,7 +68,8 @@ order by created_at asc;
   saltea** — NO frena el run. Solo un error real de herramienta frena.
 - **Si el disparo trae un `sitio_id` explícito** (corrida manual), usar ese.
 - **Recuperación de colgados.** Si `construccion_estado = 'en_curso'` y el
-  timestamp del último heartbeat (`construccion_reporte`, primera línea, o
+  timestamp del último heartbeat (`construccion_reporte`, **última** línea
+  de la bitácora — no la primera, que es la del arranque y nunca cambia; o
   `updated_at`) es de hace más de 6 horas (la construcción es larga), es
   una corrida anterior que murió: retomarlo.
 - **Un sitio por corrida.**
@@ -141,9 +142,38 @@ El repo es un proyecto Next.js (en su raíz) con:
 
 ## Proceso, paso a paso
 
-1. **Heartbeat.** Apenas elegido el sitio: `construccion_estado =
-   'en_curso'` vía conector, con un timestamp ISO en la primera línea de
+1. **Heartbeat y bitácora.** Apenas elegido el sitio: `construccion_estado
+   = 'en_curso'` vía conector, con un timestamp ISO en la primera línea de
    `construccion_reporte`. Candado + señal de arranque (Base 7).
+
+   **La construcción es larga (decenas de minutos) y desde afuera no se ve
+   nada.** Así que `construccion_reporte` no es solo el informe final: es
+   una bitácora que se va **agregando al final**, una línea por hito, con
+   este formato exacto:
+
+   ```
+   <timestamp ISO> — <paso>: <qué pasó, una línea>
+   ```
+
+   Escribir una línea al **terminar** cada uno de los pasos 2 a 9 —
+   precondición, dirección visual, estructura, contenido, taxonomía,
+   variantes, TODOs, y cada sub-hito del 9 (repo creado, rama, push, PR).
+   Decir el dato concreto, no "listo": cuántas páginas, cuántos eventos,
+   si los tokens eran reales o neutros, el nombre del repo, el link del PR.
+
+   Ejemplo de cómo se ve a mitad de camino:
+
+   ```
+   2026-09-09T19:57:13.635Z — arranque: sitio tomado, en_curso
+   2026-09-09T19:58:02.001Z — precondición: gate de Fase 2 3/3, sigo
+   2026-09-09T20:03:44.120Z — dirección visual: tokens neutros (spec sin tokens), TODO dejado
+   2026-09-09T20:11:09.887Z — estructura: 5 páginas, 4 con mapeo verificado
+   ```
+
+   Es append, nunca reescritura: **no borrar las líneas anteriores**, el
+   valor está en la secuencia. El dashboard muestra esta bitácora en vivo
+   mientras el estado es `en_curso`, y la recuperación de colgados lee el
+   timestamp de la **última** línea.
 
 2. **Precondición.** Gate de Fase 2 = 3/3 entregables en
    `estado_gates.fase2`. Si no pasa, saltear ese sitio (no construir "por
