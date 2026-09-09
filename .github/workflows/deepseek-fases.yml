@@ -79,3 +79,12 @@ jobs:
           git config --global user.name "fases-bot"
           git config --global user.email "fases-bot@users.noreply.github.com"
           bash runner/run-fase.sh ${{ matrix.fase }}
+
+      # El motivo de mover las fases a DeepSeek fue el costo, así que cada
+      # corrida tiene que poder decir cuánto gastó. OpenCode no lo imprime,
+      # pero deja las sesiones en disco. Corre siempre (if: always()) porque
+      # una corrida que falla igual gastó tokens, y nunca rompe el job.
+      - name: Uso de tokens
+        if: always()
+        continue-on-error: true
+        run: node runner/uso-tokens.mjs
