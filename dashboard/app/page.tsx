@@ -190,10 +190,12 @@ function ProgresoFaseActual({
   sitio,
   entregablesFase2,
   contenidoFase2,
+  reporteFase2,
 }: {
   sitio: EstadoSitio["sitio"];
   entregablesFase2: EstadoEntregablesFase2;
   contenidoFase2: EstadoContenidoFase2;
+  reporteFase2: EstadoSitio["reporteFase2"];
 }) {
   if (indiceFase(sitio.faseActual) < indiceFase("spec")) {
     return (
@@ -215,11 +217,43 @@ function ProgresoFaseActual({
   // condición nueva acá) -- si difiere, el gate real del Server Action manda.
   const pasaGate = completados === claves.length;
 
+  const reporteEstadoLabel: Record<string, string> = {
+    en_curso: "Rutina de spec en curso.",
+    terminada: "Rutina de spec terminada.",
+  };
+
   const contenido = (
     <div className="space-y-3">
       <p className="text-xs text-neutral-500">
         Progreso de Spec: <b className="text-neutral-300">{completados}/{claves.length} entregables</b>
       </p>
+
+      {(reporteFase2.estado || reporteFase2.texto) && (
+        <div className="space-y-1 rounded border border-neutral-800 p-3">
+          {reporteFase2.estado && (
+            <p
+              className={
+                "text-xs " +
+                (reporteFase2.estado === "terminada"
+                  ? "text-emerald-500"
+                  : reporteFase2.estado.startsWith("bloqueado")
+                    ? "text-amber-500"
+                    : "text-neutral-400")
+              }
+            >
+              {reporteEstadoLabel[reporteFase2.estado] ?? reporteFase2.estado}
+            </p>
+          )}
+          {reporteFase2.texto && (
+            <details>
+              <summary className="cursor-pointer text-xs text-neutral-500 hover:text-neutral-300">
+                Ver reporte de la rutina (huecos y TODOs)
+              </summary>
+              <p className="mt-2 whitespace-pre-wrap text-xs text-neutral-400">{reporteFase2.texto}</p>
+            </details>
+          )}
+        </div>
+      )}
 
       <div className="space-y-2">
         {claves.map((c) => (
@@ -592,6 +626,7 @@ function DetalleSitio({ cliente, estadoSitio }: { cliente: Cliente; estadoSitio:
           sitio={sitio}
           entregablesFase2={estadoSitio.entregablesFase2}
           contenidoFase2={estadoSitio.contenidoFase2}
+          reporteFase2={estadoSitio.reporteFase2}
         />
         <SeccionConstruccion sitio={sitio} />
         <SeccionChecklistFase3 sitio={sitio} />
