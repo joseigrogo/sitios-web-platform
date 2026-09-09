@@ -15,9 +15,9 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # lectura/redacción; Pro para construir código. Ajustar si los slugs cambian
 # (verificar con `opencode models`).
 case "$FASE" in
-  1) INSTR="db/scripts/fase1_investigacion_instrucciones.md"; MODEL="opencode/deepseek-v4-flash" ;;
-  2) INSTR="db/scripts/fase2_spec_instrucciones.md";           MODEL="opencode/deepseek-v4-flash" ;;
-  3) INSTR="db/scripts/fase3_construccion_instrucciones.md";   MODEL="opencode/deepseek-v4-pro" ;;
+  1) INSTR="db/scripts/fase1_investigacion_instrucciones.md"; MODEL="opencode-go/deepseek-v4-flash" ;;
+  2) INSTR="db/scripts/fase2_spec_instrucciones.md";           MODEL="opencode-go/deepseek-v4-flash" ;;
+  3) INSTR="db/scripts/fase3_construccion_instrucciones.md";   MODEL="opencode-go/deepseek-v4-pro" ;;
   *) echo "fase inválida: $FASE" >&2; exit 2 ;;
 esac
 

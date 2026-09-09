@@ -1,8 +1,8 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "opencode/deepseek-v4-flash",
+  "model": "opencode-go/deepseek-v4-flash",
   "provider": {
-    "opencode": {
+    "opencode-go": {
       "options": {
         "timeout": 600000,
         "chunkTimeout": 60000
