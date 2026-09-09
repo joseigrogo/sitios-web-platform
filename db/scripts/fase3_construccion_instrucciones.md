@@ -237,6 +237,13 @@ El repo es un proyecto Next.js (en su raíz) con:
      sitio en un commit con `mcp__github__push_files` (`node_modules/` y
      `.next/` no van — están en `.gitignore`). Abrir PR de esa rama contra
      `main` con `mcp__github__create_pull_request`. **Nunca mergear.**
+   - **El `package-lock.json` va sí o sí.** No está en `.gitignore` y no es
+     un archivo generado descartable: es el registro de las versiones que
+     realmente verificaste al correr `npm run build`. Sin él, Vercel corre
+     `npm ci` y falla antes de compilar, y lo que se despliega no es lo que
+     probaste. Si `npm install` lo generó en el runner, subilo en el mismo
+     commit que el resto del árbol — verificar explícitamente que quedó en
+     la lista de archivos pusheados, no darlo por hecho.
    - Si el push/PR falla: el repo ya quedó creado (vacío o a medias);
      dejarlo escrito en `construccion_reporte` y seguir — no abortar.
    - **Checklist contra la preview, si la hay.** Abierto el PR, si el repo
