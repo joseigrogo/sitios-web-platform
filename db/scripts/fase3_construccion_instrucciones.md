@@ -239,6 +239,28 @@ El repo es un proyecto Next.js (en su raíz) con:
      `main` con `mcp__github__create_pull_request`. **Nunca mergear.**
    - Si el push/PR falla: el repo ya quedó creado (vacío o a medias);
      dejarlo escrito en `construccion_reporte` y seguir — no abortar.
+   - **Checklist contra la preview, si la hay.** Abierto el PR, si el repo
+     del sitio está conectado a Vercel, Vercel despliega una preview solo —
+     la rutina **no** deploya, solo aprovecha la que aparece. Consultar los
+     deployments del PR (`mcp__github__*` o la API de GitHub) buscando el
+     `environment_url`, reintentando unos minutos: la preview tarda en
+     construirse. Cuando aparezca, correr desde el repo de la plataforma:
+
+     ```bash
+     cd cli && npm ci
+     node node_modules/tsx/dist/cli.mjs src/index.ts sitio checklist-fase3 <url-preview> --sitio <sitioId>
+     ```
+
+     Eso guarda el veredicto de los 8 chequeos donde el dashboard ya lo
+     lee, con la URL clickeable para mirar el sitio. Anotar en la bitácora
+     cuántos pasaron.
+
+     **Si la preview no aparece** (el repo todavía no está conectado a
+     Vercel — es el caso al crear un sitio nuevo, y conectarlo es un acto
+     humano de Fase 4): anotar en la bitácora `sin preview: repo no
+     conectado a Vercel, checklist pendiente` y **seguir**. No es un error,
+     no bloquea, y el checklist queda disponible a mano en el dashboard.
+     Degradar, nunca frenar — igual que Fase 1 y 2.
    - `construccion_estado = 'terminada'` vía conector, y
      `construccion_reporte` con: nombre del repo + link al PR, qué páginas
      se construyeron, la lista completa de `TODO(construcción)`, y la línea
@@ -250,7 +272,10 @@ El repo es un proyecto Next.js (en su raíz) con:
     proyecto Vercel, no tocar `sitios.vercel_project_id`. No dominio/DNS.
     Nada de Fase 4 o Fase 5. No `cli sitio gate-* --confirmar`. No escribir
     `sitios.fase_actual`. En Supabase, solo `construccion_estado`,
-    `construccion_reporte` y `repo_github`. En `sitios-web-platform` no
+    `construccion_reporte`, `repo_github` y — si llegó a correr el checklist
+    contra una preview — `checklist_fase3_url` / `checklist_fase3_resultado`
+    (vía `cli sitio checklist-fase3 --sitio`, que es medición, no un gate:
+    guardar el veredicto no lo confirma). En `sitios-web-platform` no
     escribe **nada** — solo lo clona para leer este instructivo y
     `fase2_formato_spec.md`.
 

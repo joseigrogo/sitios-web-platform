@@ -471,8 +471,18 @@ function SeccionChecklistFase3({ sitio }: { sitio: EstadoSitio["sitio"] }) {
         <p className="text-xs text-neutral-600">Sin correr todavía.</p>
       ) : (
         <div className="space-y-2">
+          {/* La URL del checklist es el sitio vivo -- el único link que sirve
+              para mirarlo con los ojos, así que va clickeable, no como texto. */}
           <p className="text-xs text-neutral-500">
-            Última corrida contra <span className="text-neutral-300">{resultado.url}</span>
+            Última corrida contra{" "}
+            <a
+              href={resultado.url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-neutral-300 underline hover:text-neutral-100"
+            >
+              {resultado.url}
+            </a>
           </p>
           {resultado.items.map((item) => (
             <div key={item.id} className="flex items-start gap-2 text-xs">
