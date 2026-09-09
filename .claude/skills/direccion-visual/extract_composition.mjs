@@ -27,7 +27,12 @@ const maxDepth = Number(maxDepthArg) || 5;
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+// `networkidle` con 30s se cuelga en sitios reales que nunca quedan quietos
+// (analytics, chat, lazy-loading, video de fondo) -- verificado el 2026-09-09
+// contra drmichaeljstein.com, donde la rutina de Fase 2 tuvo que parchear
+// esto a mano para poder seguir. `domcontentloaded` alcanza: lo que este
+// script mide es el DOM, no los recursos.
+await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
 try { await page.locator('button:has-text("Aceptar")').first().click({ timeout: 1500 }); } catch (e) {}
 await page.waitForTimeout(800);
 
