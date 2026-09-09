@@ -42,9 +42,22 @@ jobs:
           OPENCODE_AUTH_JSON: ${{ secrets.OPENCODE_AUTH_JSON }}
         run: |
           mkdir -p "$HOME/.local/share/opencode"
-          printf '%s' "$OPENCODE_AUTH_JSON" > "$HOME/.local/share/opencode/auth.json"
-          # sanity: JSON válido, sin imprimir el contenido
-          node -e "JSON.parse(require('fs').readFileSync(process.env.HOME + '/.local/share/opencode/auth.json','utf8')); console.log('auth.json OK')"
+          node -e '
+            const j = JSON.parse(process.env.OPENCODE_AUTH_JSON);
+            for (const [name, p] of Object.entries(j)) {
+              if (p && typeof p === "object") {
+                for (const k of ["key", "apiKey", "token", "access", "refresh"]) {
+                  if (typeof p[k] === "string") {
+                    const raw = p[k];
+                    p[k] = raw.trim();
+                    console.log(`  ${name}.${k}: len ${raw.length} -> ${p[k].length}, tenía whitespace: ${/\s/.test(raw)}`);
+                  }
+                }
+              }
+            }
+            require("fs").writeFileSync(process.env.HOME + "/.local/share/opencode/auth.json", JSON.stringify(j));
+            console.log("auth.json OK; providers:", Object.keys(j).join(", "));
+          '
 
       - name: Correr Fase ${{ matrix.fase }}
         env:
