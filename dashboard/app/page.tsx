@@ -13,6 +13,7 @@ import {
   solicitarInvestigacion,
 } from "./actions";
 import { COOKIE_NAME, sesionValida } from "@/lib/auth";
+import { AutoRefresh } from "./auto-refresh";
 import { cargarEstadoSistema, type EstadoSitio } from "@/lib/estado-sistema";
 
 const FASES: { valor: FaseActual; etiqueta: string }[] = [
@@ -711,6 +712,22 @@ function SeccionSitioEnVivo({ sitio }: { sitio: EstadoSitio["sitio"] }) {
   );
 }
 
+// "Corriendo" incluye 'solicitada': entre que el humano pide el trabajo y que
+// la rutina lo toma pasan minutos (el cron, y el agente leyendo su instructivo
+// antes del primer heartbeat). Justo ahí es cuando uno mira la pantalla
+// esperando que pase algo, así que también hay que refrescar.
+function hayRutinaCorriendo(
+  sitio: EstadoSitio["sitio"],
+  reporteFase2: EstadoSitio["reporteFase2"]
+): boolean {
+  const enMarcha = (e: string | null) => e === "solicitada" || e === "en_curso";
+  return (
+    enMarcha(sitio.investigacionEstado) ||
+    enMarcha(sitio.construccionEstado) ||
+    reporteFase2.estado === "en_curso"
+  );
+}
+
 function DetalleSitio({ cliente, estadoSitio }: { cliente: Cliente; estadoSitio: EstadoSitio }) {
   const { sitio } = estadoSitio;
 
@@ -732,6 +749,7 @@ function DetalleSitio({ cliente, estadoSitio }: { cliente: Cliente; estadoSitio:
         </div>
 
         <BarraFases actual={sitio.faseActual} />
+        <AutoRefresh activo={hayRutinaCorriendo(sitio, estadoSitio.reporteFase2)} />
         <SeccionSitioEnVivo sitio={sitio} />
         <SeccionGateFase0 sitio={sitio} />
         <SeccionFase1 estado={estadoSitio} />
