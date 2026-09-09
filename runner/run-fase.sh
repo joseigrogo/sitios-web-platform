@@ -1,18 +1,23 @@
 #!/usr/bin/env bash
-# Corre una fase de la plataforma con OpenCode + DeepSeek, no-interactivo.
-# Uso: runner/run-fase.sh <1|2|3>
+# Corre una fase de la plataforma con OpenCode (Zen / "OpenCode Go"),
+# no-interactivo. Uso: runner/run-fase.sh <1|2|3>
 # Espera correr desde la raíz del repo ya clonado (GitHub Actions lo hace).
-# Env requerido: DEEPSEEK_API_KEY, SUPABASE_ACCESS_TOKEN, GH_PAT,
-#   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, (opcional) OPENSEO_TOKEN.
+# Auth de OpenCode: ~/.local/share/opencode/auth.json recreado desde el
+#   secreto OPENCODE_AUTH_JSON (lo hace el workflow, no este script).
+# Env requerido: SUPABASE_ACCESS_TOKEN, GH_PAT, SUPABASE_URL,
+#   SUPABASE_SERVICE_ROLE_KEY, (opcional) OPENSEO_TOKEN.
 set -euo pipefail
 
 FASE="${1:?uso: run-fase.sh <1|2|3>}"
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+# Modelos vía OpenCode Zen (formato opencode/<id>). Flash para las fases de
+# lectura/redacción; Pro para construir código. Ajustar si los slugs cambian
+# (verificar con `opencode models`).
 case "$FASE" in
-  1) INSTR="db/scripts/fase1_investigacion_instrucciones.md"; MODEL="deepseek/deepseek-chat" ;;
-  2) INSTR="db/scripts/fase2_spec_instrucciones.md";           MODEL="deepseek/deepseek-chat" ;;
-  3) INSTR="db/scripts/fase3_construccion_instrucciones.md";   MODEL="deepseek/deepseek-reasoner" ;;
+  1) INSTR="db/scripts/fase1_investigacion_instrucciones.md"; MODEL="opencode/deepseek-v4-flash" ;;
+  2) INSTR="db/scripts/fase2_spec_instrucciones.md";           MODEL="opencode/deepseek-v4-flash" ;;
+  3) INSTR="db/scripts/fase3_construccion_instrucciones.md";   MODEL="opencode/deepseek-v4-pro" ;;
   *) echo "fase inválida: $FASE" >&2; exit 2 ;;
 esac
 

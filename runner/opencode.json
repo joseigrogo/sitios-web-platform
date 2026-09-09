@@ -1,15 +1,11 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "deepseek/deepseek-chat",
+  "model": "opencode/deepseek-v4-flash",
   "provider": {
-    "deepseek": {
+    "opencode": {
       "options": {
         "timeout": 600000,
         "chunkTimeout": 60000
-      },
-      "models": {
-        "deepseek-chat": { "name": "DeepSeek Chat (V3)" },
-        "deepseek-reasoner": { "name": "DeepSeek Reasoner (R1)" }
       }
     }
   },

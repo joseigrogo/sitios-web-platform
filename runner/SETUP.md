@@ -7,35 +7,32 @@ egress real, Chromium instalable).
 
 **Qué corre:** `.github/workflows/deepseek-fases.yml` — cron `17 * * * *`,
 un job por fase (matriz 1/2/3), cada uno llama a `runner/run-fase.sh N`, que
-invoca `opencode run` con DeepSeek leyendo `db/scripts/faseN_*_instrucciones.md`.
+invoca `opencode run` (vía **OpenCode Zen / "OpenCode Go"**, modelo
+`opencode/deepseek-v4-*`) leyendo `db/scripts/faseN_*_instrucciones.md`.
 
 ---
 
-## 1. Cuentas y tokens que hay que crear
+## 1. Lo que hay que conseguir
 
-| Token | Dónde se saca | Para qué |
+Ya usás **OpenCode Go** en el desktop, así que la cuenta y el crédito ya
+están. Solo hace falta portar la auth y sumar 3 tokens.
+
+| Secreto | Dónde se saca | Para qué |
 |---|---|---|
-| **DeepSeek API key** | platform.deepseek.com → *API keys* → *Create new key*. Cargar ~US$2 de crédito (alcanza para muchísimas corridas). | El modelo que ejecuta las fases. |
-| **Supabase access token** | supabase.com/dashboard → (avatar) *Account* → *Access Tokens* → *Generate new token*. | El MCP server de Supabase (`@supabase/mcp-server-supabase`) lo usa para leer/escribir. |
-| **Supabase service role key** | Ya la tenés en `cli/.env` (`SUPABASE_SERVICE_ROLE_KEY=sb_secret_…`). | El CLI de la plataforma escribe con ella (validación incluida). |
-| **GitHub PAT** | github.com/settings/tokens → *Generate new token (classic)* con scope **`repo`** (el classic `repo` permite crear repos bajo tu cuenta). O fine-grained con acceso a `joseigrogo/*` + *Administration: write*. | Fase 3 crea un repo por sitio y abre PRs. El `GITHUB_TOKEN` de Actions no puede crear repos ajenos, por eso un PAT. |
-| **OpenSEO token** (opcional) | Tu instancia `openseo.lab.whitelabel.lat`. Si el MCP no pide auth, poné cualquier string (o quitá el bloque `headers` de `runner/opencode.json`). | Solo Fase 1. |
+| **`OPENCODE_AUTH_JSON`** | El **contenido completo** de tu archivo de auth de OpenCode: `C:\Users\RM11\.local\share\opencode\auth.json`. Abrilo, copiá todo el JSON tal cual. (Si tiene keys de otros providers que no querés en CI, dejá solo el bloque `"opencode"`.) | El workflow lo recrea en el runner → OpenCode se autentica igual que tu desktop. |
+| **`SUPABASE_ACCESS_TOKEN`** | supabase.com/dashboard → (avatar) *Account* → *Access Tokens* → *Generate new token*. | El MCP server de Supabase lo usa para leer/escribir. |
+| **`SUPABASE_URL`** | Fijo: `https://aoowwztkitctnwbbwbwk.supabase.co` | El CLI. |
+| **`SUPABASE_SERVICE_ROLE_KEY`** | Ya la tenés en `cli/.env` (`sb_secret_…`). | El CLI escribe con ella (validación incluida). |
+| **`GH_PAT`** | github.com/settings/tokens → *Generate new token (classic)* con scope **`repo`** (permite crear repos bajo tu cuenta). O fine-grained con acceso a `joseigrogo/*` + *Administration: write*. | Fase 3 crea un repo por sitio y abre PRs. El `GITHUB_TOKEN` de Actions no puede crear repos, por eso un PAT. |
+| **`OPENSEO_TOKEN`** (opcional) | Tu instancia `openseo.lab.whitelabel.lat`. Si el MCP no pide auth, poné un placeholder (o quitá el bloque `headers` de `runner/opencode.json`). | Solo Fase 1. |
 
 ---
 
 ## 2. Cargar los secretos en el repo
 
 GitHub → repo `sitios-web-platform` → **Settings → Secrets and variables →
-Actions → New repository secret**. Uno por uno:
-
-```
-DEEPSEEK_API_KEY            = sk-...
-SUPABASE_ACCESS_TOKEN       = sbp_...
-SUPABASE_URL                = https://aoowwztkitctnwbbwbwk.supabase.co
-SUPABASE_SERVICE_ROLE_KEY   = sb_secret_...   (el de cli/.env)
-GH_PAT                      = ghp_...   (o github_pat_...)
-OPENSEO_TOKEN               = (lo que aplique, o un placeholder)
-```
+Actions → New repository secret**. Los 6 de la tabla de arriba, con esos
+nombres exactos. `OPENCODE_AUTH_JSON` es multilínea — pegá el JSON entero.
 
 ---
 
@@ -46,6 +43,10 @@ Repo → **Actions → "Fases automáticas (OpenCode + DeepSeek)" → Run workfl
 
 - Antes de cargar los secretos, las corridas del cron `:17` van a **fallar
   en rojo** — es inofensivo, solo ruido, hasta que los cargues.
+- Si `opencode run` falla con "model not found" o auth: verificá el slug del
+  modelo (`opencode/deepseek-v4-flash` / `-v4-pro` en `runner/run-fase.sh`)
+  contra lo que muestra el selector de tu desktop, y que `OPENCODE_AUTH_JSON`
+  sea el JSON entero y válido.
 - La primera corrida real de Fase 3 confirma si el PAT puede **crear repos**
   (si no, la rutina deja `construccion_estado='bloqueado: crear repo a mano'`).
 
@@ -67,8 +68,10 @@ o desde claude.ai).
 
 ## 5. Riesgo conocido
 
-OpenCode + DeepSeek **anda pero el tool-use/MCP de DeepSeek falla más que el
-de Claude**, sobre todo en Fase 3 (construir un Next.js entero). Puede
-necesitar varias vueltas o producir PRs con más `TODO(construcción)` /
+OpenCode + DeepSeek (vía Zen) **anda pero el tool-use/MCP de DeepSeek falla
+más que el de Claude**, sobre todo en Fase 3 (construir un Next.js entero).
+Puede necesitar varias vueltas o producir PRs con más `TODO(construcción)` /
 errores que Claude. Comparar los PRs lado a lado antes de decidir si Fase 3
-se queda en DeepSeek o vuelve a Claude.
+se queda en DeepSeek o vuelve a Claude. Fase 3 usa el modelo Pro (más
+capaz); si sigue flojo, probar otro modelo del gateway (`opencode/glm-5.2`,
+etc.) cambiando el slug en `runner/run-fase.sh`.
