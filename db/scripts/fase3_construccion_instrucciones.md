@@ -179,27 +179,66 @@ El repo es un proyecto Next.js (en su raíz) con:
    `estado_gates.fase2`. Si no pasa, saltear ese sitio (no construir "por
    si acaso").
 
-3. **Dirección visual.** Leer la sección "Dirección visual" del entregable
-   `estructura`. Si tiene tokens reales (paleta, tipografía, escala),
-   usarlos. **Si dice "Pendiente: tokens de dirección visual …"** (la
-   rutina de Fase 2 no pudo correr `direccion-visual` — dembrandt/Chromium
-   no está en su sandbox, y el de esta rutina tampoco): construir con un
-   sistema visual **neutro y sobrio** (grises, un acento, tipografía de
-   sistema, sin glass ni gradientes) y dejar
-   `// TODO(construcción): dirección visual sin tokens — correr el skill
-   direccion-visual contra <referencia_url> y re-tematizar` en el archivo
-   de tema. No aproximar a ojo un estilo de la referencia.
+3. **Dirección visual.** Leer la §5 "Dirección visual" del entregable
+   `estructura`. Si trae tokens **y composición** reales, usarlos.
 
-4. **Estructura.** Leer el entregable `estructura`: inventario de páginas,
-   asignación keyword→página, secciones por página + tabla de mapeo a
-   referencia. Para cada fila "sin contraparte": diseño original, sin
-   forzar un patrón de la referencia. Para "sí": tomar esa zona/selector
-   citada, no la página entera. **Si la tabla de mapeo dice "PARCIAL — no
-   verificada"** (Fase 2 no pudo `WebFetch` la referencia): construir la
-   estructura igual desde el inventario + secciones, y dejar
-   `// TODO(construcción): mapeo a referencia sin verificar` donde una fila
-   dependía de una zona concreta de la referencia. Descomponer en
-   componentes — nunca copiar HTML de referencia tal cual a `src/`.
+   **Si dice "Pendiente" o "PARCIAL"** (Fase 2 corrió en el sandbox de
+   claude.ai, sin Chromium ni egress): **rescatarlo acá, no degradar.** El
+   runner propio sí puede — verificado el 2026-09-09, `npx -y dembrandt`
+   corrió sin instalar nada a mano. Correr el skill **completo** desde
+   `.claude/skills/direccion-visual/`, no solo el Paso 1:
+
+   - Paso 1 — `npx -y dembrandt <referencia_url> --design-md --save-output`
+     → tokens (paleta, tipografía, escala).
+   - Paso 2 — `node extract_structure.mjs <url> 1440 900 desktop` **y**
+     `node extract_structure.mjs <url> 390 844 mobile` → orden y peso de
+     secciones, `arrangementGuess`. Comparar los dos: la composición no se
+     traslada igual. Para una sección que necesite más detalle,
+     `node extract_composition.mjs <url> "<heading>" [maxDepth]`.
+   - Paso 2.5 — `node extract_content.mjs <url>` → copy real e inventario
+     de imágenes. **Es insumo estructural** (qué tipo de contenido va en
+     cada lugar y con qué extensión), no material para pegar: ver "Qué NO
+     se copia" en el paso 4.
+   - Pasos 3 y 4 — efectos y animación de scroll, si la referencia los
+     tiene.
+
+   Solo si el skill falla de verdad (sin red, Chromium no instalable):
+   sistema visual **neutro y sobrio** (grises, un acento, tipografía de
+   sistema) + `// TODO(construcción): dirección visual sin tokens — correr
+   direccion-visual contra <referencia_url> y re-tematizar` en el archivo
+   de tema. **Nunca aproximar a ojo** un estilo que no se midió.
+
+   Dejar en la bitácora qué pasos corrieron y qué salió: es la diferencia
+   entre "tokens reales" y "neutro por fallback", y desde afuera no se
+   distingue.
+
+4. **Estructura — objetivo: reproducción cercana.** Leer el entregable
+   `estructura`: inventario de páginas, asignación keyword→página,
+   secciones por página + tabla de mapeo a referencia, y la §5 Dirección
+   visual.
+
+   **El sitio tiene que parecerse mucho a la referencia** (decisión
+   2026-09-09, ver "Objetivo de fidelidad" en
+   `fase2_spec_instrucciones.md`). Para cada fila con contraparte:
+   reproducir su composición — orden y peso de secciones,
+   `arrangementGuess` fila/columna, la diferencia desktop vs mobile, los
+   efectos. No "inspirarse": reproducir. Para las filas "sin contraparte"
+   (secciones que el spec SEO exige y la referencia no tiene): diseño
+   propio **coherente con el sistema visual de la referencia**, no un
+   estilo distinto.
+
+   **Qué NO se copia:** el copy literal y las imágenes de la referencia son
+   de un tercero. El copy sale del entregable `contenido`; donde falte una
+   imagen, dejar `// TODO(construcción): imagen pendiente` — nunca
+   incrustar un asset de la referencia. Y nunca copiar su HTML tal cual a
+   `src/`: descomponer en componentes.
+
+   **Si la §5 o la tabla de mapeo vienen "PARCIAL"/"Pendiente"** (Fase 2
+   corrió sin Chromium o sin egress): **rescatarlo acá** — correr
+   `direccion-visual` completo contra `referencia_url` (ver paso 3) y usar
+   esa composición. Solo si eso tampoco se puede, construir desde el
+   inventario y dejar `// TODO(construcción): mapeo a referencia sin
+   verificar`.
 
 5. **Contenido.** Aplicar el copy bloque por bloque tal como lo trae el
    entregable `contenido` — literal, no parafraseado. Cualquier valor que

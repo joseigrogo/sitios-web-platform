@@ -37,9 +37,10 @@ Dos entornos:
   - `WebFetch` de `referencia_url` **funciona** — hacerlo de verdad; la
     tabla de mapeo va completa y verificada, **no** "PARCIAL".
   - Si podés instalar Chromium (`npx playwright install --with-deps chromium`):
-    correr el skill `direccion-visual` contra `referencia_url` y poner los
-    **tokens reales** (paleta, tipografía, escala) en el spec — no dejar el
-    bloque como "pendiente".
+    correr el skill `direccion-visual` contra `referencia_url` **completo**,
+    no solo el Paso 1. Ver "Objetivo de fidelidad" abajo — con reproducción
+    cercana hacen falta los pasos 0, 1, 2, 2.5, 3 y 4, y el spec lleva la
+    composición real, no solo la paleta.
 - **Sandbox de claude.ai** (rutina RemoteTrigger): sin service key, sin
   egress, sin navegador. Ahí valen todas las degradaciones descritas más
   abajo (conector MCP, mapeo PARCIAL, tokens "pendiente").
@@ -115,6 +116,30 @@ Con el `sitio_id` elegido, leer de Supabase:
   PR (best-effort — si el push falla, dejar constancia y seguir).
 - **Lo que NO produce:** ningún cambio a `sitios.fase_actual`. Ese flip lo
   aprieta un humano desde el dashboard ("Confirmar y pasar a Construcción").
+
+## Objetivo de fidelidad: reproducción cercana (decisión 2026-09-09)
+
+El sitio construido tiene que **parecerse mucho** a `referencia_url`:
+misma composición, mismo orden y tipo de secciones, mismos efectos. No es
+"inspirarse" — es reproducir la estructura visual que ya funciona en esa
+vertical.
+
+Eso activa el **Paso 2.5** del skill `direccion-visual`, que está
+explícitamente condicionado a este objetivo y por eso nunca había corrido.
+
+**Qué sí se reproduce:** composición, orden y peso de secciones,
+`arrangementGuess` (fila/columna), diferencias desktop vs mobile, tokens,
+efectos, animación de scroll. Eso es dirección de diseño y no es de nadie.
+
+**Qué NO se copia al sitio del cliente:** el copy literal y las imágenes de
+la referencia son **de un tercero**. El skill los extrae como insumo para
+saber *qué tipo de contenido va en cada lugar y con qué extensión* — no
+para pegarlos. El copy del sitio sale del entregable `contenido`, y las
+imágenes las decide el humano. El propio skill lo dice: "tratar como uso
+interno/privado, no publicar sin decidirlo aparte".
+
+Si en algún sitio el objetivo fuera otro, se cambia acá y en el paso 4 de
+`fase3_construccion_instrucciones.md` — no por criterio de la rutina.
 
 ## Proceso, paso a paso
 
@@ -202,15 +227,17 @@ Con el `sitio_id` elegido, leer de Supabase:
      llenarla con lo mejor que dé `WebSearch` + el patrón típico del
      arquetipo/vertical, y **no** afirmar contrapartes que no se
      verificaron — marcarlas "por confirmar".
-   - **§5 Dirección visual.** Si hubo `WebFetch`, describir estructura y
-     orden de secciones de la referencia; si no, la parte de estructura
-     queda con la misma nota "PARCIAL" que la tabla de mapeo. Los
-     **tokens** (paleta, tipografía, espaciado, sombras, radios) necesitan
-     el skill `direccion-visual` (dembrandt + Chromium), que **no corre en
-     este sandbox** en ningún caso. Dejar el bloque de tokens con la nota
-     literal: *"Pendiente: tokens de dirección visual — correr el skill
-     `direccion-visual` contra la referencia aparte (sesión interactiva).
-     No inventar colores/tamaños."*
+   - **§5 Dirección visual.** En el **runner** (con Chromium) esta sección
+     se llena de verdad corriendo `direccion-visual` completo — ver
+     "Objetivo de fidelidad" más abajo. Lleva: tokens (Paso 1),
+     **composición sección por sección en desktop y mobile** (Paso 2),
+     **copy real e inventario de imágenes de la referencia** (Paso 2.5),
+     efectos (Paso 3) y animación de scroll si la hay (Paso 4).
+     En el **sandbox de claude.ai** nada de esto corre: dejar el bloque
+     con la nota literal *"Pendiente: tokens y composición de dirección
+     visual — correr el skill `direccion-visual` contra la referencia
+     aparte. No inventar colores/tamaños ni suponer la composición."* y
+     que Fase 3 lo rescate.
    - **§6 Bitácora de cambios.** Arranca con una fila `v1 del spec` +
      una fila por cada exclusión de alcance (líneas sin keywords, etc.).
    - **Variantes de layout** (ex-entregable "experimentos", ahora acá):
