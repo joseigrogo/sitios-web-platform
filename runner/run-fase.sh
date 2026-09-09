@@ -13,13 +13,13 @@ set -euo pipefail
 FASE="${1:?uso: run-fase.sh <1|2|3>}"
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Modelos vía OpenCode Zen (formato opencode/<id>). Flash para las fases de
-# lectura/redacción; Pro para construir código. Ajustar si los slugs cambian
-# (verificar con `opencode models`).
+# Modelos vía OpenCode Go (formato opencode-go/<id>). Las 3 fases van con
+# flash por decisión del usuario (2026-09-09) — incluida construcción, que
+# antes usaba pro. Verificar los slugs con `opencode models` si cambian.
 case "$FASE" in
   1) INSTR="db/scripts/fase1_investigacion_instrucciones.md"; MODEL="opencode-go/deepseek-v4-flash" ;;
   2) INSTR="db/scripts/fase2_spec_instrucciones.md";           MODEL="opencode-go/deepseek-v4-flash" ;;
-  3) INSTR="db/scripts/fase3_construccion_instrucciones.md";   MODEL="opencode-go/deepseek-v4-pro" ;;
+  3) INSTR="db/scripts/fase3_construccion_instrucciones.md";   MODEL="opencode-go/deepseek-v4-flash" ;;
   *) echo "fase inválida: $FASE" >&2; exit 2 ;;
 esac
 
