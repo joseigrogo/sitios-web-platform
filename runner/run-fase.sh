@@ -48,6 +48,16 @@ Chromium si hace falta.
 EOF
 )
 
+# --- sondas de diagnóstico (no fatales) ---
+echo "::group::opencode diagnóstico"
+opencode --version 2>&1 || true
+echo "--- config que usa ---"
+echo "OPENCODE_CONFIG=${OPENCODE_CONFIG:-<no seteado>}"
+ls -la "$REPO_ROOT/runner/opencode.json" 2>&1 || true
+echo "--- modelos disponibles (prueba de auth) ---"
+opencode models 2>&1 | head -30 || true
+echo "::endgroup::"
+
 exec opencode run "$PROMPT" \
   --model "$MODEL" \
   --auto \
