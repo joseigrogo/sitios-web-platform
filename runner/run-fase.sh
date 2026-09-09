@@ -21,6 +21,11 @@ case "$FASE" in
   *) echo "fase inválida: $FASE" >&2; exit 2 ;;
 esac
 
+# Override manual del modelo (input `modelo` del workflow_dispatch). Sirve para
+# probar otro modelo sin commitear, p.ej. si el de arriba requiere un opt-in
+# que el workspace no tiene ("only available hosted in China").
+MODEL="${OPENCODE_MODEL:-$MODEL}"
+
 # cli/.env para que el CLI de la plataforma tenga la service key sin depender
 # del env del proceso hijo.
 if [ -n "${SUPABASE_SERVICE_ROLE_KEY:-}" ] && [ -n "${SUPABASE_URL:-}" ]; then
@@ -51,6 +56,7 @@ EOF
 # --- sondas de diagnóstico (no fatales) ---
 echo "::group::opencode diagnóstico"
 opencode --version 2>&1 || true
+echo "modelo: $MODEL"
 echo "--- config que usa ---"
 echo "OPENCODE_CONFIG=${OPENCODE_CONFIG:-<no seteado>}"
 ls -la "$REPO_ROOT/runner/opencode.json" 2>&1 || true

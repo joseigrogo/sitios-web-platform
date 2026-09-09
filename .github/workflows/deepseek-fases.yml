@@ -13,6 +13,10 @@ on:
         description: "Correr solo una fase (1, 2 o 3). Vacío = las 3."
         required: false
         default: ""
+      modelo:
+        description: "Modelo a forzar (ej. opencode-go/glm-5.3). Vacío = el del script."
+        required: false
+        default: ""
 
 concurrency:
   group: fases-deepseek
@@ -67,6 +71,7 @@ jobs:
           GH_PAT: ${{ secrets.GH_PAT }}
           OPENSEO_TOKEN: ${{ secrets.OPENSEO_TOKEN }}
           OPENCODE_CONFIG: ${{ github.workspace }}/runner/opencode.json
+          OPENCODE_MODEL: ${{ github.event.inputs.modelo }}
           GIT_AUTHOR_NAME: "fases-bot"
           GIT_AUTHOR_EMAIL: "fases-bot@users.noreply.github.com"
           GIT_COMMITTER_NAME: "fases-bot"
