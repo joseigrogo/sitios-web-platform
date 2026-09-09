@@ -13,9 +13,10 @@ como "cumple el checklist técnico de Fase 3 y no tiene nada inventado", no
 como "cero TODOs". Un TODO visible es preferible a una decisión inventada
 en silencio.
 
-**Límite central, igual que Fase 1 y 2:** construye el sitio en una rama,
-pero **nunca hace merge, nunca deploya, nunca toca dominio/DNS ni nada de
-Fase 4/5**. Esos gates humanos siguen intactos (Base 6).
+**Límite central, igual que Fase 1 y 2:** construye el sitio en su **propio
+repo GitHub** (uno por sitio — decisión 2026-09-09), en una rama, y abre
+PR ahí — pero **nunca hace merge, nunca deploya, nunca toca dominio/DNS ni
+nada de Fase 4/5**. Esos gates humanos siguen intactos (Base 6).
 
 ---
 
@@ -47,7 +48,8 @@ order by created_at asc;
 Con el `sitio_id` elegido, leer de Supabase:
 
 - `sitios`: `nombre_marca`, `dominio`, `arquetipo`, `segmento`,
-  `referencia_url`.
+  `referencia_url`, `repo_github` (si ya tiene URL, es de una corrida
+  anterior — ver Output).
 - `sitios.estado_gates.fase2`: confirmar que los **3** entregables
   (`estructura`, `contenido`, `taxonomia_eventos`) están en `true`. **Si
   no, saltear** — no se construye sobre un spec incompleto. Es la misma
@@ -63,13 +65,26 @@ Con el `sitio_id` elegido, leer de Supabase:
 
 ## Output esperado
 
-El sitio construido como **subdirectorio del monorepo** en una rama propia
-(`sites/<slug>/`), abierto en un PR (best-effort — si el push/PR falla,
-dejar constancia en `construccion_reporte` y seguir; lo que destraba el
-gate de Fase 4 es que el código exista y el reporte lo diga). Nunca un
-repo nuevo (la rutina no crea repos), nunca a `main`/`master`.
+**Un repo GitHub nuevo, propio del sitio** — el código del sitio es la
+**raíz** de ese repo, no un subdirectorio de nada.
 
-El `sites/<slug>/` es un proyecto Next.js con:
+- **Nombre del repo:** de `sitios.dominio` sin el TLD, minúsculas,
+  no-alfanumérico → `-` (ej. `makeovercol.com` → `makeovercol`). Si
+  `dominio` es `null`: `<cliente.slug>`; si el cliente tiene más de un
+  sitio, `<cliente.slug>-<nombre_marca slugificado>`. Owner: `joseigrogo`.
+  Determinístico — un retry tiene que llegar al mismo nombre.
+- **Si `sitios.repo_github` ya tiene una URL** (corrida anterior que creó
+  el repo pero no terminó): reusar ese repo, no crear otro.
+- **Crear el repo** vía `mcp__github__create_repository` (privado,
+  `autoInit: true` para tener un `main` contra el que abrir PR). **Si la
+  creación falla por permisos:** `construccion_estado = 'bloqueado: crear
+  repo joseigrogo/<nombre> a mano (plantilla Next.js o vacío con main) y
+  reintentar'`, y saltear. Misma degradación que el resto — el primer run
+  real dice si el Claude GitHub App puede crear repos.
+- **Escribir `sitios.repo_github`** con la URL del repo apenas creado, vía
+  conector (así un retry lo encuentra).
+
+El repo es un proyecto Next.js (en su raíz) con:
 
 - Las 4 capas técnicas de Fase 3 (`Proceso_GENERAL`):
   **Renderizado** — App Router, Server Components, SSR/SSG, sin rutas
@@ -87,12 +102,14 @@ El `sites/<slug>/` es un proyecto Next.js con:
   del spec, no un contrato genérico inventado acá.
 - El spec (los 3 entregables tal como están guardados en
   `estado_gates.fase2_contenido`, más lo que haya de dirección visual)
-  copiado como `sites/<slug>/SPEC.md`.
+  copiado como `SPEC.md` en la raíz del repo.
+- Un `.gitignore` con `node_modules/`, `.next/`, `.env*`.
 - Datos estructurados (JSON-LD) válidos para el tipo de negocio, **sin**
   `aggregateRating`/`review` autoreferenciado salvo reseñas de terceros
   verificadas (Google lo prohíbe explícitamente).
 - **Lo que NO produce:** ningún cambio a `sitios.fase_actual`, ningún
-  deploy, ningún merge. `construccion_estado` sí (heartbeat + cierre).
+  deploy, ningún proyecto Vercel, ningún merge (ni en el repo del sitio ni
+  en el monorepo). `construccion_estado` y `repo_github` sí.
 
 ## Proceso, paso a paso
 
@@ -156,22 +173,28 @@ El `sites/<slug>/` es un proyecto Next.js con:
    código + al reporte. Este es el ~20% que se completa a mano — es el
    diseño, no una falla.
 
-9. **Commit, PR y reporte.**
-   - `git checkout -b fase3-construccion-<slug>-<YYYYMMDD-HHMMSS>` desde
-     `master`. Commit de `sites/<slug>/`. Push + PR (best-effort, nunca a
-     `master`).
+9. **Push, PR y reporte.**
+   - En el **repo del sitio**: crear rama `fase3-construccion-inicial`
+     desde `main` (`mcp__github__create_branch`). Subir todo el árbol del
+     sitio en un commit con `mcp__github__push_files` (`node_modules/` y
+     `.next/` no van — están en `.gitignore`). Abrir PR de esa rama contra
+     `main` con `mcp__github__create_pull_request`. **Nunca mergear.**
+   - Si el push/PR falla: el repo ya quedó creado (vacío o a medias);
+     dejarlo escrito en `construccion_reporte` y seguir — no abortar.
    - `construccion_estado = 'terminada'` vía conector, y
-     `construccion_reporte` con: qué páginas se construyeron, la lista
-     completa de `TODO(construcción)`, el link al PR (o "push falló" con la
-     rama), y la línea explícita **"gate de Fase 4 no confirmado — revisar
-     el checklist en el dashboard"**.
+     `construccion_reporte` con: nombre del repo + link al PR, qué páginas
+     se construyeron, la lista completa de `TODO(construcción)`, y la línea
+     explícita **"gate de Fase 4 no confirmado — revisar el checklist en el
+     dashboard"**.
 
-10. **Límite duro, nunca cruzarlo.** No `merge` a `master`/`main`. No
-    `vercel deploy` ni ningún deploy. No tocar dominio/DNS. No nada de
-    Fase 4 o Fase 5. No `cli sitio gate-*  --confirmar`. No escribir
-    `sitios.fase_actual`. En Supabase, solo `construccion_estado` y
-    `construccion_reporte`. En el repo, solo `sites/<slug>/` en una rama
-    propia.
+10. **Límite duro, nunca cruzarlo.** No `merge` — ni a `main` del repo del
+    sitio, ni a `master` del monorepo. No `vercel deploy`, no crear
+    proyecto Vercel, no tocar `sitios.vercel_project_id`. No dominio/DNS.
+    Nada de Fase 4 o Fase 5. No `cli sitio gate-* --confirmar`. No escribir
+    `sitios.fase_actual`. En Supabase, solo `construccion_estado`,
+    `construccion_reporte` y `repo_github`. En `sitios-web-platform` no
+    escribe **nada** — solo lo clona para leer este instructivo y
+    `fase2_formato_spec.md`.
 
 ---
 
@@ -187,7 +210,16 @@ El `sites/<slug>/` es un proyecto Next.js con:
 - **Escribe a Supabase por conector, no por CLI** — el sandbox de esta
   rutina no tiene `SUPABASE_SERVICE_ROLE_KEY` (`RemoteTrigger update` no
   aplica `environment_variables`). Los escritos son `UPDATE sitios SET
-  construccion_estado / construccion_reporte` — mecánicos, sin juicio.
+  construccion_estado / construccion_reporte / repo_github` — mecánicos,
+  sin juicio.
+- **Un repo GitHub por sitio** (decisión 2026-09-09, no un subdir del
+  monorepo): cada sitio es independiente — su propia historia, su propio
+  proyecto Vercel en Fase 4. La rutina lo crea con
+  `mcp__github__create_repository` y sube el código con
+  `mcp__github__push_files` (por API, sin `git` local al repo nuevo, así
+  no depende de la config de `outcomes` de la rutina). Si el Claude GitHub
+  App no puede crear repos, la rutina se bloquea pidiendo el repo a mano y
+  reintenta en la corrida siguiente.
 
 ---
 
