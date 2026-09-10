@@ -78,7 +78,18 @@ jobs:
         run: |
           git config --global user.name "fases-bot"
           git config --global user.email "fases-bot@users.noreply.github.com"
+          node runner/verificar-avance.mjs ${{ matrix.fase }} antes /tmp/avance.json
           bash runner/run-fase.sh ${{ matrix.fase }}
+
+      # Un job en verde que no movio nada es peor que uno en rojo: pasa por
+      # exitoso. Compara el estado de los sitios pendientes contra el snapshot
+      # de antes y falla si la fase no toco ninguno.
+      - name: Verificar que la fase avanzo
+        if: always()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node runner/verificar-avance.mjs ${{ matrix.fase }} despues /tmp/avance.json
 
       # El motivo de mover las fases a DeepSeek fue el costo, así que cada
       # corrida tiene que poder decir cuánto gastó. OpenCode no lo imprime,

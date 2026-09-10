@@ -46,6 +46,19 @@ Dos entornos:
 
 Detección: `printenv SUPABASE_SERVICE_ROLE_KEY` con valor → runner propio.
 
+**Nunca imprimir credenciales, ni siquiera un prefijo.** Para detectar el
+entorno alcanza con saber si la variable *tiene* valor — nunca mostrar su
+contenido. GitHub enmascara el valor exacto del secreto, **no un prefijo**,
+y el repo de la plataforma es público: un `cut -c1-20` de la service key
+queda legible para cualquiera en el log de Actions (pasó el 2026-09-09).
+
+```bash
+# bien
+[ -n "${SUPABASE_SERVICE_ROLE_KEY:-}" ] && echo "service key: presente"
+# mal — filtra credencial al log público
+printenv SUPABASE_SERVICE_ROLE_KEY | cut -c1-20
+```
+
 ---
 
 ## Input
