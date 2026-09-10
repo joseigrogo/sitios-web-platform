@@ -69,6 +69,9 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           GH_PAT: ${{ secrets.GH_PAT }}
+          # Vacio salvo que se cargue el secreto. Con el, se puede correr
+          # una fase con `modelo: anthropic/claude-opus-5` (o sonnet-5).
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OPENCODE_CONFIG: ${{ github.workspace }}/runner/opencode.json
           OPENCODE_MODEL: ${{ github.event.inputs.modelo }}
           GIT_AUTHOR_NAME: "fases-bot"

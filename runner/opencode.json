@@ -7,6 +7,12 @@
         "timeout": 600000,
         "chunkTimeout": 60000
       }
+    },
+    "anthropic": {
+      "options": {
+        "timeout": 600000,
+        "chunkTimeout": 60000
+      }
     }
   },
   "permission": {
@@ -19,7 +25,9 @@
       "type": "local",
       "enabled": true,
       "command": [
-        "npx", "-y", "@supabase/mcp-server-supabase@latest",
+        "npx",
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
         "--project-ref=aoowwztkitctnwbbwbwk"
       ],
       "environment": {
@@ -29,7 +37,11 @@
     "github": {
       "type": "local",
       "enabled": true,
-      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
       "environment": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "{env:GH_PAT}"
       }
@@ -41,4 +53,3 @@
     }
   }
 }
-

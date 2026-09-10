@@ -40,6 +40,31 @@ GitHub → repo `sitios-web-platform` → **Settings → Secrets and variables �
 Actions → New repository secret**. Los 5 de la tabla de arriba, con esos
 nombres exactos. `OPENCODE_AUTH_JSON` es multilínea — pegá el JSON entero.
 
+### 2c. Correr una fase con un modelo de Claude (opcional)
+
+El plan **Go** de OpenCode expone 23 modelos y **ninguno es Claude** (DeepSeek,
+GLM, Kimi, Qwen, Grok, MiniMax, Hunyuan...). Los Claude que aparecen
+habilitados en la pestaña `Zen` son otro producto, pago por token.
+
+La via limpia es el provider `anthropic` nativo de OpenCode, ya declarado en
+`runner/opencode.json`. Queda inerte hasta que exista la key:
+
+1. Crear una API key en `console.anthropic.com` -> API keys.
+2. Cargarla como secreto `ANTHROPIC_API_KEY` del repo.
+3. Correr el workflow con el input **`modelo`** = `anthropic/claude-opus-5`
+   (o `anthropic/claude-sonnet-5`, ~1/3 del costo).
+
+Para que una fase use Claude *siempre*, cambiar su `MODEL` en
+`runner/run-fase.sh`. El caso que tiene sentido es **solo Fase 3**: es la
+tarea mas dificil (construir un sitio entero contra un spec), corre una vez
+por sitio, y es donde la calidad del modelo se nota. Fases 1 y 2 andan bien
+con DeepSeek y salen practicamente gratis.
+
+Tarifas por millon de tokens (Anthropic directo): Opus 5 $5 in / $25 out ·
+Sonnet 5 $2 / $10 · Haiku 4.5 $1 / $5.
+
+---
+
 ### 2b. Opt-in de modelos hosteados en China (obligatorio para DeepSeek)
 
 DeepSeek V4 en OpenCode Zen corre en infraestructura en China y el workspace
