@@ -40,6 +40,28 @@ GitHub → repo `sitios-web-platform` → **Settings → Secrets and variables �
 Actions → New repository secret**. Los 5 de la tabla de arriba, con esos
 nombres exactos. `OPENCODE_AUTH_JSON` es multilínea — pegá el JSON entero.
 
+### 2b. Opt-in de modelos hosteados en China (obligatorio para DeepSeek)
+
+DeepSeek V4 en OpenCode Zen corre en infraestructura en China y el workspace
+tiene que consentirlo explícitamente. Sin eso, `opencode run` muere a los 8
+segundos con:
+
+```
+> build · deepseek-v4-flash
+Error: The latest version of this model is only available hosted in China
+       and requires explicit opt in: https://opencode.ai/workspace/<wrk_id>/go
+```
+
+Se activa en **opencode.ai → tu workspace → pestaña `Go`** (no en `Zen`: los
+toggles de `Zen` son *permisos por modelo* para los miembros, cosa distinta —
+un modelo puede estar habilitado ahí y aun así rebotar por falta de opt-in).
+
+Si preferís no dar ese consentimiento, el `workflow_dispatch` tiene un input
+**`modelo`** que fuerza otro slug del gateway (ej. `opencode-go/gpt-5.6-luna`)
+sin tocar el repo.
+
+---
+
 ### 2c. Correr una fase con un modelo de Claude (opcional)
 
 El plan **Go** de OpenCode expone 23 modelos y **ninguno es Claude** (DeepSeek,
@@ -62,28 +84,6 @@ con DeepSeek y salen practicamente gratis.
 
 Tarifas por millon de tokens (Anthropic directo): Opus 5 $5 in / $25 out ·
 Sonnet 5 $2 / $10 · Haiku 4.5 $1 / $5.
-
----
-
-### 2b. Opt-in de modelos hosteados en China (obligatorio para DeepSeek)
-
-DeepSeek V4 en OpenCode Zen corre en infraestructura en China y el workspace
-tiene que consentirlo explícitamente. Sin eso, `opencode run` muere a los 8
-segundos con:
-
-```
-> build · deepseek-v4-flash
-Error: The latest version of this model is only available hosted in China
-       and requires explicit opt in: https://opencode.ai/workspace/<wrk_id>/go
-```
-
-Se activa en **opencode.ai → tu workspace → pestaña `Go`** (no en `Zen`: los
-toggles de `Zen` son *permisos por modelo* para los miembros, cosa distinta —
-un modelo puede estar habilitado ahí y aun así rebotar por falta de opt-in).
-
-Si preferís no dar ese consentimiento, el `workflow_dispatch` tiene un input
-**`modelo`** que fuerza otro slug del gateway (ej. `opencode-go/gpt-5.6-luna`)
-sin tocar el repo.
 
 ---
 
