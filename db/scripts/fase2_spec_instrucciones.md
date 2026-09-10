@@ -134,9 +134,17 @@ efectos, animación de scroll. Eso es dirección de diseño y no es de nadie.
 **Qué NO se copia al sitio del cliente:** el copy literal y las imágenes de
 la referencia son **de un tercero**. El skill los extrae como insumo para
 saber *qué tipo de contenido va en cada lugar y con qué extensión* — no
-para pegarlos. El copy del sitio sale del entregable `contenido`, y las
-imágenes las decide el humano. El propio skill lo dice: "tratar como uso
-interno/privado, no publicar sin decidirlo aparte".
+para pegarlos. El copy del sitio sale del entregable `contenido`, y el
+*contenido* de las imágenes lo decide el humano. El propio skill lo dice:
+"tratar como uso interno/privado, no publicar sin decidirlo aparte".
+
+**Pero el hueco de cada imagen sí es parte del spec.** Que el humano decida
+qué foto va no significa que la sección desaparezca: si desaparece, una
+referencia de 86 imágenes se reproduce como un documento de texto (pasó en
+Makeover, 2026-09-09). Por cada imagen, video o media que §5 detecte,
+anotar **dónde va, qué representa y su proporción real** (las dimensiones
+las reporta `extract_content.mjs`) — con eso Fase 3 construye el slot vacío
+con su `aspect-ratio` y un TODO, y el humano solo reemplaza el contenido.
 
 Si en algún sitio el objetivo fuera otro, se cambia acá y en el paso 4 de
 `fase3_construccion_instrucciones.md` — no por criterio de la rutina.

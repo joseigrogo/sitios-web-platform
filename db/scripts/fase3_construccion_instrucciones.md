@@ -227,10 +227,38 @@ El repo es un proyecto Next.js (en su raíz) con:
    propio **coherente con el sistema visual de la referencia**, no un
    estilo distinto.
 
+   **Los dos inventarios de secciones, y cuál manda cada cosa.** El spec
+   trae dos listas y **no compiten**, gobiernan ejes distintos:
+
+   | Lista | Gobierna |
+   |---|---|
+   | "Secciones por página, orden por intención de búsqueda" | **Qué** se dice y en qué orden — es SEO, sale de las keywords |
+   | §5 "Composición sección por sección" | **Cómo se ve** cada sección: layout, columnas, altura, proporción, tratamiento visual |
+
+   El error a evitar (cometido en Makeover, 2026-09-09): construir la
+   primera lista y usar la segunda solo para tipografías y colores. Eso da
+   un sitio con la paleta correcta y la composición de cualquier landing
+   genérica. **Cada sección de la lista SEO se construye con el tratamiento
+   visual de su análoga en §5**: si el hero de la referencia es un slider a
+   pantalla completa con media de fondo, el hero del sitio es a pantalla
+   completa con media de fondo; si las tarjetas van en grilla de 3 con
+   imagen arriba, van en grilla de 3 con imagen arriba.
+
+   **Las imágenes van como slot, nunca omitidas.** "No inventar" (Base 3)
+   significa no inventar el *contenido* de la imagen — **no** significa
+   borrar el hueco donde va. Una referencia con 86 imágenes reproducida sin
+   ninguna no es una reproducción: es un documento de texto.
+
+   Donde §5 dice que hay una imagen, video o foto, construir el elemento
+   con su **proporción real** (`aspect-ratio` de las dimensiones que reportó
+   `extract_content.mjs`), un fondo neutro del sistema de tokens, y adentro
+   `// TODO(construcción): imagen pendiente — <qué va acá según §5>`. El
+   layout tiene que quedar terminado y verse bien con los slots vacíos: el
+   humano solo reemplaza el contenido, no arma la estructura.
+
    **Qué NO se copia:** el copy literal y las imágenes de la referencia son
-   de un tercero. El copy sale del entregable `contenido`; donde falte una
-   imagen, dejar `// TODO(construcción): imagen pendiente` — nunca
-   incrustar un asset de la referencia. Y nunca copiar su HTML tal cual a
+   de un tercero — nunca incrustar un asset suyo ni pegar su copy. El copy
+   sale del entregable `contenido`. Y nunca copiar su HTML tal cual a
    `src/`: descomponer en componentes.
 
    **Si la §5 o la tabla de mapeo vienen "PARCIAL"/"Pendiente"** (Fase 2
