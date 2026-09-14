@@ -6,7 +6,7 @@
 > no es un documento aparte del código, vive en el mismo repo y en el mismo
 > historial de commits.
 
-## Estado pendiente — leer antes de seguir (actualizado el 2026-09-09)
+## Estado pendiente — leer antes de seguir (actualizado el 2026-09-14)
 
 **Leer §14 primero: la ejecución ya no vive en claude.ai.** Las 3 fases
 corren en GitHub Actions con OpenCode + DeepSeek, y las 3 rutinas de
@@ -19,12 +19,26 @@ modo degradado, no como el camino normal.
 todo en el historial. Y los entregables de Fase 2 son **3**, no 4 —
 `experimentos` salió del gate.
 
-**Próximo paso real, no inventado:** las tres cosas que se escribieron pero
-ninguna corrida ejercitó todavía — el checklist automático dentro de Fase 3,
-las bitácoras de las 3 fases, y la reproducción cercana de la referencia
-(los 6 pasos de `direccion-visual`). Se prueban solas en la próxima corrida
-de cada fase; hasta entonces son instrucciones, no comportamiento
-verificado. Ver "Pendiente al cierre" en §14.
+**Ya verificado, no solo escrito:** el checklist automático de Fase 3
+(7/8 contra una preview real de Vercel), las bitácoras de las 3 fases, y la
+reproducción cercana de la referencia (8 `MediaSlot` con aspect-ratio real
+confirmados en el HTML servido) — probado el 2026-09-09/14 contra una
+reconstrucción genuina de Makeover. Ver "Fase 3, probada end-to-end" en §14.
+
+**Dos bugs encontrados el 2026-09-14** revisando 5 días de corridas sin
+supervisión (ambos corregidos): el guardarraíl `verificar-avance.mjs` daba
+falso positivo en Fase 2 por no distinguir "saltea un sitio bloqueado a
+propósito" de "se cayó en silencio"; y la base rechazaba
+`construccion_estado = 'bloqueado: <motivo>'` pese a que el instructivo de
+Fase 3 lo pide, por un `CHECK` que solo aceptaba 3 valores fijos. Ver
+"Pendiente al cierre" en §14.
+
+**Gap arquitectónico anotado, no resuelto:** si el instructivo de una fase
+cambia después de que un sitio ya tiene repo, la rutina puede "verificar y
+reusar" el build viejo en vez de reconstruir — no hay versionado del
+instructivo ni comparación contra lo que generó el repo existente. Pasó una
+vez con Makeover; se resolvió a mano (cerrar PR + borrar rama + resetear
+estado). Sin mecanismo para detectar esto solo.
 
 ## 0. Instrucción para Claude Code al leer este archivo por primera vez
 
@@ -662,17 +676,46 @@ viene "PARCIAL".
 
 ### Pendiente al cierre del 2026-09-09
 
-- El paso del checklist automático dentro de la rutina de Fase 3 **se
-  escribió pero ninguna corrida lo recorrió sola** — se probó a mano, paso
-  por paso.
-- Las bitácoras de las 3 fases son instrucciones nuevas: **ninguna rutina
-  escribió una todavía**.
+- ~~El paso del checklist automático dentro de la rutina de Fase 3 se
+  escribió pero ninguna corrida lo recorrió sola~~ — **resuelto**: corrió
+  solo el 2026-09-14, 7/8 puntos contra la preview real, `og:image` como
+  único hallazgo.
+- ~~Las bitácoras de las 3 fases son instrucciones nuevas: ninguna rutina
+  escribió una todavía~~ — **resuelto**: las 3 fases escriben bitácora en
+  corridas reales.
 - Fase 4 y Fase 5 siguen sin automatización.
 - Rotar la key de OpenCode Go (`sk-eyg5hd…`), expuesta al debuggear el
-  secreto `OPENCODE_AUTH_JSON`.
+  secreto `OPENCODE_AUTH_JSON`. **Sigue pendiente.**
 - **No usar el conector MCP de Vercel para crear proyectos.** Un
   `create_git_project` creó un proyecto en una cuenta de Vercel ajena
   (el conector no apuntaba a la del usuario), enlazado al repo privado, que
   lo clonó y compiló en cada push hasta que se cortó el acceso. El conector
   ya apunta a `joseigrogo22`, y se usa para **leer**, no para escribir:
   crear el proyecto Vercel es acto humano y gate de Fase 4.
+
+### Pendiente al cierre del 2026-09-14
+
+Revisión de 5 días de corridas sin supervisión (ambos bugs corregidos):
+
+- **`verificar-avance.mjs` daba falso positivo en Fase 2** cada hora:
+  Capital Window Cleaning está bloqueado por falta de `referencia_url`
+  desde agosto, y el guardarraíl no distinguía "saltea un sitio bloqueado a
+  propósito" (correcto, lo manda el instructivo) de "se cayó en silencio"
+  (falla real). Corregido en `runner/verificar-avance.mjs`
+  (`ES_TRABAJABLE`, commit `892212c`).
+- **La base rechazaba `construccion_estado = 'bloqueado: <motivo>'`**
+  aunque `fase3_construccion_instrucciones.md` lo pide explícitamente — el
+  `CHECK` de `20260818_sitios_construccion_estado.sql` solo aceptaba 3
+  valores fijos. Corregido en vivo el mismo día vía `execute_sql`, pero
+  **el fix no quedó documentado como migración hasta hoy** (drift entre
+  Supabase y el repo): ver `db/migrations/20260914_sitios_construccion_estado_bloqueado.sql`.
+  Recordatorio para el futuro: un `ALTER TABLE` aplicado a mano necesita su
+  archivo de migración en el mismo commit, no después.
+- Comparación de Fase 3 con Claude (no DeepSeek) usando la rutina de
+  claude.ai ya existente (`trig_0117Wpqv8Sk45qvcQFCThJ9e`, hoy
+  deshabilitada) sigue bloqueada: su conector de GitHub solo alcanza
+  `sitios-web-platform`, no `makeovercol`. Falta que el usuario amplíe el
+  acceso en github.com/settings/installations. Se descartó pagar la API de
+  Anthropic para esto.
+- Capital Window Cleaning (cliente real, no fixture) sigue bloqueado desde
+  agosto por falta de `referencia_url` — decisión del usuario, no bug.
