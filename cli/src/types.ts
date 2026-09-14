@@ -43,6 +43,8 @@ export interface Sitio {
   repoGithub: string | null;
   construccionEstado: ConstruccionEstado | null;
   construccionReporte: string | null;
+  construccionInstructivoHash: string | null;
+  construccionInstructivoAlerta: string | null;
   investigacionEstado: InvestigacionEstado | null;
   investigacionReporte: string | null;
   checklistFase3Url: string | null;

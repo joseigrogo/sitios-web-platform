@@ -91,7 +91,12 @@ Con el `sitio_id` elegido, leer de Supabase:
 
 - `sitios`: `nombre_marca`, `dominio`, `arquetipo`, `segmento`,
   `referencia_url`, `repo_github` (si ya tiene URL, es de una corrida
-  anterior — ver Output).
+  anterior — ver Output), `construccion_instructivo_alerta` (si trae texto,
+  este sitio ya estaba `terminada` y quedó marcado como desactualizado
+  frente a este instructivo — ver el paso 9. La reconstrucción sigue el
+  mismo proceso; la rama `fase3-construccion-inicial` y el PR de la corrida
+  vieja quedan del lado humano para cerrar/borrar a mano antes de reintentar,
+  igual que se hizo con Makeover — esta rutina no gestiona ramas viejas).
 - `sitios.estado_gates.fase2`: confirmar que los **3** entregables
   (`estructura`, `contenido`, `taxonomia_eventos`) están en `true`. **Si
   no, saltear** — no se construye sobre un spec incompleto. Es la misma
@@ -361,16 +366,33 @@ El repo es un proyecto Next.js (en su raíz) con:
      se construyeron, la lista completa de `TODO(construcción)`, y la línea
      explícita **"gate de Fase 4 no confirmado — revisar el checklist en el
      dashboard"**.
+   - **`construccion_instructivo_hash`**: junto con lo anterior, escribir
+     `sha256sum db/scripts/fase3_construccion_instrucciones.md` (el archivo
+     que estás leyendo ahora mismo, dentro del clon de
+     `sitios-web-platform`) — solo el hash, sin el nombre de archivo que
+     agrega el comando. Sirve para que un chequeo aparte
+     (`runner/verificar-instructivo-vigente.mjs`) note más adelante si este
+     instructivo cambió después de esta construcción — nunca dispara una
+     reconstrucción sola, es solo la huella. Si `sitios.repo_github` **ya
+     tenía URL** al empezar (ver Input) — o sea, esto es una reconstrucción
+     sobre un sitio que ya estaba `terminada` — también limpiar
+     `construccion_instructivo_alerta` a `null` en el mismo `UPDATE`: la
+     alerta de "instructivo desactualizado" que la trajo hasta acá ya no
+     aplica.
 
 10. **Límite duro, nunca cruzarlo.** No `merge` — ni a `main` del repo del
     sitio, ni a `master` del monorepo. No `vercel deploy`, no crear
     proyecto Vercel, no tocar `sitios.vercel_project_id`. No dominio/DNS.
     Nada de Fase 4 o Fase 5. No `cli sitio gate-* --confirmar`. No escribir
     `sitios.fase_actual`. En Supabase, solo `construccion_estado`,
-    `construccion_reporte`, `repo_github` y — si llegó a correr el checklist
-    contra una preview — `checklist_fase3_url` / `checklist_fase3_resultado`
-    (vía `cli sitio checklist-fase3 --sitio`, que es medición, no un gate:
-    guardar el veredicto no lo confirma). En `sitios-web-platform` no
+    `construccion_reporte`, `repo_github`, `construccion_instructivo_hash`
+    (y `construccion_instructivo_alerta`, solo para limpiarla a `null` en una
+    reconstrucción — nunca para escribirla: eso lo hace
+    `runner/verificar-instructivo-vigente.mjs`, no esta rutina) y — si llegó
+    a correr el checklist contra una preview — `checklist_fase3_url` /
+    `checklist_fase3_resultado` (vía `cli sitio checklist-fase3 --sitio`, que
+    es medición, no un gate: guardar el veredicto no lo confirma). En
+    `sitios-web-platform` no
     escribe **nada** — solo lo clona para leer este instructivo y
     `fase2_formato_spec.md`.
 

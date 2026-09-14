@@ -1,0 +1,21 @@
+-- Aplicada a Supabase (proyecto aoowwztkitctnwbbwbwk, "Sitios Web") el
+-- 2026-09-14 via apply_migration, nombre:
+-- sitios_construccion_instructivo_commit_a_hash.
+-- Este archivo documenta lo ya aplicado -- no es pendiente de correr.
+--
+-- Corrige 20260914_sitios_construccion_instructivo_version.sql: el nombre
+-- `construccion_instructivo_commit` asumia un hash de commit de git, pero
+-- `actions/checkout@v4` clona con `fetch-depth: 1` -- sin historial, `git
+-- log -1 -- <archivo>` en un runner de Fase 3 devolveria siempre el SHA del
+-- checkout superficial, no el commit real que toco el archivo por ultima
+-- vez. Cambiar el checkout a profundidad completa solo para esto es
+-- desproporcionado (afecta el workflow compartido de las 3 fases).
+--
+-- Reemplazo: hash de contenido (`sha256sum db/scripts/fase3_construccion_instrucciones.md`),
+-- calculable con una sola linea de shell en cualquier entorno (runner propio
+-- o sandbox), sin depender de cuanto historial de git haya disponible.
+--
+-- Reversible: `alter table sitios rename column construccion_instructivo_hash
+-- to construccion_instructivo_commit;`
+
+alter table sitios rename column construccion_instructivo_commit to construccion_instructivo_hash;

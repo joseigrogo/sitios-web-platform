@@ -102,3 +102,14 @@ jobs:
         if: always()
         continue-on-error: true
         run: node runner/uso-tokens.mjs
+
+      # Un sitio ya 'terminada' no vuelve a tocarse solo -- si el instructivo
+      # de Fase 3 cambia después, nada lo nota. Solo deja una nota visible en
+      # el dashboard; nunca reconstruye solo (Base 6).
+      - name: Verificar sitios terminados contra el instructivo vigente
+        if: always() && matrix.fase == 3
+        continue-on-error: true
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node runner/verificar-instructivo-vigente.mjs

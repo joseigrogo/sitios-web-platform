@@ -432,6 +432,9 @@ function SeccionConstruccion({ sitio }: { sitio: EstadoSitio["sitio"] }) {
                   "sin repo registrado"
                 )}
               </p>
+              {sitio.construccionInstructivoAlerta && (
+                <p className="text-xs text-amber-500">⚠ {sitio.construccionInstructivoAlerta}</p>
+              )}
               {sitio.construccionReporte && (
                 <p className="whitespace-pre-wrap text-xs text-neutral-400">{sitio.construccionReporte}</p>
               )}

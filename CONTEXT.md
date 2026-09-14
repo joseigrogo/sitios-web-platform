@@ -33,12 +33,22 @@ propósito" de "se cayó en silencio"; y la base rechazaba
 Fase 3 lo pide, por un `CHECK` que solo aceptaba 3 valores fijos. Ver
 "Pendiente al cierre" en §14.
 
-**Gap arquitectónico anotado, no resuelto:** si el instructivo de una fase
-cambia después de que un sitio ya tiene repo, la rutina puede "verificar y
-reusar" el build viejo en vez de reconstruir — no hay versionado del
-instructivo ni comparación contra lo que generó el repo existente. Pasó una
-vez con Makeover; se resolvió a mano (cerrar PR + borrar rama + resetear
-estado). Sin mecanismo para detectar esto solo.
+**Gap arquitectónico: detectado, con aviso — todavía sin corrida real que
+lo ejercite.** Si `fase3_construccion_instrucciones.md` cambia después de
+que un sitio ya quedó `terminada`, nada lo notaba (pasó con Makeover;
+se resolvió a mano el 2026-09-09: cerrar PR + borrar rama + resetear
+estado). Ahora la rutina guarda `construccion_instructivo_hash` (sha256 del
+instructivo, no un commit de git — el checkout de Actions es superficial)
+al terminar, y un chequeo aparte
+(`runner/verificar-instructivo-vigente.mjs`, corre junto a Fase 3 cada
+hora) compara ese hash contra el vigente y dejar una nota visible en el
+dashboard si difieren (`construccion_instructivo_alerta`). **Decisión
+deliberada:** nunca reconstruye sola — la rama/PR viejos del build anterior
+siguen siendo del humano para limpiar a mano antes de reintentar, igual que
+con Makeover (Base 6). Migraciones:
+`20260914_sitios_construccion_instructivo_version.sql` +
+`..._commit_a_hash.sql`. Sin probar todavía contra un cambio real de
+instructivo — recién escrito el 2026-09-14.
 
 ## 0. Instrucción para Claude Code al leer este archivo por primera vez
 

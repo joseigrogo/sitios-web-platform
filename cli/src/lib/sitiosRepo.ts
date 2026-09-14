@@ -38,6 +38,8 @@ function filaASitio(fila: Record<string, unknown>): Sitio {
     repoGithub: (fila.repo_github as string | null) ?? null,
     construccionEstado: (fila.construccion_estado as ConstruccionEstado | null) ?? null,
     construccionReporte: (fila.construccion_reporte as string | null) ?? null,
+    construccionInstructivoHash: (fila.construccion_instructivo_hash as string | null) ?? null,
+    construccionInstructivoAlerta: (fila.construccion_instructivo_alerta as string | null) ?? null,
     investigacionEstado: (fila.investigacion_estado as InvestigacionEstado | null) ?? null,
     investigacionReporte: (fila.investigacion_reporte as string | null) ?? null,
     checklistFase3Url: (fila.checklist_fase3_url as string | null) ?? null,
