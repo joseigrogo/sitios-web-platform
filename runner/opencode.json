@@ -13,6 +13,12 @@
         "timeout": 600000,
         "chunkTimeout": 60000
       }
+    },
+    "openai": {
+      "options": {
+        "timeout": 600000,
+        "chunkTimeout": 60000
+      }
     }
   },
   "permission": {

@@ -87,6 +87,41 @@ Sonnet 5 $2 / $10 · Haiku 4.5 $1 / $5.
 
 ---
 
+### 2d. Correr una fase con tu suscripcion de ChatGPT Plus/Pro (Codex, opcional)
+
+Distinto de 2c: esto no es una API key facturada por token, es la sesion de
+tu cuenta de ChatGPT (Plus/Pro) autenticada por OAuth -- mismo mecanismo que
+usa el Codex CLI oficial de OpenAI. El provider `openai` ya esta declarado
+en `runner/opencode.json`, inerte igual que `anthropic` hasta que exista la
+sesion.
+
+1. **En tu maquina** (no en el runner -- este paso es interactivo, abre el
+   navegador): `opencode auth login` -> elegir **OpenAI** -> **ChatGPT
+   Plus/Pro (Codex Subscription)** -> loguearte con tu cuenta.
+2. Correr `opencode models` y anotar el slug real que aparece bajo `openai/`
+   (ej. `openai/gpt-5.2-codex`) -- no asumirlo, confirmarlo como se hizo con
+   los slugs de OpenCode Go.
+3. Abrir tu `auth.json` local (mismo archivo de la tabla en la seccion 1:
+   `C:\Users\RM11\.local\share\opencode\auth.json`) -- ahora tiene, ademas
+   de la entrada que ya usabas, una entrada nueva `openai`.
+4. **Reemplazar** el secreto `OPENCODE_AUTH_JSON` del repo con el JSON
+   completo actualizado (las dos entradas juntas, no solo la de `openai`):
+   el paso "Auth de OpenCode" del workflow recorre todas las claves del
+   objeto, asi que un solo secreto alcanza para los dos providers.
+5. Correr el workflow con el input **`modelo`** = el slug del paso 2.
+
+**Riesgo real, no cosmetico:** esto es uso "incluido" de una suscripcion,
+no facturacion por token -- la misma categoria de limite que saco las 3
+fases de claude.ai en primer lugar (rate-limit en corridas de 13+ min,
+CONTEXT.md §14). Puede aguantar una corrida puntual de comparacion y
+todavia toparse con el techo si se deja corriendo por cron cada hora. Y el
+login por ChatGPT en OpenCode es reciente -- hay reportes de que la opcion
+desaparecio para algunos usuarios en ciertas versiones; si `opencode auth
+login` no muestra "ChatGPT Plus/Pro (Codex Subscription)" bajo OpenAI,
+actualizar OpenCode primero (`npm i -g opencode-ai@latest`).
+
+---
+
 ## 3. Probar (sin esperar el cron)
 
 Repo → **Actions → "Fases automáticas (OpenCode + DeepSeek)" → Run workflow**
