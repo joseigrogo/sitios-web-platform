@@ -126,10 +126,68 @@ suscripcion ChatGPT/Codex al cliente oficial de Codex CLI y lo rechaza
 desde un cliente de terceros como OpenCode, para cualquier modelo. Coincide
 con la propia recomendacion de OpenAI para CI/CD ("usar una API key, no
 auth de navegador de ChatGPT") y con reportes de que esta opcion de
-OpenCode es inestable. **Conclusion: esta via no sirve para Fase 3 tal
-como esta OpenCode hoy.** Si hace falta un modelo de OpenAI, la unica que
-funciono es 2c-con-openai-en-vez-de-anthropic: API key facturada por
-token, no la suscripcion.
+OpenCode es inestable.
+
+**Conclusion real (2026-09-14, misma tarde): la suscripcion SI sirve, pero
+no via OpenCode.** El cliente oficial de OpenAI (`@openai/codex`, paquete
+npm distinto de OpenCode) usa el mismo token sin problema, probado de
+punta a punta -- login headless, `codex exec` no interactivo, MCP servers
+con secretos, y sandbox con red -- ver **2e**. Si hace falta un modelo de
+OpenAI facturado por token en vez de por suscripcion, la via es
+2c-con-openai-en-vez-de-anthropic (API key).
+
+---
+
+### 2e. Correr Fase 3 con Codex CLI oficial + suscripcion ChatGPT Plus/Pro (probado, funciona)
+
+Cliente **distinto** de OpenCode: `runner/run-fase-codex.sh` +
+`runner/codex-config.toml`, seleccionado con el input **`backend`** del
+workflow (`opencode` por default, `codex` para esto). Todo lo de abajo se
+probo a mano el 2026-09-14 antes de commitear -- no es teoria.
+
+**Setup, una sola vez:**
+
+1. **En tu maquina:** `npm i -g @openai/codex`, despues `codex login
+   --device-auth`. Da un link (`https://auth.openai.com/codex/device`) y un
+   codigo de un solo uso -- abrilo en el navegador logueado a la cuenta que
+   vas a usar y autorizalo.
+2. **Si la cuenta es Team/Business** (no Plus/Pro individual): antes del
+   paso 1 hace falta activar, en `chatgpt.com` -> Settings -> Security,
+   **"Activar autorizacion con codigos de dispositivo para Codex"** -- sin
+   esto el login por codigo queda con el boton "Continuar" deshabilitado.
+   Puede ser un ajuste de admin del workspace, no de cualquier miembro.
+3. Confirmar `codex exec "decime ok"` responde bien en tu maquina antes de
+   tocar nada del repo -- valida que el login realmente quedo activo.
+4. Copiar el contenido de `C:\Users\RM11\.codex\auth.json` como secreto
+   **`CODEX_AUTH_JSON`** del repo (mismo patron que `OPENCODE_AUTH_JSON`:
+   `Get-Content -Raw "C:\Users\RM11\.codex\auth.json" | gh secret set
+   CODEX_AUTH_JSON --repo joseigrogo/sitios-web-platform`).
+5. Correr el workflow con `backend` = **`codex`** (y `fase` = la que sea).
+
+**Modelo:** el default de la cuenta (visto: `gpt-5.6-sol`) funciona sin
+pasar nada. Los modelos con branding "codex" (ej. `gpt-5.3-codex-spark`)
+**no** estan disponibles con auth de suscripcion, en ningun cliente --
+confirmado con el mismo error de la seccion anterior. No hace falta pelear
+con eso: dejar `modelo` vacio.
+
+**Permisos y sandbox:** `run-fase-codex.sh` usa
+`--dangerously-bypass-approvals-and-sandbox`. El nombre asusta, pero es
+literalmente lo que la propia documentacion de Codex recomienda para
+"entornos ya sandboxeados externamente" -- un job de GitHub Actions es
+exactamente eso (VM efimera, se tira entera al terminar). Mismo criterio
+que `runner/opencode.json` ya aplica con `permission.bash/edit = "allow"`.
+
+**MCP servers:** `runner/codex-config.toml` declara Supabase/GitHub/OpenSEO
+igual que `opencode.json`, pero con la sintaxis de Codex: `env_vars =
+["NOMBRE"]` reenvia esa variable del proceso al MCP server sin
+hardcodear el valor en el archivo (probado a mano). El de GitHub espera
+`GITHUB_PERSONAL_ACCESS_TOKEN`; el script lo alias-ea desde el secreto
+`GH_PAT` que ya existe.
+
+**Riesgo real:** sigue siendo uso "incluido" de una suscripcion (misma
+categoria que dejo fuera a claude.ai originalmente) -- una corrida de
+comparacion puntual esta bien, dejarlo en el cron de cada hora podria
+toparse con el limite de la cuenta. Probar puntual primero.
 
 ---
 

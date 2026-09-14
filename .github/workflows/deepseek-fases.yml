@@ -17,6 +17,12 @@ on:
         description: "Modelo a forzar (ej. opencode-go/glm-5.3). Vacío = el del script."
         required: false
         default: ""
+      backend:
+        description: "Cliente a usar. codex = Codex CLI oficial con suscripción ChatGPT Plus/Pro (ver SETUP.md §2e)."
+        required: false
+        type: choice
+        options: ["opencode", "codex"]
+        default: "opencode"
 
 concurrency:
   group: fases-deepseek
@@ -39,9 +45,11 @@ jobs:
           node-version: "22"
 
       - name: Instalar OpenCode
+        if: github.event.inputs.backend != 'codex'
         run: npm i -g opencode-ai
 
       - name: Auth de OpenCode (Zen / "OpenCode Go")
+        if: github.event.inputs.backend != 'codex'
         env:
           OPENCODE_AUTH_JSON: ${{ secrets.OPENCODE_AUTH_JSON }}
         run: |
@@ -63,7 +71,34 @@ jobs:
             console.log("auth.json OK; providers:", Object.keys(j).join(", "));
           '
 
-      - name: Correr Fase ${{ matrix.fase }}
+      # Codex CLI oficial, autenticado con la suscripción ChatGPT Plus/Pro
+      # (device-auth) -- no una API key. Ver SETUP.md §2e: probado el
+      # 2026-09-14 que OpenCode NO puede usar ese token (rechazado por
+      # OpenAI para cualquier modelo, es un límite del cliente, no del
+      # slug), así que esto corre con el cliente oficial en vez de OpenCode.
+      - name: Instalar Codex CLI
+        if: github.event.inputs.backend == 'codex'
+        run: npm i -g @openai/codex
+
+      - name: Auth de Codex (suscripción ChatGPT Plus/Pro)
+        if: github.event.inputs.backend == 'codex'
+        env:
+          CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
+        run: |
+          mkdir -p "$HOME/.codex"
+          node -e '
+            const j = JSON.parse(process.env.CODEX_AUTH_JSON);
+            if (j.tokens) {
+              for (const k of ["id_token", "access_token", "refresh_token"]) {
+                if (typeof j.tokens[k] === "string") j.tokens[k] = j.tokens[k].trim();
+              }
+            }
+            require("fs").writeFileSync(process.env.HOME + "/.codex/auth.json", JSON.stringify(j));
+            console.log("auth.json OK; auth_mode:", j.auth_mode);
+          '
+
+      - name: Correr Fase ${{ matrix.fase }} (OpenCode)
+        if: github.event.inputs.backend != 'codex'
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -83,6 +118,24 @@ jobs:
           git config --global user.email "fases-bot@users.noreply.github.com"
           node runner/verificar-avance.mjs ${{ matrix.fase }} antes /tmp/avance.json
           bash runner/run-fase.sh ${{ matrix.fase }}
+
+      - name: Correr Fase ${{ matrix.fase }} (Codex / ChatGPT Plus-Pro)
+        if: github.event.inputs.backend == 'codex'
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GH_PAT: ${{ secrets.GH_PAT }}
+          OPENCODE_MODEL: ${{ github.event.inputs.modelo }}
+          GIT_AUTHOR_NAME: "fases-bot"
+          GIT_AUTHOR_EMAIL: "fases-bot@users.noreply.github.com"
+          GIT_COMMITTER_NAME: "fases-bot"
+          GIT_COMMITTER_EMAIL: "fases-bot@users.noreply.github.com"
+        run: |
+          git config --global user.name "fases-bot"
+          git config --global user.email "fases-bot@users.noreply.github.com"
+          node runner/verificar-avance.mjs ${{ matrix.fase }} antes /tmp/avance.json
+          bash runner/run-fase-codex.sh ${{ matrix.fase }}
 
       # Un job en verde que no movio nada es peor que uno en rojo: pasa por
       # exitoso. Compara el estado de los sitios pendientes contra el snapshot

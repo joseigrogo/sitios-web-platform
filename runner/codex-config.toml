@@ -1,0 +1,23 @@
+# Config de Codex CLI para correr una fase con la suscripcion ChatGPT
+# Plus/Pro (Codex), en vez de OpenCode + DeepSeek. Ver SETUP.md §2e.
+#
+# `env_vars` reenvia la variable del entorno del proceso al MCP server sin
+# hardcodear el valor aca (probado a mano el 2026-09-14: el hijo SI recibe
+# el valor real). El nombre de la variable para GitHub se resuelve a
+# GITHUB_PERSONAL_ACCESS_TOKEN en runner/run-fase-codex.sh (alias de GH_PAT)
+# porque `env_vars` reenvia por nombre, no permite renombrar en el TOML.
+
+[mcp_servers.supabase]
+command = "npx"
+args = ["-y", "@supabase/mcp-server-supabase@latest", "--project-ref=aoowwztkitctnwbbwbwk"]
+env_vars = ["SUPABASE_ACCESS_TOKEN"]
+
+[mcp_servers.github]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github"]
+env_vars = ["GITHUB_PERSONAL_ACCESS_TOKEN"]
+
+# Remoto, sin auth -- igual que en runner/opencode.json (self-hosted,
+# local-admin, responde initialize/tools/list/whoami sin token).
+[mcp_servers.openseo]
+url = "https://openseo.lab.whitelabel.lat/mcp"
