@@ -30,6 +30,25 @@ const FILTRO = {
   3: 'construccion_estado=eq.solicitada&fase_actual=eq.construccion',
 };
 
+// El filtro de arriba es a nivel Postgres (coarse); esto filtra en JS lo que
+// el propio instructivo de cada fase ya considera "no trabajable" y por
+// tanto correctamente saltea sin tocar. Sin esto, un sitio bloqueado a
+// propósito (ej. Capital Window Cleaning, sin referencia_url desde agosto)
+// queda contado como "pendiente" para siempre, y cada corrida que lo saltea
+// bien -- exactamente como manda el instructivo -- se reporta como falla.
+// Encontrado el 2026-09-14: 5 días de Fase 2 en rojo por esto.
+const ES_TRABAJABLE = {
+  1: () => true,
+  2: (f) => {
+    const g = f.estado_gates ?? {};
+    const yaBloqueado = typeof g.fase2_estado === 'string' && g.fase2_estado.startsWith('bloqueado:');
+    const flags = g.fase2 ?? {};
+    const yaCompleto = flags.estructura === true && flags.contenido === true && flags.taxonomia_eventos === true;
+    return !yaBloqueado && !yaCompleto;
+  },
+  3: () => true,
+};
+
 async function main() {
   const [fase, modo, archivo] = process.argv.slice(2);
   if (!['1', '2', '3'].includes(fase) || !['antes', 'despues'].includes(modo) || !archivo) {
@@ -52,7 +71,7 @@ async function main() {
     return 0;
   }
 
-  const filas = await res.json();
+  const filas = (await res.json()).filter(ES_TRABAJABLE[fase]);
   const huella = Object.fromEntries(filas.map((f) => [f.id, JSON.stringify(f)]));
 
   if (modo === 'antes') {
