@@ -110,15 +110,26 @@ sesion.
    objeto, asi que un solo secreto alcanza para los dos providers.
 5. Correr el workflow con el input **`modelo`** = el slug del paso 2.
 
-**Riesgo real, no cosmetico:** esto es uso "incluido" de una suscripcion,
-no facturacion por token -- la misma categoria de limite que saco las 3
-fases de claude.ai en primer lugar (rate-limit en corridas de 13+ min,
-CONTEXT.md §14). Puede aguantar una corrida puntual de comparacion y
-todavia toparse con el techo si se deja corriendo por cron cada hora. Y el
-login por ChatGPT en OpenCode es reciente -- hay reportes de que la opcion
-desaparecio para algunos usuarios en ciertas versiones; si `opencode auth
-login` no muestra "ChatGPT Plus/Pro (Codex Subscription)" bajo OpenAI,
-actualizar OpenCode primero (`npm i -g opencode-ai@latest`).
+**Probado el 2026-09-14 y NO funciona -- no es un riesgo hipotetico, es un
+bloqueo real confirmado.** El login OAuth completa bien (auth.json queda
+con la entrada `openai`), pero cualquier `opencode run --model openai/<lo
+que sea>` -- probado con `gpt-5.3-codex-spark` y con `gpt-5.4`, mismo
+resultado en los dos -- devuelve:
+
+```
+Bad Request: {"detail":"The '<modelo>' model is not supported when using
+Codex with a ChatGPT account."}
+```
+
+No es un problema de slug ni de modelo: OpenAI ata el token de la
+suscripcion ChatGPT/Codex al cliente oficial de Codex CLI y lo rechaza
+desde un cliente de terceros como OpenCode, para cualquier modelo. Coincide
+con la propia recomendacion de OpenAI para CI/CD ("usar una API key, no
+auth de navegador de ChatGPT") y con reportes de que esta opcion de
+OpenCode es inestable. **Conclusion: esta via no sirve para Fase 3 tal
+como esta OpenCode hoy.** Si hace falta un modelo de OpenAI, la unica que
+funciono es 2c-con-openai-en-vez-de-anthropic: API key facturada por
+token, no la suscripcion.
 
 ---
 
