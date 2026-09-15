@@ -295,12 +295,17 @@ continuo de Base 7.
 verificación en Search Console, envío de sitemap, solicitud de indexación
 manual de páginas pilar.
 
-**Cómo:** nada construido. Dominio es requisito **de acá**, no de Fase 0
-(ver arriba). Depende por completo de en qué cuenta vive el proyecto de
-despliegue — Estarter tenía sus 4 sitios en una cuenta ajena
-(`mia-corral-developer`), lo que bloqueaba esta fase entera por permisos
-que no eran del usuario. Confirmar quién administra la cuenta de deploy es
-parte de esta fase, no un supuesto.
+**Cómo:** parcialmente construido (ver CONTEXT.md §16) — `checklist-fase4`,
+`marcar-entregable-fase4` y `gate-fase4` ya existen. Dominio es requisito
+**de acá**, no de Fase 0 (ver arriba).
+
+**Nota histórica, corregida el 2026-09-15:** esta sección decía que
+Estarter tenía sus 4 sitios en una cuenta "ajena" (`mia-corral-developer`)
+que bloqueaba la fase por permisos que no eran del usuario. Confirmado con
+el usuario: `mia.corral.developer@gmail.com` **es su cuenta** — la nota
+quedó vieja, no describe un bloqueo real. Sigue siendo cierto en general
+que confirmar quién administra la cuenta de deploy es parte de esta fase,
+no un supuesto — solo que en este caso ya está confirmado.
 
 ---
 

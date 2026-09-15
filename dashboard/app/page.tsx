@@ -13,6 +13,8 @@ import {
   crearSitioParaCliente,
   guardarAgentePreferido,
   guardarReferenciaUrl,
+  marcarEntregableFase2Accion,
+  marcarEntregableFase4Accion,
   solicitarConstruccion,
   solicitarInvestigacion,
 } from "./actions";
@@ -278,15 +280,30 @@ function ProgresoFaseActual({
       <div className="space-y-2">
         {claves.map((c) => (
           <div key={c} className="rounded border border-neutral-800 p-3">
-            <span
-              className={
-                "rounded-full px-3 py-1 text-xs " +
-                (entregablesFase2[c] ? "bg-emerald-500 text-emerald-950" : "bg-neutral-900 text-neutral-500")
-              }
-            >
-              {entregablesFase2[c] && "✓ "}
-              {ETIQUETAS_ENTREGABLES_FASE2[c]}
-            </span>
+            <div className="flex items-center gap-2">
+              <span
+                className={
+                  "rounded-full px-3 py-1 text-xs " +
+                  (entregablesFase2[c] ? "bg-emerald-500 text-emerald-950" : "bg-neutral-900 text-neutral-500")
+                }
+              >
+                {entregablesFase2[c] && "✓ "}
+                {ETIQUETAS_ENTREGABLES_FASE2[c]}
+              </span>
+              {/* Solo si ya hay contenido guardado -- marcar sin nada detrás
+                  dejaría pasar el gate de Fase 2 sobre un entregable vacío.
+                  A diferencia de Fase 4 (confirmación humana pura, sin nada
+                  que verificar), acá sí hay algo que "marcar hecho" confirma. */}
+              {!entregablesFase2[c] && contenidoFase2[c] && (
+                <form action={marcarEntregableFase2Accion}>
+                  <input type="hidden" name="sitioId" value={sitio.id} />
+                  <input type="hidden" name="entregable" value={c} />
+                  <button type="submit" className={BOTON_SECUNDARIO}>
+                    Marcar hecho
+                  </button>
+                </form>
+              )}
+            </div>
             {contenidoFase2[c] ? (
               <details className="mt-2">
                 <summary className="cursor-pointer text-xs text-neutral-500 hover:text-neutral-300">
@@ -647,18 +664,25 @@ function SeccionFase4({ estado }: { estado: EstadoSitio }) {
       )}
 
       <div className="space-y-1 border-t border-neutral-800 pt-2">
-        <p className="text-xs text-neutral-500">
-          Confirmaciones humanas ({completados}/{claves.length}) — marcar por CLI:{" "}
-          <code className="text-neutral-400">cli sitio marcar-entregable-fase4 {sitio.id} &lt;entregable&gt;</code>
-        </p>
-        {claves.map((clave) => (
-          <div key={clave} className="flex items-center gap-2 text-xs">
-            <span className={entregablesFase4[clave as keyof typeof entregablesFase4] ? "text-emerald-500" : "text-neutral-600"}>
-              {entregablesFase4[clave as keyof typeof entregablesFase4] ? "✓" : "·"}
-            </span>
-            <span className="text-neutral-400">{ENTREGABLES_FASE4_ETIQUETA[clave] ?? clave}</span>
-          </div>
-        ))}
+        <p className="text-xs text-neutral-500">Confirmaciones humanas ({completados}/{claves.length})</p>
+        {claves.map((clave) => {
+          const hecho = entregablesFase4[clave as keyof typeof entregablesFase4];
+          return (
+            <div key={clave} className="flex items-center gap-2 text-xs">
+              <span className={hecho ? "text-emerald-500" : "text-neutral-600"}>{hecho ? "✓" : "·"}</span>
+              <span className="text-neutral-400">{ENTREGABLES_FASE4_ETIQUETA[clave] ?? clave}</span>
+              {!hecho && (
+                <form action={marcarEntregableFase4Accion}>
+                  <input type="hidden" name="sitioId" value={sitio.id} />
+                  <input type="hidden" name="entregable" value={clave} />
+                  <button type="submit" className={BOTON_SECUNDARIO}>
+                    Marcar hecho
+                  </button>
+                </form>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {sitio.faseActual === "deploy" && pasaGate && (

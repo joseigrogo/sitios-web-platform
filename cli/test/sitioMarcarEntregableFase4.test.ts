@@ -1,15 +1,27 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { ejecutarMarcarEntregableFase4 } from '../src/commands/sitioMarcarEntregableFase4.js';
-import { ValidationError } from '../src/lib/errors.js';
+import { ejecutarMarcarEntregableFase4 } from '../src/lib/marcarEntregableFase4.js';
 import { crearSitiosRepoFalso } from './fakes.js';
+
+// Duck-typing (name + errores), no instanceof: marcarEntregableFase4.ts
+// define su propia clase ValidationError local (mismo gotcha Turbopack que
+// ../src/lib/errors.ts ya documenta), así que no es la misma clase en
+// memoria que cualquier ValidationError importado acá.
+function esValidationError(err: unknown): err is { errores: string[] } {
+  return (
+    typeof err === 'object' &&
+    err !== null &&
+    (err as { name?: unknown }).name === 'ValidationError' &&
+    Array.isArray((err as { errores?: unknown }).errores)
+  );
+}
 
 test('rechaza un entregable que no existe', async () => {
   const repos = { sitios: crearSitiosRepoFalso() };
   await assert.rejects(
     () => ejecutarMarcarEntregableFase4('sitio-1', 'dns', repos),
     (err: unknown) => {
-      assert.ok(err instanceof ValidationError);
+      assert.ok(esValidationError(err));
       assert.ok(err.errores.some((e) => e.includes('entregable')));
       return true;
     }

@@ -12,6 +12,8 @@ import { ejecutarGateFase2 } from "@cli/lib/gateFase2";
 import { ejecutarGateFase3 } from "@cli/lib/gateFase3";
 import { ejecutarGateFase4 } from "@cli/lib/gateFase4";
 import { crearKeywordsRepoSupabase } from "@cli/lib/keywordsRepo";
+import { ejecutarMarcarEntregableFase2 } from "@cli/lib/marcarEntregableFase2";
+import { ejecutarMarcarEntregableFase4 } from "@cli/lib/marcarEntregableFase4";
 import { crearSitiosRepoSupabase } from "@cli/lib/sitiosRepo";
 import { crearSupabaseClient } from "@cli/lib/supabaseClient";
 import { COOKIE_NAME, sesionValida } from "@/lib/auth";
@@ -58,6 +60,48 @@ export async function confirmarGateFase4(formData: FormData) {
   const repos = { sitios: crearSitiosRepoSupabase(supabase) };
 
   await ejecutarGateFase4(sitioId, true, repos);
+
+  revalidatePath("/");
+}
+
+// Primer paso hacia CONTEXT.md §17 (norte SaaS): marcar un entregable
+// humano dejó de ser exclusivo de `cli sitio marcar-entregable-faseN` --
+// reusa ejecutarMarcarEntregableFase2/4 del CLI, mismo criterio que el
+// resto de este archivo (Base 8, CONTEXT.md §11). Mecánico a propósito: no
+// valida que el trabajo esté bien hecho, solo mueve el flag -- esa decisión
+// sigue siendo de quien hace click.
+export async function marcarEntregableFase2Accion(formData: FormData) {
+  const cookieStore = await cookies();
+  if (!sesionValida(cookieStore.get(COOKIE_NAME)?.value)) {
+    redirect("/login");
+  }
+
+  const sitioId = String(formData.get("sitioId") ?? "");
+  const entregable = String(formData.get("entregable") ?? "");
+  if (!sitioId.trim() || !entregable.trim()) return;
+
+  const supabase = crearSupabaseClient();
+  const repos = { sitios: crearSitiosRepoSupabase(supabase) };
+
+  await ejecutarMarcarEntregableFase2(sitioId, entregable, repos);
+
+  revalidatePath("/");
+}
+
+export async function marcarEntregableFase4Accion(formData: FormData) {
+  const cookieStore = await cookies();
+  if (!sesionValida(cookieStore.get(COOKIE_NAME)?.value)) {
+    redirect("/login");
+  }
+
+  const sitioId = String(formData.get("sitioId") ?? "");
+  const entregable = String(formData.get("entregable") ?? "");
+  if (!sitioId.trim() || !entregable.trim()) return;
+
+  const supabase = crearSupabaseClient();
+  const repos = { sitios: crearSitiosRepoSupabase(supabase) };
+
+  await ejecutarMarcarEntregableFase4(sitioId, entregable, repos);
 
   revalidatePath("/");
 }

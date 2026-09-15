@@ -878,3 +878,59 @@ inventar el resultado.
 como gates humanos irreducibles (GrowthBook, Ads) — no tiene sentido fijar
 su criterio exacto antes de que exista aunque sea un sitio real
 atravesando Fase 4, que todavía no pasó.
+
+## 17. Norte del producto: pensar esto como un SaaS (2026-09-15)
+
+Instrucción de gerencia, transmitida por el usuario: **el objetivo final es
+que un cliente pueda entrar y hacer la tarea solo** — "imagínese que usted
+es el cliente: lo que usted hace, es lo que el user va a hacer". El
+producto tiene que ser intuitivo y resolver todo por su cuenta; **no puede
+haber "hacks" que funcionan solo porque el operador sabe por dónde
+moverse.** No es un pedido para construir ya — es la vara con la que se
+mide cada decisión de acá en adelante: si hoy hace falta terminal, SQL
+directo o `gh` CLI para algo que un cliente necesitaría, es una brecha real
+de producto, no un detalle de implementación.
+
+**Litmus test aplicado retroactivamente a la sesión del 2026-09-15** —
+poniéndose en el lugar del cliente con lo que se usó hoy mismo:
+
+Ya es producto (tiene botón real en el dashboard, sin depender de nadie que
+"sepa"): alta de cliente/sitio, `referencia_url`, elegir agente
+(Codex/OpenCode), pedir investigación, correr los checklists de Fase 3/4,
+confirmar cada gate (0 a 4).
+
+**Hacks encontrados, no producto todavía — el mapa real de lo que falta:**
+
+1. **Marcar los entregables humanos** de Fase 2 (estructura/contenido/
+   taxonomía) y Fase 4 (Search Console/sitemap/indexación) — hoy solo
+   existen por `cli marcar-entregable-faseN`. El dashboard los muestra,
+   pero no deja tocarlos.
+2. **Destrabar un sitio colgado** — hoy es un `UPDATE` directo en Supabase
+   (se hizo a mano con Big Apple Test el 2026-09-15). Hay recuperación
+   automática a las 3 horas, pero "hacelo ahora" no es un botón.
+3. **Reconstruir un sitio ya terminado** — cerrar el PR viejo y borrar la
+   rama vieja del repo del sitio (se hizo a mano con Makeover el
+   2026-09-15, `gh pr close` + `gh api DELETE .../refs/heads/...`). Sin
+   forma de pedirlo desde el producto.
+4. **Ver por qué algo falló** — hoy es leer logs de GitHub Actions por
+   CLI (así se diagnosticó el cuelgue de 45 min de DeepSeek). Un cliente
+   real solo ve "bloqueado", sin ninguna pista.
+5. **Conectar la propia cuenta de Google (GA4/GTM)** — lo que se hizo hoy
+   fue leer un archivo de credenciales del escritorio y correr un script
+   a mano. La versión producto es un flujo OAuth ("Conectar tu Google
+   Analytics"), no un JSON que alguien tiene que saber dónde buscar.
+6. **Disparar una fase fuera del horario del cron** — hoy es
+   `gh workflow run` a mano, nunca un botón "correr ahora".
+
+Coincide con lo que ya estaba pausado (§ multi-tenant, pedido de gerencia
+el mismo día: login por cliente, la agencia se agrega como usuario en
+cada tenant) — es la misma dirección, vista desde dos ángulos distintos
+(quién entra vs qué puede hacer una vez adentro).
+
+**Primer paso real hacia esto, mismo día:** cerrar el punto 1 (marcar
+entregables desde el dashboard) — ver el commit correspondiente. Se elige
+ese primero por ser el más chico y sin riesgo: mismo patrón ya usado hoy
+para los gates (Server Action que reusa la función núcleo del CLI), sin
+dependencias nuevas (nada de GitHub API, nada de OAuth) y cierra una
+brecha completa, no parcial. Los puntos 2-6 quedan en esta lista para
+retomar en orden, no decidido todavía cuál sigue.
