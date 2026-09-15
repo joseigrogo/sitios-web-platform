@@ -9,6 +9,7 @@ import { ejecutarClienteAlta } from "@cli/lib/clienteAlta";
 import { ejecutarGateFase0 } from "@cli/lib/gateFase0";
 import { ejecutarGateFase1 } from "@cli/lib/gateFase1";
 import { ejecutarGateFase2 } from "@cli/lib/gateFase2";
+import { ejecutarGateFase3 } from "@cli/lib/gateFase3";
 import { crearKeywordsRepoSupabase } from "@cli/lib/keywordsRepo";
 import { crearSitiosRepoSupabase } from "@cli/lib/sitiosRepo";
 import { crearSupabaseClient } from "@cli/lib/supabaseClient";
@@ -20,6 +21,27 @@ import { COOKIE_NAME, sesionValida } from "@/lib/auth";
 // CLI, no reimplementar la lógica"). El check (sin --confirmar) sigue
 // pudiendo correr solo -- lo que queda detrás de un click humano es la
 // escritura misma (Base 6: desatendido = solo lectura).
+// Gap real, no un descuido: fase3_construccion_instrucciones.md nunca
+// escribe fase_actual a propósito -- sin este gate, un sitio terminado
+// (checklist 8/8) se queda para siempre en fase_actual='construccion'.
+// Mismo criterio que confirmarGateFase2: reusa ejecutarGateFase3 del CLI.
+export async function confirmarGateFase3(formData: FormData) {
+  const cookieStore = await cookies();
+  if (!sesionValida(cookieStore.get(COOKIE_NAME)?.value)) {
+    redirect("/login");
+  }
+
+  const sitioId = String(formData.get("sitioId") ?? "");
+  if (!sitioId.trim()) return;
+
+  const supabase = crearSupabaseClient();
+  const repos = { sitios: crearSitiosRepoSupabase(supabase) };
+
+  await ejecutarGateFase3(sitioId, true, repos);
+
+  revalidatePath("/");
+}
+
 export async function confirmarGateFase2(formData: FormData) {
   const cookieStore = await cookies();
   if (!sesionValida(cookieStore.get(COOKIE_NAME)?.value)) {

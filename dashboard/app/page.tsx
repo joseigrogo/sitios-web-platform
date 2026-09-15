@@ -6,6 +6,7 @@ import {
   confirmarGateFase0,
   confirmarGateFase1,
   confirmarGateFase2,
+  confirmarGateFase3,
   correrChecklistFase3,
   crearSitioParaCliente,
   guardarAgentePreferido,
@@ -545,6 +546,16 @@ function SeccionChecklistFase3({ sitio }: { sitio: EstadoSitio["sitio"] }) {
             </div>
           ))}
         </div>
+      )}
+
+      {sitio.faseActual === "construccion" && sitio.repoGithub && resultado?.pasaTodo && (
+        <form action={confirmarGateFase3} className="flex items-center gap-2 pt-1">
+          <input type="hidden" name="sitioId" value={sitio.id} />
+          <button type="submit" className={BOTON_PRIMARIO}>
+            Confirmar y pasar a Despliegue
+          </button>
+          <span className="text-xs text-neutral-500">Gate de Fase 3: PASA — falta tu confirmación.</span>
+        </form>
       )}
     </div>
   );
