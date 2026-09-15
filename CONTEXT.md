@@ -772,37 +772,33 @@ deepseek-v4-flash` y silencio total hasta el timeout del job.
 causa del cuelgue en sí (¿instalando Chromium? ¿esperando red?) queda sin
 diagnosticar — no hay ni un log intermedio para saber qué estaba haciendo.
 
-## 16. Diseño de Fase 4 y Fase 5 (2026-09-15) — sin automatizar todavía
+## 16. Fase 4 construida; Fase 5 sigue en diseño (2026-09-15)
 
-Decisión del usuario: pensar cómo seguirían estas dos fases antes de
-construir nada. Apoyado en lo que ya existe, no arrancando de cero — dos
-piezas del modelo de datos ya anticipaban esto desde la migración inicial
-(`esquema_base_plataforma`, 2026-08-04) sin que nadie las hubiera
-conectado todavía: `sitios.vercel_project_id` y la tabla `ids_recursos`
-(`sitio_id, tipo, valor, confirmado_via_api`).
+Decisión del usuario: pensar cómo seguirían Fase 4 y 5 antes de construir
+nada — y el mismo día se terminó construyendo Fase 4 completa, apoyado en
+lo que ya existía sin conectar desde la migración inicial
+(`esquema_base_plataforma`, 2026-08-04): `sitios.vercel_project_id` y la
+tabla `ids_recursos` (`sitio_id, tipo, valor, confirmado_via_api`), esta
+última todavía sin usar — sigue siendo la pieza pendiente de Fase 5.
 
-### Gap encontrado primero, independiente de Fase 4/5: falta `gate-fase3`
+### Gap encontrado primero, independiente de Fase 4/5: faltaba `gate-fase3` — **construido**
 
-Fase 0/1/2 tienen su gate (`cli sitio gate-faseN`, verifica y opcionalmente
+Fase 0/1/2 tenían su gate (`cli sitio gate-faseN`, verifica y opcionalmente
 confirma el flip de `fase_actual`). Fase 3 no: el instructivo de
 construcción **nunca escribe `fase_actual`** a propósito (línea explícita
 en `fase3_construccion_instrucciones.md`, "no reemplaza juicio humano").
-Resultado real, visible hoy: Makeover tiene `construccion_estado =
-'terminada'` con PR abierto y checklist 8/8, pero `fase_actual` sigue en
-`'construccion'` — nada marca que está listo para Fase 4. No es un bug (el
-instructivo hace exactamente lo que dice), es una pieza que falta.
+Resultado real que lo dejó en evidencia: Makeover tenía `construccion_estado
+= 'terminada'` con PR abierto y checklist 8/8, pero `fase_actual` seguía en
+`'construccion'` — nada marcaba que estaba listo para Fase 4.
 
-**Diseño propuesto, sin construir:** `cli sitio gate-fase3`, mismo patrón
-que gate-fase0/1/2 — sin `--confirmar` solo verifica:
-- `checklist_fase3_resultado` existe y los ítems automáticamente
-  verificables (todos salvo `taxonomia_eventos` y `search_console`, ya
-  marcados `pasa: null` a propósito) no tienen ningún `pasa: false`.
-- `repo_github` no es null y el PR que dejó la rutina sigue existiendo
-  (verificable por API de GitHub — **merge del PR sigue siendo un acto
-  humano**, esto solo confirma que hay algo para revisar, no lo aprueba).
-- Con `--confirmar`: flip a `fase_actual = 'deploy'`.
+**Construido:** `cli sitio gate-fase3 <id> [--confirmar]`, mismo patrón que
+gate-fase0/1/2 (`cli/src/lib/gateFase3.ts`). Condición: `repo_github` no es
+null y `checklist_fase3_resultado.pasaTodo` es `true`. El merge del PR
+sigue siendo un acto humano — el gate no lo verifica ni lo reemplaza, solo
+confirma que hay algo real medido para revisar. Probado contra datos
+reales: Makeover pasó de `'construccion'` a `'deploy'` el mismo día.
 
-### Fase 4 · Despliegue, dominio e indexación
+### Fase 4 · Despliegue, dominio e indexación — **construida**
 
 La secuencia real (`Proceso_GENERAL` §Fase 4) es casi enteramente actos
 humanos de una sola vez por sitio — merge por cuenta autorizada, conectar
@@ -820,22 +816,34 @@ que Fase 4 pide en "dominio canónico único" y "sitemap enviado" sin
 escribir un verificador nuevo. Diferencia real con Fase 3: acá "pasar" sí
 importa para el gate (en Fase 3 es solo medición).
 
-**Diseño propuesto, sin construir:**
-- `cli sitio checklist-fase4 <url-produccion> --sitio <id>` — literalmente
-  reusa `ejecutarChecklistFase3` con otro nombre de comando (o el mismo
-  comando, otro parámetro), guardado en columnas nuevas
+**Construido, mismo día:**
+- `cli sitio checklist-fase4 <url-produccion> --sitio <id>`
+  (`cli/src/commands/sitioChecklistFase4.ts`) — literalmente reusa
+  `ejecutarChecklistFase3`, guardado en columnas nuevas
   `checklist_fase4_url` / `checklist_fase4_resultado` (mismo patrón que
-  Fase 3, no una tabla aparte — Base 8).
-- Dos confirmaciones que **no tienen API service-account-friendly** y
-  quedan como input humano explícito, no inferido: `search_console_ok
-  boolean` y `sitemap_enviado boolean` en `sitios` (o dentro de
-  `estado_gates`, a decidir cuando se construya — no es una decisión que
-  haga falta tomar hoy).
-- `cli sitio gate-fase4`: checklist4 pasa + las dos confirmaciones en
-  `true` → con `--confirmar`, flip a `fase_actual = 'medicion'`.
-- **Nunca automatizar:** merge del PR, conexión de dominio/DNS, verificación
-  TXT de Search Console, solicitud de indexación manual — gates humanos
-  irreducibles ya identificados en `BASES_DEL_SISTEMA.md` (Base 6).
+  Fase 3, no una tabla aparte — Base 8). `mismoSitio()` se movió del
+  comando de Fase 3 a `lib/checklistFase3.ts` para reusarla sin duplicarla.
+- 3 confirmaciones humanas, **no 2** como se había estimado al diseñar —
+  `EntregableFase4 = 'search_console' | 'sitemap' | 'indexacion'`, mismo
+  patrón exacto que `EntregableFase2` (flags en `estado_gates -> 'fase4'`,
+  `cli sitio marcar-entregable-fase4 <id> <entregable>`). Ninguna tiene API
+  service-account-friendly — quedan como input humano explícito, nunca
+  inferido, igual que se anotó al diseñar.
+- `cli sitio gate-fase4 <id> [--confirmar]` (`cli/src/lib/gateFase4.ts`):
+  checklist4 pasa + los 3 entregables en `true` → flip a `fase_actual =
+  'medicion'`. Mismo patrón que gate-fase0/1/2/3.
+- Dashboard: sección nueva con el checklist y los 3 entregables en solo
+  lectura (se marcan por CLI, mismo criterio que Fase 2 — el dashboard
+  nunca expuso eso ahí tampoco) + el botón de gate.
+- **Nunca automatizado, a propósito:** merge del PR, conexión de
+  dominio/DNS, verificación TXT de Search Console, solicitud de indexación
+  manual — gates humanos irreducibles ya identificados en
+  `BASES_DEL_SISTEMA.md` (Base 6).
+
+Probado contra datos reales: `gate-fase4` corrido contra Makeover (recién
+en `'deploy'`) reporta correctamente las 4 condiciones faltantes — no tiene
+dominio propio conectado todavía (solo URLs `*.vercel.app`), nada
+inventado. 89/89 tests del CLI pasan.
 
 ### Fase 5 · Ecosistema de medición (GTM → GA4 → BigQuery → GrowthBook → Ads)
 
