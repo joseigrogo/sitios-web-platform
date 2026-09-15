@@ -4,16 +4,21 @@ import { crearDependenciasFetchReal, ejecutarChecklistFase3, mismoSitio } from '
 import { crearSitiosRepoSupabase } from '../lib/sitiosRepo.js';
 import { crearSupabaseClient } from '../lib/supabaseClient.js';
 
-export function registrarComandoChecklistFase3(program: Command): void {
+// Mismo motor que checklist-fase3 (ejecutarChecklistFase3) -- la diferencia
+// real no es qué se mide, es CONTRA QUÉ URL y qué significa el resultado.
+// En Fase 3 la URL es la preview del PR y el checklist es medición (no
+// confirma ningún gate). Acá la URL es el dominio de PRODUCCIÓN y el
+// resultado SÍ es condición del gate de salida de Fase 4 -- "dominio
+// resolviendo en HTTPS, sin variantes compitiendo" y "sitemap accesible"
+// son exactamente lo que este motor ya verifica (CONTEXT.md §16). No se
+// escribe un verificador nuevo para lo mismo (Base 8).
+export function registrarComandoChecklistFase4(program: Command): void {
   program
-    .command('checklist-fase3 <url>')
+    .command('checklist-fase4 <url>')
     .description(
-      'Verifica el checklist de 10 puntos de Fase 3 (Proceso_GENERAL_de_Lanzamiento_Sitios.md) contra una URL en vivo -- SSR, canonical, Open Graph, robots+sitemap, JSON-LD, 404 reales, imágenes, dominio canónico. 2 de los 10 puntos (taxonomía de eventos, Search Console) no son verificables automáticamente todavía y se marcan como tal, nunca como pasa/no-pasa inventado.'
+      'Verifica el checklist técnico/SEO de Fase 4 contra el dominio de PRODUCCIÓN (mismo motor que checklist-fase3). ' +
+        'A diferencia de Fase 3, el resultado sí es condición del gate de salida -- ver gate-fase4.'
     )
-    // Sin --sitio el comando solo imprime, que es el uso a mano de siempre.
-    // Con --sitio guarda el resultado en Supabase, que es como la rutina de
-    // Fase 3 deja el veredicto donde el dashboard ya sabe leerlo -- misma
-    // escritura que hace el botón "Correr checklist", no una segunda vía.
     .option('--sitio <sitioId>', 'Guardar el resultado en Supabase para ese sitio (lo muestra el dashboard)')
     .action(async (url: string, opciones: { sitio?: string }) => {
       try {
@@ -30,18 +35,17 @@ export function registrarComandoChecklistFase3(program: Command): void {
           throw new ValidationError([
             `La verificación terminó en ${resultado.url}, que no es ${url}.`,
             'No se midió el sitio, así que no se guarda nada.',
-            'Causa típica: Deployment Protection de Vercel en la preview — se apaga en',
-            'Project Settings → Deployment Protection → Vercel Authentication → Disabled.',
+            'Causa típica: el dominio todavía no propagó, o redirige a otro lado (revisar DNS).',
           ]);
         }
 
         const sitioId = opciones.sitio?.trim();
         if (sitioId) {
           const repos = crearSitiosRepoSupabase(crearSupabaseClient());
-          await repos.guardarResultadoChecklistFase3(sitioId, url, resultado);
+          await repos.guardarResultadoChecklistFase4(sitioId, url, resultado);
         }
 
-        console.log(`Checklist de Fase 3 contra ${resultado.url}`);
+        console.log(`Checklist de Fase 4 contra ${resultado.url}`);
         if (sitioId) console.log(`Resultado guardado en el sitio ${sitioId}.`);
         console.log('');
         for (const item of resultado.items) {

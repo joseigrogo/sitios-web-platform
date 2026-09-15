@@ -4,8 +4,10 @@ import type {
   AgentePreferido,
   ConstruccionEstado,
   EntregableFase2,
+  EntregableFase4,
   EstadoContenidoFase2,
   EstadoEntregablesFase2,
+  EstadoEntregablesFase4,
   FaseActual,
   InvestigacionEstado,
   NuevoSitioInput,
@@ -20,6 +22,11 @@ import type {
 // workaround (2026-08-14); tsc/tsx nativos del CLI no tienen el problema.
 function estadoFase2VacioLocal(): EstadoEntregablesFase2 {
   return { estructura: false, contenido: false, taxonomia_eventos: false };
+}
+
+// Mismo motivo que estadoFase2VacioLocal.
+function estadoFase4VacioLocal(): EstadoEntregablesFase4 {
+  return { search_console: false, sitemap: false, indexacion: false };
 }
 
 function contenidoFase2VacioLocal(): EstadoContenidoFase2 {
@@ -45,6 +52,8 @@ function filaASitio(fila: Record<string, unknown>): Sitio {
     investigacionReporte: (fila.investigacion_reporte as string | null) ?? null,
     checklistFase3Url: (fila.checklist_fase3_url as string | null) ?? null,
     checklistFase3Resultado: (fila.checklist_fase3_resultado as ChecklistFase3Resultado | null) ?? null,
+    checklistFase4Url: (fila.checklist_fase4_url as string | null) ?? null,
+    checklistFase4Resultado: (fila.checklist_fase4_resultado as ChecklistFase3Resultado | null) ?? null,
     agentePreferido: (fila.agente_preferido as AgentePreferido) ?? 'codex',
   };
 }
@@ -122,6 +131,14 @@ export function crearSitiosRepoSupabase(client: SupabaseClient): SitiosRepo {
       if (error) throw new Error(`Error guardando resultado de checklist: ${error.message}`);
     },
 
+    async guardarResultadoChecklistFase4(id, url, resultado) {
+      const { error } = await client
+        .from('sitios')
+        .update({ checklist_fase4_url: url, checklist_fase4_resultado: resultado })
+        .eq('id', id);
+      if (error) throw new Error(`Error guardando resultado de checklist: ${error.message}`);
+    },
+
     async listarPorCliente(clienteId) {
       const { data, error } = await client
         .from('sitios')
@@ -189,6 +206,34 @@ export function crearSitiosRepoSupabase(client: SupabaseClient): SitiosRepo {
 
       const { error } = await client.from('sitios').update({ estado_gates: nuevosGates }).eq('id', sitioId);
       if (error) throw new Error(`Error guardando contenido: ${error.message}`);
+    },
+
+    async obtenerEstadoEntregablesFase4(sitioId) {
+      const { data, error } = await client.from('sitios').select('estado_gates').eq('id', sitioId).maybeSingle();
+      if (error) throw new Error(`Error obteniendo estado_gates: ${error.message}`);
+      const gates = (data?.estado_gates ?? {}) as Record<string, unknown>;
+      const fase4 = (gates.fase4 ?? {}) as Partial<EstadoEntregablesFase4>;
+      const resultado = estadoFase4VacioLocal();
+      for (const clave of Object.keys(resultado) as EntregableFase4[]) {
+        resultado[clave] = Boolean(fase4[clave]);
+      }
+      return resultado;
+    },
+
+    async marcarEntregableFase4(sitioId, entregable) {
+      const { data, error: errorLectura } = await client
+        .from('sitios')
+        .select('estado_gates')
+        .eq('id', sitioId)
+        .maybeSingle();
+      if (errorLectura) throw new Error(`Error leyendo estado_gates: ${errorLectura.message}`);
+
+      const gatesActuales = (data?.estado_gates ?? {}) as Record<string, unknown>;
+      const fase4Actual = (gatesActuales.fase4 ?? {}) as Partial<EstadoEntregablesFase4>;
+      const nuevosGates = { ...gatesActuales, fase4: { ...fase4Actual, [entregable]: true } };
+
+      const { error } = await client.from('sitios').update({ estado_gates: nuevosGates }).eq('id', sitioId);
+      if (error) throw new Error(`Error marcando entregable: ${error.message}`);
     },
   };
 }

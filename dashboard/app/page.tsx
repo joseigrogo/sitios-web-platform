@@ -7,7 +7,9 @@ import {
   confirmarGateFase1,
   confirmarGateFase2,
   confirmarGateFase3,
+  confirmarGateFase4,
   correrChecklistFase3,
+  correrChecklistFase4,
   crearSitioParaCliente,
   guardarAgentePreferido,
   guardarReferenciaUrl,
@@ -572,6 +574,106 @@ function SeccionChecklistFase3({ sitio }: { sitio: EstadoSitio["sitio"] }) {
   );
 }
 
+// Diseñado en CONTEXT.md §16: el checklist reusa el mismo motor de Fase 3
+// (ejecutarChecklistFase3), corrido contra el dominio de producción en vez
+// de la preview -- acá SÍ es condición del gate (Fase 3 es solo medición).
+// Los 3 entregables humanos (search_console, sitemap, indexacion) se
+// muestran en solo lectura, mismo criterio que entregablesFase2: se marcan
+// por CLI (cli sitio marcar-entregable-fase4), nunca desde un click acá.
+const ENTREGABLES_FASE4_ETIQUETA: Record<string, string> = {
+  search_console: "Search Console verificado",
+  sitemap: "Sitemap enviado",
+  indexacion: "Indexación de páginas pilar solicitada",
+};
+
+function SeccionFase4({ estado }: { estado: EstadoSitio }) {
+  const { sitio, entregablesFase4 } = estado;
+  if (indiceFase(sitio.faseActual) < indiceFase("deploy")) return null;
+
+  const resultado = sitio.checklistFase4Resultado;
+  const claves = Object.keys(entregablesFase4);
+  const completados = claves.filter((c) => entregablesFase4[c as keyof typeof entregablesFase4]).length;
+  const pasaGate = Boolean(resultado?.pasaTodo) && completados === claves.length;
+
+  return (
+    <div className="space-y-3 rounded border border-neutral-800 p-3">
+      <h2 className="text-sm font-medium text-neutral-300">Fase 4 — Despliegue, dominio e indexación</h2>
+
+      <form action={correrChecklistFase4} className="flex items-center gap-2">
+        <input type="hidden" name="sitioId" value={sitio.id} />
+        <input
+          type="url"
+          name="checklistUrl"
+          defaultValue={sitio.checklistFase4Url ?? ""}
+          placeholder="https://dominio-de-produccion.com"
+          className={`flex-1 ${CAMPO}`}
+        />
+        <button type="submit" className={BOTON_SECUNDARIO}>
+          Correr checklist
+        </button>
+      </form>
+
+      {!resultado ? (
+        <p className="text-xs text-neutral-600">Checklist sin correr todavía (necesita el dominio ya conectado).</p>
+      ) : (
+        <div className="space-y-2">
+          <p className="text-xs text-neutral-500">
+            Última corrida contra{" "}
+            <a
+              href={resultado.url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-neutral-300 underline hover:text-neutral-100"
+            >
+              {resultado.url}
+            </a>
+          </p>
+          {resultado.items.map((item) => (
+            <div key={item.id} className="flex items-start gap-2 text-xs">
+              <span
+                className={
+                  item.pasa === null ? "text-neutral-600" : item.pasa ? "text-emerald-500" : "text-red-500"
+                }
+              >
+                {item.pasa === null ? "·" : item.pasa ? "✓" : "✗"}
+              </span>
+              <div>
+                <p className="text-neutral-300">{item.nombre}</p>
+                <p className="text-neutral-600">{item.detalle}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="space-y-1 border-t border-neutral-800 pt-2">
+        <p className="text-xs text-neutral-500">
+          Confirmaciones humanas ({completados}/{claves.length}) — marcar por CLI:{" "}
+          <code className="text-neutral-400">cli sitio marcar-entregable-fase4 {sitio.id} &lt;entregable&gt;</code>
+        </p>
+        {claves.map((clave) => (
+          <div key={clave} className="flex items-center gap-2 text-xs">
+            <span className={entregablesFase4[clave as keyof typeof entregablesFase4] ? "text-emerald-500" : "text-neutral-600"}>
+              {entregablesFase4[clave as keyof typeof entregablesFase4] ? "✓" : "·"}
+            </span>
+            <span className="text-neutral-400">{ENTREGABLES_FASE4_ETIQUETA[clave] ?? clave}</span>
+          </div>
+        ))}
+      </div>
+
+      {sitio.faseActual === "deploy" && pasaGate && (
+        <form action={confirmarGateFase4} className="flex items-center gap-2 pt-1">
+          <input type="hidden" name="sitioId" value={sitio.id} />
+          <button type="submit" className={BOTON_PRIMARIO}>
+            Confirmar y pasar a Medición
+          </button>
+          <span className="text-xs text-neutral-500">Gate de Fase 4: PASA — falta tu confirmación.</span>
+        </form>
+      )}
+    </div>
+  );
+}
+
 function SeccionKeywords({ keywords }: { keywords: Keyword[] }) {
   const pilares = keywords.filter((k) => !k.esDescarte && k.rol === "pilar");
   const descartes = keywords.filter((k) => k.esDescarte);
@@ -800,6 +902,7 @@ function DetalleSitio({ cliente, estadoSitio }: { cliente: Cliente; estadoSitio:
         />
         <SeccionConstruccion sitio={sitio} />
         <SeccionChecklistFase3 sitio={sitio} />
+        <SeccionFase4 estado={estadoSitio} />
 
         <div>
           <h2 className="mb-2 text-sm font-medium text-neutral-300">Fase 1 — Keywords</h2>

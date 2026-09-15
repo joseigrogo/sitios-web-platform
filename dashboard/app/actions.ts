@@ -10,6 +10,7 @@ import { ejecutarGateFase0 } from "@cli/lib/gateFase0";
 import { ejecutarGateFase1 } from "@cli/lib/gateFase1";
 import { ejecutarGateFase2 } from "@cli/lib/gateFase2";
 import { ejecutarGateFase3 } from "@cli/lib/gateFase3";
+import { ejecutarGateFase4 } from "@cli/lib/gateFase4";
 import { crearKeywordsRepoSupabase } from "@cli/lib/keywordsRepo";
 import { crearSitiosRepoSupabase } from "@cli/lib/sitiosRepo";
 import { crearSupabaseClient } from "@cli/lib/supabaseClient";
@@ -38,6 +39,25 @@ export async function confirmarGateFase3(formData: FormData) {
   const repos = { sitios: crearSitiosRepoSupabase(supabase) };
 
   await ejecutarGateFase3(sitioId, true, repos);
+
+  revalidatePath("/");
+}
+
+// Gap de Fase 4: mismo criterio que confirmarGateFase3 -- reusa
+// ejecutarGateFase4 del CLI, no reimplementa la condición acá.
+export async function confirmarGateFase4(formData: FormData) {
+  const cookieStore = await cookies();
+  if (!sesionValida(cookieStore.get(COOKIE_NAME)?.value)) {
+    redirect("/login");
+  }
+
+  const sitioId = String(formData.get("sitioId") ?? "");
+  if (!sitioId.trim()) return;
+
+  const supabase = crearSupabaseClient();
+  const repos = { sitios: crearSitiosRepoSupabase(supabase) };
+
+  await ejecutarGateFase4(sitioId, true, repos);
 
   revalidatePath("/");
 }
@@ -157,6 +177,30 @@ export async function correrChecklistFase3(formData: FormData) {
   const supabase = crearSupabaseClient();
   const repos = crearSitiosRepoSupabase(supabase);
   await repos.guardarResultadoChecklistFase3(sitioId, url, resultado);
+
+  revalidatePath("/");
+}
+
+// Mismo motor que correrChecklistFase3 (ejecutarChecklistFase3) -- la
+// diferencia es contra qué URL corre (dominio de producción, no la
+// preview) y dónde se guarda (columnas de Fase 4, porque acá el resultado
+// sí es condición del gate de salida, no solo medición). Ver
+// runner/CONTEXT.md §16 y cli/src/commands/sitioChecklistFase4.ts.
+export async function correrChecklistFase4(formData: FormData) {
+  const cookieStore = await cookies();
+  if (!sesionValida(cookieStore.get(COOKIE_NAME)?.value)) {
+    redirect("/login");
+  }
+
+  const sitioId = String(formData.get("sitioId") ?? "");
+  const url = String(formData.get("checklistUrl") ?? "").trim();
+  if (!sitioId.trim() || !url) return;
+
+  const resultado = await ejecutarChecklistFase3(url, crearDependenciasFetchReal());
+
+  const supabase = crearSupabaseClient();
+  const repos = crearSitiosRepoSupabase(supabase);
+  await repos.guardarResultadoChecklistFase4(sitioId, url, resultado);
 
   revalidatePath("/");
 }

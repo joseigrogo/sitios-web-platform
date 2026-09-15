@@ -56,6 +56,8 @@ export interface Sitio {
   investigacionReporte: string | null;
   checklistFase3Url: string | null;
   checklistFase3Resultado: ChecklistFase3Resultado | null;
+  checklistFase4Url: string | null;
+  checklistFase4Resultado: ChecklistFase3Resultado | null;
   agentePreferido: AgentePreferido;
 }
 
@@ -124,6 +126,32 @@ export function contenidoFase2Vacio(): EstadoContenidoFase2 {
   return { estructura: null, contenido: null, taxonomia_eventos: null };
 }
 
+// Fase 4 · las 3 confirmaciones humanas de su gate de salida
+// (Proceso_GENERAL, "Salida de esta fase"). El cuarto punto de esa lista
+// —"dominio resolviendo en HTTPS, sin variantes compitiendo"— no está acá
+// a propósito: ese sí se mide solo, con el checklist contra el dominio de
+// producción (`checklist_fase4_resultado`). Estos 3 no tienen API
+// service-account-friendly (Search Console pide OAuth del dueño, el envío
+// de sitemap y la solicitud de indexación son actos en la UI de Google),
+// así que son input humano explícito -- nunca inferido.
+export type EntregableFase4 = 'search_console' | 'sitemap' | 'indexacion';
+
+export type EstadoEntregablesFase4 = Record<EntregableFase4, boolean>;
+
+export const ENTREGABLES_FASE4: readonly EntregableFase4[] = [
+  'search_console',
+  'sitemap',
+  'indexacion',
+];
+
+export function esEntregableFase4Valido(valor: string): valor is EntregableFase4 {
+  return (ENTREGABLES_FASE4 as readonly string[]).includes(valor);
+}
+
+export function estadoFase4Vacio(): EstadoEntregablesFase4 {
+  return { search_console: false, sitemap: false, indexacion: false };
+}
+
 export interface SitiosRepo {
   crear(input: NuevoSitioInput): Promise<Sitio>;
   obtenerPorId(id: string): Promise<Sitio | null>;
@@ -135,11 +163,14 @@ export interface SitiosRepo {
   actualizarEstadoInvestigacion(id: string, estado: InvestigacionEstado): Promise<void>;
   finalizarInvestigacion(id: string, reporte: string): Promise<void>;
   guardarResultadoChecklistFase3(id: string, url: string, resultado: ChecklistFase3Resultado): Promise<void>;
+  guardarResultadoChecklistFase4(id: string, url: string, resultado: ChecklistFase3Resultado): Promise<void>;
   listarPorCliente(clienteId: string): Promise<Sitio[]>;
   obtenerEstadoEntregablesFase2(sitioId: string): Promise<EstadoEntregablesFase2>;
   marcarEntregableFase2(sitioId: string, entregable: EntregableFase2): Promise<void>;
   obtenerContenidoFase2(sitioId: string): Promise<EstadoContenidoFase2>;
   guardarContenidoFase2(sitioId: string, entregable: EntregableFase2, contenido: string): Promise<void>;
+  obtenerEstadoEntregablesFase4(sitioId: string): Promise<EstadoEntregablesFase4>;
+  marcarEntregableFase4(sitioId: string, entregable: EntregableFase4): Promise<void>;
 }
 
 export type Rol = 'pilar' | 'secundaria' | 'long_tail';

@@ -2,7 +2,7 @@ import { crearClientesRepoSupabase } from "@cli/lib/clientesRepo";
 import { crearKeywordsRepoSupabase } from "@cli/lib/keywordsRepo";
 import { crearSitiosRepoSupabase } from "@cli/lib/sitiosRepo";
 import { crearSupabaseClient } from "@cli/lib/supabaseClient";
-import type { Cliente, EstadoContenidoFase2, EstadoEntregablesFase2, Keyword, Sitio } from "@cli/types";
+import type { Cliente, EstadoContenidoFase2, EstadoEntregablesFase2, EstadoEntregablesFase4, Keyword, Sitio } from "@cli/types";
 
 export interface EstadoSitio {
   sitio: Sitio;
@@ -15,6 +15,11 @@ export interface EstadoSitio {
   // dato local). No pasa por SitiosRepo -- lectura directa acá, como el
   // resto de este archivo.
   reporteFase2: { estado: string | null; texto: string | null };
+  // Los 3 entregables humanos de Fase 4 (search_console, sitemap,
+  // indexacion) -- mismo patrón que entregablesFase2, marcados solo por
+  // CLI (cli sitio marcar-entregable-fase4), el dashboard los muestra en
+  // solo lectura igual que a los de Fase 2.
+  entregablesFase4: EstadoEntregablesFase4;
 }
 
 export interface EstadoCliente {
@@ -57,6 +62,7 @@ export async function cargarEstadoSistema(): Promise<EstadoSistema> {
           entregablesFase2: await sitiosRepo.obtenerEstadoEntregablesFase2(sitio.id),
           contenidoFase2: await sitiosRepo.obtenerContenidoFase2(sitio.id),
           reporteFase2: await leerReporteFase2(supabase, sitio.id),
+          entregablesFase4: await sitiosRepo.obtenerEstadoEntregablesFase4(sitio.id),
         }))
       );
       return { cliente, sitios: estadoSitios };

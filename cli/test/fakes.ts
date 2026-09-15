@@ -1,10 +1,11 @@
-import { contenidoFase2Vacio, estadoFase2Vacio } from '../src/types.js';
+import { contenidoFase2Vacio, estadoFase2Vacio, estadoFase4Vacio } from '../src/types.js';
 import type {
   AgentePreferido,
   Cliente,
   ClientesRepo,
   ConstruccionEstado,
   EntregableFase2,
+  EntregableFase4,
   EstadoContenidoFase2,
   FaseActual,
   InvestigacionEstado,
@@ -46,6 +47,7 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
   const sitios = [...iniciales];
   const gatesFase2 = new Map<string, ReturnType<typeof estadoFase2Vacio>>();
   const contenidoFase2 = new Map<string, EstadoContenidoFase2>();
+  const gatesFase4 = new Map<string, ReturnType<typeof estadoFase4Vacio>>();
 
   return {
     async crear(input: NuevoSitioInput) {
@@ -62,6 +64,8 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
         investigacionReporte: null,
         checklistFase3Url: null,
         checklistFase3Resultado: null,
+        checklistFase4Url: null,
+        checklistFase4Resultado: null,
         agentePreferido: 'codex',
         ...input,
       };
@@ -113,6 +117,13 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
         sitio.checklistFase3Resultado = resultado;
       }
     },
+    async guardarResultadoChecklistFase4(id: string, url: string, resultado: ChecklistFase3Resultado) {
+      const sitio = sitios.find((s) => s.id === id);
+      if (sitio) {
+        sitio.checklistFase4Url = url;
+        sitio.checklistFase4Resultado = resultado;
+      }
+    },
     async listarPorCliente(clienteId: string) {
       return sitios.filter((s) => s.clienteId === clienteId);
     },
@@ -131,6 +142,14 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
       const actual = contenidoFase2.get(sitioId) ?? contenidoFase2Vacio();
       actual[entregable] = contenido;
       contenidoFase2.set(sitioId, actual);
+    },
+    async obtenerEstadoEntregablesFase4(sitioId: string) {
+      return { ...(gatesFase4.get(sitioId) ?? estadoFase4Vacio()) };
+    },
+    async marcarEntregableFase4(sitioId: string, entregable: EntregableFase4) {
+      const actual = gatesFase4.get(sitioId) ?? estadoFase4Vacio();
+      actual[entregable] = true;
+      gatesFase4.set(sitioId, actual);
     },
   };
 }

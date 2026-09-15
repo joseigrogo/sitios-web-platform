@@ -287,6 +287,24 @@ export async function ejecutarChecklistFase3(url: string, deps: DependenciasChec
   return { url: respuesta.urlFinal, items, pasaTodo };
 }
 
+// Un redirect a otro dominio significa que no medimos el sitio: el caso real
+// es Vercel con Deployment Protection, que manda la preview a vercel.com/login
+// y devuelve un 200 con SU html -- el checklist entonces "pasa" o "falla"
+// puntos sobre una pantalla de login ajena. Guardar eso es peor que no tener
+// nada, porque el dashboard lo muestra como veredicto del sitio (Base 3: no
+// dar por bueno un dato que no es el que se pidió).
+// apex -> www no cuenta como otro sitio, que es un redirect legítimo y común.
+// Vive acá (no en el comando) para reusarla igual desde checklist-fase4 sin
+// duplicarla -- mismo chequeo, la única diferencia es contra qué URL corre.
+export function mismoSitio(pedida: string, final: string): boolean {
+  const host = (u: string) => new URL(u).host.replace(/^www\./, '').toLowerCase();
+  try {
+    return host(pedida) === host(final);
+  } catch {
+    return false;
+  }
+}
+
 export function crearDependenciasFetchReal(): DependenciasChecklistFase3 {
   return {
     async fetchPagina(url, opciones = {}) {
