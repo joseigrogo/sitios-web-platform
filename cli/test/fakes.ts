@@ -1,5 +1,6 @@
 import { contenidoFase2Vacio, estadoFase2Vacio } from '../src/types.js';
 import type {
+  AgentePreferido,
   Cliente,
   ClientesRepo,
   ConstruccionEstado,
@@ -61,6 +62,7 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
         investigacionReporte: null,
         checklistFase3Url: null,
         checklistFase3Resultado: null,
+        agentePreferido: 'codex',
         ...input,
       };
       sitios.push(sitio);
@@ -76,6 +78,10 @@ export function crearSitiosRepoFalso(iniciales: Sitio[] = []): SitiosRepo {
     async actualizarReferenciaUrl(id: string, url: string) {
       const sitio = sitios.find((s) => s.id === id);
       if (sitio) sitio.referenciaUrl = url;
+    },
+    async actualizarAgentePreferido(id: string, agente: AgentePreferido) {
+      const sitio = sitios.find((s) => s.id === id);
+      if (sitio) sitio.agentePreferido = agente;
     },
     async actualizarEstadoConstruccion(id: string, estado: ConstruccionEstado) {
       const sitio = sitios.find((s) => s.id === id);

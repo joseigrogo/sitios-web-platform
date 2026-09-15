@@ -60,29 +60,38 @@ printenv SUPABASE_SERVICE_ROLE_KEY | cut -c1-20
 ## Input
 
 **Cómo se elige el sitio.** Esta rutina corre por cron, sin `sitio_id` en
-el disparo. Al arrancar, consultar Supabase (conector MCP) por sitios
-pendientes:
+el disparo. El prompt de arranque dice qué agente sos (`opencode` o
+`codex`, ver "## Entorno de ejecución" más abajo) — **filtrar siempre por
+`agente_preferido` igual a tu propio agente.** Un sitio con
+`agente_preferido = 'opencode'` no es trabajo tuyo si sos `codex`, y
+viceversa: saltealo, no es una anomalía, es de la otra corrida (el cron
+dispara los dos agentes en paralelo cada hora — cada uno atiende lo suyo).
+Al arrancar, consultar Supabase (conector MCP) por sitios pendientes:
 
 ```sql
 select id, cliente_id from sitios
 where investigacion_estado = 'solicitada' and fase_actual = 'investigacion'
+  and agente_preferido = '<tu propio agente: opencode o codex>'
 order by created_at asc
 limit 1;
 ```
 
 - **Cero filas → salir en silencio.** Es el caso normal la mayoría de las
-  horas. No es una anomalía: no escribir reporte, no notificar, terminar.
+  horas — incluye "hay sitios pendientes pero son del otro agente". No es
+  una anomalía: no escribir reporte, no notificar, terminar.
 - **Una o más → tomar la más vieja** (el `limit 1` de arriba) y procesarla.
   Si hay varias en `solicitada`, las demás las levanta la corrida
   siguiente — una por hora alcanza.
 - Si el disparo trae un `sitio_id` explícito (corrida manual), usar ese y
   saltear la consulta.
-- **Recuperación de colgados.** Si no hay ninguno en `solicitada` pero hay
-  uno en `investigacion_estado = 'en_curso'` cuyo `updated_at` (o el
-  timestamp de la **última** línea de la bitácora en
-  `investigacion_reporte` — no la primera, que es la del arranque y nunca
-  cambia) es de hace más de 3 horas, es una corrida anterior que murió a
-  mitad: retomarlo como si estuviera en `solicitada`.
+- **Recuperación de colgados.** Mismo filtro de `agente_preferido` que
+  arriba — un sitio colgado del otro agente no es tuyo para retomar. Si no
+  hay ninguno en `solicitada` (de tu agente) pero hay uno (de tu agente) en
+  `investigacion_estado = 'en_curso'` cuyo `updated_at` (o el timestamp de
+  la **última** línea de la bitácora en `investigacion_reporte` — no la
+  primera, que es la del arranque y nunca cambia) es de hace más de 3
+  horas, es una corrida anterior que murió a mitad: retomarlo como si
+  estuviera en `solicitada`.
 
 Con el `sitio_id` elegido, leer de Supabase (conector MCP, no hay comando
 de CLI para esto — no hace falta uno nuevo, Base 8):

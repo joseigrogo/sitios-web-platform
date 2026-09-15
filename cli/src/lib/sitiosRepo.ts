@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { ChecklistFase3Resultado } from './checklistFase3.js';
 import type {
+  AgentePreferido,
   ConstruccionEstado,
   EntregableFase2,
   EstadoContenidoFase2,
@@ -44,6 +45,7 @@ function filaASitio(fila: Record<string, unknown>): Sitio {
     investigacionReporte: (fila.investigacion_reporte as string | null) ?? null,
     checklistFase3Url: (fila.checklist_fase3_url as string | null) ?? null,
     checklistFase3Resultado: (fila.checklist_fase3_resultado as ChecklistFase3Resultado | null) ?? null,
+    agentePreferido: (fila.agente_preferido as AgentePreferido) ?? 'codex',
   };
 }
 
@@ -79,6 +81,11 @@ export function crearSitiosRepoSupabase(client: SupabaseClient): SitiosRepo {
     async actualizarReferenciaUrl(id, url) {
       const { error } = await client.from('sitios').update({ referencia_url: url }).eq('id', id);
       if (error) throw new Error(`Error actualizando referencia_url: ${error.message}`);
+    },
+
+    async actualizarAgentePreferido(id, agente) {
+      const { error } = await client.from('sitios').update({ agente_preferido: agente }).eq('id', id);
+      if (error) throw new Error(`Error actualizando agente_preferido: ${error.message}`);
     },
 
     async actualizarEstadoConstruccion(id, estado) {

@@ -31,6 +31,13 @@ export type ConstruccionEstado = 'solicitada' | 'en_curso' | 'terminada';
 // automática (Fase 1) -- ver db/scripts/fase1_investigacion_instrucciones.md.
 export type InvestigacionEstado = 'solicitada' | 'en_curso' | 'terminada';
 
+// Qué agente corre las 3 fases de este sitio en el runner propio -- default
+// 'codex' (decisión 2026-09-15: Codex + suscripción ChatGPT Plus/Pro pasa a
+// ser el default, DeepSeek/OpenCode solo si el sitio lo pide explícito).
+// Cada instructivo (fase1/2/3) filtra por esta columna al autodescubrir
+// trabajo -- ver runner/verificar-avance.mjs y SETUP.md §2f.
+export type AgentePreferido = 'opencode' | 'codex';
+
 export interface Sitio {
   id: string;
   clienteId: string;
@@ -49,6 +56,7 @@ export interface Sitio {
   investigacionReporte: string | null;
   checklistFase3Url: string | null;
   checklistFase3Resultado: ChecklistFase3Resultado | null;
+  agentePreferido: AgentePreferido;
 }
 
 export interface NuevoClienteInput {
@@ -121,6 +129,7 @@ export interface SitiosRepo {
   obtenerPorId(id: string): Promise<Sitio | null>;
   actualizarFaseActual(id: string, fase: FaseActual): Promise<void>;
   actualizarReferenciaUrl(id: string, url: string): Promise<void>;
+  actualizarAgentePreferido(id: string, agente: AgentePreferido): Promise<void>;
   actualizarEstadoConstruccion(id: string, estado: ConstruccionEstado): Promise<void>;
   finalizarConstruccion(id: string, reporte: string, repoGithub: string): Promise<void>;
   actualizarEstadoInvestigacion(id: string, estado: InvestigacionEstado): Promise<void>;

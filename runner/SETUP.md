@@ -191,9 +191,42 @@ toparse con el limite de la cuenta. Probar puntual primero.
 
 ---
 
+### 2f. Elegir el agente por sitio (`agente_preferido`)
+
+Decision del usuario (2026-09-15): **Codex es el default para las 3 fases,
+incluido el cron automatico de cada hora** -- DeepSeek/OpenCode solo corre
+en un sitio si ese sitio lo pide explicito. Riesgo del 2e aceptado a
+proposito, no un descuido.
+
+Mecanismo: columna `sitios.agente_preferido` (`'codex'` default, o
+`'opencode'`), un ajuste real por sitio, no un `if` centralizado. El
+workflow ahora dispara **los dos backends en cada tick del cron**
+(`backend: 'ambos'`, el default real); cada uno autodescubre trabajo
+filtrando por su propio `agente_preferido` dentro del instructivo de cada
+fase (ver "Cómo se elige el sitio" en `fase1/2/3_*.md`) -- el que no tiene
+sitios asignados no-opea, mismo principio que "cero pendientes no es
+anomalia". `runner/verificar-avance.mjs` tambien filtra por agente (si no,
+cada uno veria como "sin tocar" los sitios que correctamente dejo para el
+otro y fallaria en falso) -- por eso ahora pide el backend como argumento:
+`node runner/verificar-avance.mjs <fase> <opencode|codex> <antes|despues> <archivo>`.
+
+**Cambiar el agente de un sitio puntual:** desde el dashboard (selector
+"Agente" en la tarjeta del sitio, visible en cualquier fase) o directo en
+Supabase (`update sitios set agente_preferido='opencode' where id=...`).
+Sirve para el caso real que motivo esto: si la cuenta de ChatGPT Plus/Pro
+se topa con su limite de uso, volver un sitio puntual a `opencode` sin
+tocar el resto.
+
+**`workflow_dispatch` manual:** el input `backend` sigue existiendo para
+forzar **un solo** agente en una corrida de prueba (`opencode` o `codex`),
+ignorando `agente_preferido` -- útil para una comparacion puntual como la
+que motivo esta seccion. Vacio o `ambos` = el comportamiento real del cron.
+
+---
+
 ## 3. Probar (sin esperar el cron)
 
-Repo → **Actions → "Fases automáticas (OpenCode + DeepSeek)" → Run workflow**
+Repo → **Actions → "Fases automáticas (OpenCode + Codex)" → Run workflow**
 → en *fase* poné `1` (o `2` / `3`) → *Run workflow*. Mirá el log del job.
 
 - Antes de cargar los secretos, las corridas del cron `:17` van a **fallar

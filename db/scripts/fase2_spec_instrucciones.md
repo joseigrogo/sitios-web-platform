@@ -67,13 +67,15 @@ printenv SUPABASE_SERVICE_ROLE_KEY | cut -c1-20
 ## Input
 
 **Cómo se elige el sitio.** Corre por cron, sin `sitio_id` en el disparo.
-Al arrancar, consultar Supabase (conector MCP) por sitios con spec
-pendiente:
+El prompt de arranque dice qué agente sos (`opencode` o `codex`, ver "##
+Entorno de ejecución" arriba). Al arrancar, consultar Supabase (conector
+MCP) por sitios con spec pendiente:
 
 ```sql
 select id, cliente_id, estado_gates
 from sitios
 where fase_actual = 'spec'
+  and agente_preferido = '<tu propio agente: opencode o codex>'
 order by created_at asc;
 ```
 
@@ -86,18 +88,21 @@ más nuevo y quedarse con el primero que se pueda trabajar.** Un sitio que
 falla una precondición (sin `referencia_url`, `fase_actual` ya no es
 `'spec'`) o que quedó `bloqueado` en una corrida anterior **se saltea** —
 NO frena el run. Si ya tiene la marca `'bloqueado: …'` en `fase2_estado`,
-ni re-escribir la marca; pasar al siguiente. Solo un error real de
-herramienta (Supabase caído, etc.) frena.
+ni re-escribir la marca; pasar al siguiente. Un sitio con `agente_preferido`
+distinto al tuyo tampoco es candidato — es del otro agente, no una
+anomalía (el cron dispara los dos en paralelo cada hora). Solo un error
+real de herramienta (Supabase caído, etc.) frena.
 
 - **Cero sitios trabajables → salir en silencio.** Caso normal la mayoría
   de las horas (incluye "todos los pendientes están bloqueados por falta
   de `referencia_url`"). No es anomalía: no escribir nada, terminar.
 - **Si el disparo trae un `sitio_id` explícito** (corrida manual), usar
   ese y saltear el recorrido.
-- **Recuperación de colgados.** Si `estado_gates ->> 'fase2_estado'` es
-  `'en_curso'` y su timestamp (`estado_gates -> 'fase2_estado_ts'`) es de
-  hace más de 3 horas, es una corrida anterior que murió: es un candidato
-  trabajable, retomarlo.
+- **Recuperación de colgados.** Mismo filtro de `agente_preferido` que
+  arriba. Si `estado_gates ->> 'fase2_estado'` es `'en_curso'` (del tuyo)
+  y su timestamp (`estado_gates -> 'fase2_estado_ts'`) es de hace más de 3
+  horas, es una corrida anterior que murió: es un candidato trabajable,
+  retomarlo.
 - **Un sitio por corrida.** Elegido uno trabajable, se procesa ese y se
   termina; los demás pendientes los toma la corrida siguiente.
 

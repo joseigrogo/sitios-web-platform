@@ -6,12 +6,18 @@
 // GitHub Actions reportó los 10 pasos en verde. Sin mirar la base, esa corrida
 // pasa por exitosa. Base 7: "el silencio es alarmante, no tranquilizador".
 //
-// Uso:  node runner/verificar-avance.mjs <fase> antes|despues <archivo-snapshot>
+// Uso:  node runner/verificar-avance.mjs <fase> <opencode|codex> antes|despues <archivo-snapshot>
 //
 // "antes" guarda qué sitios estaban pendientes. "despues" compara: si alguno
 // que estaba pendiente sigue EXACTAMENTE igual, la fase no lo tocó y el job
 // falla. Cero pendientes al arrancar es el caso normal (no-op legítimo) y
 // nunca falla.
+//
+// <opencode|codex>: desde que el cron dispara los dos agentes en paralelo
+// cada hora (decisión 2026-09-15, agente_preferido por sitio), cada uno
+// filtra "pendiente" a lo que es SUYO -- si no, cada agente vería como
+// "sin tocar" los sitios que correctamente dejó para el otro y fallaría en
+// falso. Pasar un snapshot (`<archivo-snapshot>`) distinto por agente.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 
@@ -29,6 +35,10 @@ const FILTRO = {
   2: 'fase_actual=eq.spec',
   3: 'construccion_estado=eq.solicitada&fase_actual=eq.construccion',
 };
+
+function filtroConAgente(fase, backend) {
+  return `${FILTRO[fase]}&agente_preferido=eq.${backend}`;
+}
 
 // El filtro de arriba es a nivel Postgres (coarse); esto filtra en JS lo que
 // el propio instructivo de cada fase ya considera "no trabajable" y por
@@ -50,9 +60,14 @@ const ES_TRABAJABLE = {
 };
 
 async function main() {
-  const [fase, modo, archivo] = process.argv.slice(2);
-  if (!['1', '2', '3'].includes(fase) || !['antes', 'despues'].includes(modo) || !archivo) {
-    console.error('uso: verificar-avance.mjs <1|2|3> <antes|despues> <archivo>');
+  const [fase, backend, modo, archivo] = process.argv.slice(2);
+  if (
+    !['1', '2', '3'].includes(fase) ||
+    !['opencode', 'codex'].includes(backend) ||
+    !['antes', 'despues'].includes(modo) ||
+    !archivo
+  ) {
+    console.error('uso: verificar-avance.mjs <1|2|3> <opencode|codex> <antes|despues> <archivo>');
     return 2;
   }
 
@@ -63,7 +78,7 @@ async function main() {
     return 0;
   }
 
-  const res = await fetch(`${urlBase}/rest/v1/sitios?select=${CAMPOS[fase]}&${FILTRO[fase]}`, {
+  const res = await fetch(`${urlBase}/rest/v1/sitios?select=${CAMPOS[fase]}&${filtroConAgente(fase, backend)}`, {
     headers: { apikey: key, Authorization: `Bearer ${key}` },
   });
   if (!res.ok) {
@@ -102,7 +117,7 @@ async function main() {
   }
 
   console.log(
-    `::error::Fase ${fase} terminó sin tocar ${sinTocar.length} de ${ids.length} sitio(s) que estaban pendientes: ${sinTocar.join(', ')}`
+    `::error::Fase ${fase} (${backend}) terminó sin tocar ${sinTocar.length} de ${ids.length} sitio(s) que estaban pendientes: ${sinTocar.join(', ')}`
   );
   console.log('El job habría salido en verde igual. Revisar el log de la fase: el agente');
   console.log('probablemente falló y abandonó en silencio (ej. una query mal formada).');

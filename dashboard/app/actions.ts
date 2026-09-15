@@ -54,6 +54,27 @@ export async function guardarReferenciaUrl(formData: FormData) {
   revalidatePath("/");
 }
 
+// Qué agente (Codex/ChatGPT Plus-Pro vs OpenCode/DeepSeek) corre las 3 fases
+// de este sitio en el runner propio -- ver AgentePreferido en types.ts y
+// SETUP.md §2f. Mecánico: solo escribe la columna, el filtro real vive en
+// cada instructivo de fase al autodescubrir trabajo.
+export async function guardarAgentePreferido(formData: FormData) {
+  const cookieStore = await cookies();
+  if (!sesionValida(cookieStore.get(COOKIE_NAME)?.value)) {
+    redirect("/login");
+  }
+
+  const sitioId = String(formData.get("sitioId") ?? "");
+  const agente = String(formData.get("agentePreferido") ?? "");
+  if (!sitioId.trim() || (agente !== "opencode" && agente !== "codex")) return;
+
+  const supabase = crearSupabaseClient();
+  const repos = crearSitiosRepoSupabase(supabase);
+  await repos.actualizarAgentePreferido(sitioId, agente);
+
+  revalidatePath("/");
+}
+
 // Mecánico a propósito, como confirmarGateFase2: esto solo marca la
 // intención (construccion_estado = 'solicitada') -- Base 6, desatendido
 // escribe en Supabase, nada más. Quién reacciona a ese cambio (el webhook

@@ -1,8 +1,15 @@
-name: Fases automáticas (OpenCode + DeepSeek)
+name: Fases automáticas (OpenCode + Codex)
 
 # Reemplaza las rutinas de claude.ai (trig_01PP5 / trig_01V1pm6J / trig_0117).
 # Corre por cron; cada fase se autodescubre el trabajo y no-opea si no hay nada.
 # Repo público -> minutos de Actions gratis.
+#
+# Dos agentes posibles por sitio (columna sitios.agente_preferido, default
+# 'codex' desde el 2026-09-15): OpenCode+DeepSeek, o Codex CLI oficial con
+# suscripción ChatGPT Plus/Pro (SETUP.md §2e/§2f). El cron dispara los DOS
+# cada hora -- cada uno autodescubre y solo toca lo suyo (filtro
+# agente_preferido dentro de cada instructivo); el que no tiene sitios
+# asignados no-opea, mismo principio que "cero pendientes no es anomalía".
 
 on:
   schedule:
@@ -14,15 +21,15 @@ on:
         required: false
         default: ""
       modelo:
-        description: "Modelo a forzar (ej. opencode-go/glm-5.3). Vacío = el del script."
+        description: "Modelo a forzar (ej. opencode-go/glm-5.3, o vacío para el default de Codex). Vacío = el del script."
         required: false
         default: ""
       backend:
-        description: "Cliente a usar. codex = Codex CLI oficial con suscripción ChatGPT Plus/Pro (ver SETUP.md §2e)."
+        description: "Qué agente(s) correr. 'ambos' es el default real del cron -- cada uno atiende solo los sitios con su agente_preferido."
         required: false
         type: choice
-        options: ["opencode", "codex"]
-        default: "opencode"
+        options: ["ambos", "opencode", "codex"]
+        default: "ambos"
 
 concurrency:
   group: fases-deepseek
@@ -45,11 +52,11 @@ jobs:
           node-version: "22"
 
       - name: Instalar OpenCode
-        if: github.event.inputs.backend != 'codex'
+        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode'
         run: npm i -g opencode-ai
 
       - name: Auth de OpenCode (Zen / "OpenCode Go")
-        if: github.event.inputs.backend != 'codex'
+        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode'
         env:
           OPENCODE_AUTH_JSON: ${{ secrets.OPENCODE_AUTH_JSON }}
         run: |
@@ -77,11 +84,11 @@ jobs:
       # OpenAI para cualquier modelo, es un límite del cliente, no del
       # slug), así que esto corre con el cliente oficial en vez de OpenCode.
       - name: Instalar Codex CLI
-        if: github.event.inputs.backend == 'codex'
+        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex'
         run: npm i -g @openai/codex
 
       - name: Auth de Codex (suscripción ChatGPT Plus/Pro)
-        if: github.event.inputs.backend == 'codex'
+        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex'
         env:
           CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
         run: |
@@ -97,8 +104,9 @@ jobs:
             console.log("auth.json OK; auth_mode:", j.auth_mode);
           '
 
+      # --- OpenCode / DeepSeek: solo sitios con agente_preferido='opencode' ---
       - name: Correr Fase ${{ matrix.fase }} (OpenCode)
-        if: github.event.inputs.backend != 'codex'
+        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode'
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -116,11 +124,22 @@ jobs:
         run: |
           git config --global user.name "fases-bot"
           git config --global user.email "fases-bot@users.noreply.github.com"
-          node runner/verificar-avance.mjs ${{ matrix.fase }} antes /tmp/avance.json
+          node runner/verificar-avance.mjs ${{ matrix.fase }} opencode antes /tmp/avance-opencode.json
           bash runner/run-fase.sh ${{ matrix.fase }}
 
+      # Un job en verde que no movio nada es peor que uno en rojo: pasa por
+      # exitoso. Compara el estado de los sitios pendientes de ESTE agente
+      # contra el snapshot de antes y falla si no toco ninguno de los suyos.
+      - name: Verificar que OpenCode avanzo
+        if: always() && (github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode')
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node runner/verificar-avance.mjs ${{ matrix.fase }} opencode despues /tmp/avance-opencode.json
+
+      # --- Codex / ChatGPT Plus-Pro: solo sitios con agente_preferido='codex' ---
       - name: Correr Fase ${{ matrix.fase }} (Codex / ChatGPT Plus-Pro)
-        if: github.event.inputs.backend == 'codex'
+        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex'
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -134,23 +153,22 @@ jobs:
         run: |
           git config --global user.name "fases-bot"
           git config --global user.email "fases-bot@users.noreply.github.com"
-          node runner/verificar-avance.mjs ${{ matrix.fase }} antes /tmp/avance.json
+          node runner/verificar-avance.mjs ${{ matrix.fase }} codex antes /tmp/avance-codex.json
           bash runner/run-fase-codex.sh ${{ matrix.fase }}
 
-      # Un job en verde que no movio nada es peor que uno en rojo: pasa por
-      # exitoso. Compara el estado de los sitios pendientes contra el snapshot
-      # de antes y falla si la fase no toco ninguno.
-      - name: Verificar que la fase avanzo
-        if: always()
+      - name: Verificar que Codex avanzo
+        if: always() && (github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex')
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-        run: node runner/verificar-avance.mjs ${{ matrix.fase }} despues /tmp/avance.json
+        run: node runner/verificar-avance.mjs ${{ matrix.fase }} codex despues /tmp/avance-codex.json
 
       # El motivo de mover las fases a DeepSeek fue el costo, así que cada
       # corrida tiene que poder decir cuánto gastó. OpenCode no lo imprime,
       # pero deja las sesiones en disco. Corre siempre (if: always()) porque
       # una corrida que falla igual gastó tokens, y nunca rompe el job.
+      # No trackea uso de Codex todavía (formato de sesión distinto) --
+      # gap conocido, no bloqueante.
       - name: Uso de tokens
         if: always()
         continue-on-error: true

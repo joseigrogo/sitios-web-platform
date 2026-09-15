@@ -8,6 +8,7 @@ import {
   confirmarGateFase2,
   correrChecklistFase3,
   crearSitioParaCliente,
+  guardarAgentePreferido,
   guardarReferenciaUrl,
   solicitarConstruccion,
   solicitarInvestigacion,
@@ -357,6 +358,26 @@ function Bitacora({ reporte, sinSenal }: { reporte: string | null; sinSenal: str
         </details>
       )}
     </div>
+  );
+}
+
+// Siempre visible, en cualquier fase -- a diferencia de SeccionConstruccion
+// (que arranca en Spec), agente_preferido ya importa desde Fase 1. Default
+// 'codex' (decisión 2026-09-15): DeepSeek/OpenCode queda como excepción
+// explícita por sitio, no al revés.
+function SeccionAgentePreferido({ sitio }: { sitio: EstadoSitio["sitio"] }) {
+  return (
+    <form action={guardarAgentePreferido} className="flex items-center gap-2">
+      <input type="hidden" name="sitioId" value={sitio.id} />
+      <label className="text-xs text-neutral-500">Agente</label>
+      <select name="agentePreferido" defaultValue={sitio.agentePreferido} className={CAMPO}>
+        <option value="codex">Codex (ChatGPT Plus/Pro)</option>
+        <option value="opencode">OpenCode (DeepSeek)</option>
+      </select>
+      <button type="submit" className={BOTON_SECUNDARIO}>
+        Guardar
+      </button>
+    </form>
   );
 }
 
@@ -754,6 +775,7 @@ function DetalleSitio({ cliente, estadoSitio }: { cliente: Cliente; estadoSitio:
           <p className="text-xs text-neutral-500">{sitio.dominio ?? "sin dominio decidido"}</p>
         </div>
 
+        <SeccionAgentePreferido sitio={sitio} />
         <BarraFases actual={sitio.faseActual} />
         <AutoRefresh activo={hayRutinaCorriendo(sitio, estadoSitio.reporteFase2)} />
         <SeccionSitioEnVivo sitio={sitio} />

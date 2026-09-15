@@ -60,6 +60,11 @@ PROMPT=$(cat <<EOF
 Sos la rutina automática de Fase $FASE de la plataforma sitios-web-platform
 (automatización de lanzamiento de sitios web de captación de leads).
 
+Tu agente es **codex** — al autodescubrir trabajo en el paso "Input" del
+instructivo, filtrá siempre por \`agente_preferido = 'codex'\`. Un sitio
+con \`agente_preferido = 'opencode'\` no es tuyo, saltealo (no es una
+anomalía: el cron dispara los dos agentes en paralelo cada hora).
+
 Ya estás dentro del repo clonado — NO lo re-clones. Trabajá en tu propia
 rama, nunca en master.
 

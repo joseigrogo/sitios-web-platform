@@ -729,3 +729,37 @@ Revisión de 5 días de corridas sin supervisión (ambos bugs corregidos):
   Anthropic para esto.
 - Capital Window Cleaning (cliente real, no fixture) sigue bloqueado desde
   agosto por falta de `referencia_url` — decisión del usuario, no bug.
+
+## 15. Codex CLI oficial + suscripción ChatGPT Plus/Pro, y agente por sitio (2026-09-15)
+
+**Probado de punta a punta, no teoría.** OpenCode no puede usar el token de
+la suscripción ChatGPT/Codex (OpenAI lo rechaza para cualquier modelo desde
+un cliente de terceros), pero el Codex CLI oficial (`@openai/codex`) sí:
+login headless (`codex login --device-auth`), `codex exec` no interactivo,
+MCP servers con secretos vía `env_vars` (sin hardcodear valores),
+`--dangerously-bypass-approvals-and-sandbox` para permisos completos (la VM
+efímera de Actions es el sandbox real). Corrida real completa contra
+Makeover con Codex: **8/8 puntos del checklist** (la de DeepSeek había dado
+7/8). Detalle técnico completo en `runner/SETUP.md` §2e.
+
+**Decisión del usuario: Codex pasa a ser el agente por default, incluido el
+cron de cada hora — DeepSeek solo si un sitio lo pide explícito.** Columna
+nueva `sitios.agente_preferido` (`'codex'` default, `'opencode'` la
+excepción). El workflow ahora dispara los dos backends en cada tick;
+cada uno autodescubre y filtra por su propio agente dentro del instructivo
+— el que no tiene sitios asignados no-opea. Selector visible en el
+dashboard (cualquier fase, no solo construcción). Detalle en
+`runner/SETUP.md` §2f.
+
+**Riesgo aceptado a propósito, no un descuido:** la suscripción es uso
+incluido, no facturación por token — la misma categoría de límite que ya
+sacó las 3 fases de claude.ai una vez. El campo por sitio existe
+justamente para poder volver un sitio puntual a `opencode` si eso pasa,
+sin tocar el resto.
+
+**Fixture nuevo para probar esto sin tocar clientes reales:** "Big Apple
+Test" (`big-apple-test`), vertical limpieza de ventanas, referencia
+`bigapplewindowcleaning.com` — mismo criterio que Makeover, nunca contra
+Capital Window Cleaning (cliente real con sitio propio ya en producción,
+`capital-window-cleaning.com`, no debe usarse como referencia de un
+competidor ni tocarse por estas pruebas).

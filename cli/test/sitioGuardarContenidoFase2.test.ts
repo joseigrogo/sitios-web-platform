@@ -27,6 +27,7 @@ function sitioBase(overrides: Partial<Sitio> = {}): Sitio {
     investigacionReporte: null,
     checklistFase3Url: null,
     checklistFase3Resultado: null,
+    agentePreferido: 'codex',
     ...overrides,
   };
 }

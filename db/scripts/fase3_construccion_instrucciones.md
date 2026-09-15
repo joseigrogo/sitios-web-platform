@@ -64,27 +64,36 @@ printenv SUPABASE_SERVICE_ROLE_KEY | cut -c1-20
 ## Input
 
 **Cómo se elige el sitio.** Corre por cron, sin `sitio_id` en el disparo.
-Al arrancar, consultar Supabase (conector MCP):
+El prompt de arranque dice qué agente sos (`opencode` o `codex`, ver "##
+Entorno de ejecución" arriba). Al arrancar, consultar Supabase (conector
+MCP):
 
 ```sql
 select id, cliente_id, construccion_estado, estado_gates
 from sitios
 where fase_actual = 'construccion'
   and construccion_estado in ('solicitada')
+  and agente_preferido = '<tu propio agente: opencode o codex>'
 order by created_at asc;
 ```
 
-- **Cero filas → salir en silencio.** Caso normal la mayoría de las horas.
+- **Cero filas → salir en silencio.** Caso normal la mayoría de las horas —
+  incluye "hay sitios `solicitada` pero son del otro agente" (el cron
+  dispara los dos en paralelo cada hora, no es una anomalía).
 - **Recorrer del más viejo al más nuevo y tomar el primero trabajable.**
   Un sitio que falla la precondición del gate de Fase 2, o que quedó
   `construccion_estado = 'bloqueado: …'` en una corrida anterior, **se
   saltea** — NO frena el run. Solo un error real de herramienta frena.
-- **Si el disparo trae un `sitio_id` explícito** (corrida manual), usar ese.
-- **Recuperación de colgados.** Si `construccion_estado = 'en_curso'` y el
-  timestamp del último heartbeat (`construccion_reporte`, **última** línea
-  de la bitácora — no la primera, que es la del arranque y nunca cambia; o
-  `updated_at`) es de hace más de 6 horas (la construcción es larga), es
-  una corrida anterior que murió: retomarlo.
+- **Si el disparo trae un `sitio_id` explícito** (corrida manual), usar ese
+  — en ese caso no importa `agente_preferido`, mandar el `sitio_id` ya es
+  la decisión explícita.
+- **Recuperación de colgados.** Mismo filtro de `agente_preferido` que
+  arriba — un colgado del otro agente no es tuyo. Si `construccion_estado
+  = 'en_curso'` (del tuyo) y el timestamp del último heartbeat
+  (`construccion_reporte`, **última** línea de la bitácora — no la
+  primera, que es la del arranque y nunca cambia; o `updated_at`) es de
+  hace más de 6 horas (la construcción es larga), es una corrida anterior
+  que murió: retomarlo.
 - **Un sitio por corrida.**
 
 Con el `sitio_id` elegido, leer de Supabase:
