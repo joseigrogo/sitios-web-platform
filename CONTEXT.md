@@ -763,3 +763,110 @@ Test" (`big-apple-test`), vertical limpieza de ventanas, referencia
 Capital Window Cleaning (cliente real con sitio propio ya en producción,
 `capital-window-cleaning.com`, no debe usarse como referencia de un
 competidor ni tocarse por estas pruebas).
+
+**Hallazgo real, sin arreglar:** en la corrida de vuelta a OpenCode
+(Big Apple Test, Fase 2), DeepSeek se colgó **45 minutos sin ninguna
+llamada a herramienta ni salida visible** — un solo `> build ·
+deepseek-v4-flash` y silencio total hasta el timeout del job.
+`verificar-avance.mjs` lo agarró bien (rojo real, no verde falso), pero la
+causa del cuelgue en sí (¿instalando Chromium? ¿esperando red?) queda sin
+diagnosticar — no hay ni un log intermedio para saber qué estaba haciendo.
+
+## 16. Diseño de Fase 4 y Fase 5 (2026-09-15) — sin automatizar todavía
+
+Decisión del usuario: pensar cómo seguirían estas dos fases antes de
+construir nada. Apoyado en lo que ya existe, no arrancando de cero — dos
+piezas del modelo de datos ya anticipaban esto desde la migración inicial
+(`esquema_base_plataforma`, 2026-08-04) sin que nadie las hubiera
+conectado todavía: `sitios.vercel_project_id` y la tabla `ids_recursos`
+(`sitio_id, tipo, valor, confirmado_via_api`).
+
+### Gap encontrado primero, independiente de Fase 4/5: falta `gate-fase3`
+
+Fase 0/1/2 tienen su gate (`cli sitio gate-faseN`, verifica y opcionalmente
+confirma el flip de `fase_actual`). Fase 3 no: el instructivo de
+construcción **nunca escribe `fase_actual`** a propósito (línea explícita
+en `fase3_construccion_instrucciones.md`, "no reemplaza juicio humano").
+Resultado real, visible hoy: Makeover tiene `construccion_estado =
+'terminada'` con PR abierto y checklist 8/8, pero `fase_actual` sigue en
+`'construccion'` — nada marca que está listo para Fase 4. No es un bug (el
+instructivo hace exactamente lo que dice), es una pieza que falta.
+
+**Diseño propuesto, sin construir:** `cli sitio gate-fase3`, mismo patrón
+que gate-fase0/1/2 — sin `--confirmar` solo verifica:
+- `checklist_fase3_resultado` existe y los ítems automáticamente
+  verificables (todos salvo `taxonomia_eventos` y `search_console`, ya
+  marcados `pasa: null` a propósito) no tienen ningún `pasa: false`.
+- `repo_github` no es null y el PR que dejó la rutina sigue existiendo
+  (verificable por API de GitHub — **merge del PR sigue siendo un acto
+  humano**, esto solo confirma que hay algo para revisar, no lo aprueba).
+- Con `--confirmar`: flip a `fase_actual = 'deploy'`.
+
+### Fase 4 · Despliegue, dominio e indexación
+
+La secuencia real (`Proceso_GENERAL` §Fase 4) es casi enteramente actos
+humanos de una sola vez por sitio — merge por cuenta autorizada, conectar
+dominio en Vercel, TXT de Search Console, envío de sitemap. No tiene
+sentido una rutina de cron autodescubriendo trabajo acá (a diferencia de
+Fase 1-3): es un checklist que un humano recorre una vez, no un flujo
+recurrente.
+
+**Lo que sí es automatizable, y ya existe la pieza para reusar:**
+`ejecutarChecklistFase3` (el mismo motor de `cli sitio checklist-fase3`)
+ya verifica canonical único, robots+sitemap, JSON-LD, 404 reales, Open
+Graph — corrido contra la preview de Vercel. **Correrlo de nuevo contra
+el dominio de producción**, una vez conectado, revalida exactamente lo
+que Fase 4 pide en "dominio canónico único" y "sitemap enviado" sin
+escribir un verificador nuevo. Diferencia real con Fase 3: acá "pasar" sí
+importa para el gate (en Fase 3 es solo medición).
+
+**Diseño propuesto, sin construir:**
+- `cli sitio checklist-fase4 <url-produccion> --sitio <id>` — literalmente
+  reusa `ejecutarChecklistFase3` con otro nombre de comando (o el mismo
+  comando, otro parámetro), guardado en columnas nuevas
+  `checklist_fase4_url` / `checklist_fase4_resultado` (mismo patrón que
+  Fase 3, no una tabla aparte — Base 8).
+- Dos confirmaciones que **no tienen API service-account-friendly** y
+  quedan como input humano explícito, no inferido: `search_console_ok
+  boolean` y `sitemap_enviado boolean` en `sitios` (o dentro de
+  `estado_gates`, a decidir cuando se construya — no es una decisión que
+  haga falta tomar hoy).
+- `cli sitio gate-fase4`: checklist4 pasa + las dos confirmaciones en
+  `true` → con `--confirmar`, flip a `fase_actual = 'medicion'`.
+- **Nunca automatizar:** merge del PR, conexión de dominio/DNS, verificación
+  TXT de Search Console, solicitud de indexación manual — gates humanos
+  irreducibles ya identificados en `BASES_DEL_SISTEMA.md` (Base 6).
+
+### Fase 5 · Ecosistema de medición (GTM → GA4 → BigQuery → GrowthBook → Ads)
+
+Acá el modelo de datos **ya está resuelto** desde el primer día
+(`ids_recursos`), incluido el campo que previene la falla silenciosa #20
+del proceso (`confirmado_via_api` — un ID nunca se guarda porque apareció
+en la URL del navegador, ver Proceso_GENERAL nodo GA4/GTM). Lo que falta
+es todo lo demás: nada lee ni escribe esa tabla todavía.
+
+**Por nodo, qué tan automatizable es de verdad** (no todo es igual):
+
+| Nodo | ¿Automatizable? | Por qué |
+|---|---|---|
+| GTM | Parcial | API existe, pero requiere permiso "Publicar" separado de "Editor" (ya documentado como trampa real) — crear/verificar sí, publicar solo si la cuenta de servicio tiene ese nivel |
+| GA4 | Sí, para verificar | Admin API confirma property ID real; validar que los parámetros de eventos lleguen poblados requiere BigQuery, no solo Realtime |
+| BigQuery | Sí, para verificar | Listar datasets/tablas por API confirma vínculo activo; la latencia de 24h es del proceso, no un estado que se pueda apurar |
+| GrowthBook | **No, nunca completo** | Sin endpoint para crear Data Sources (documentado en Proceso_GENERAL) — conectar BigQuery a un proyecto es solo UI. Verificar por API sí es posible una vez que existe |
+| Ads | **No, nunca completo** | Developer token con aprobación externa manual, con demora real — no hay atajo |
+
+**Diseño propuesto, sin construir:** un script `verificar-ids-recursos`
+(no una rutina de cron, un chequeo bajo demanda o diario) que, por cada
+fila de `ids_recursos` con `confirmado_via_api = false`, intenta
+confirmarla contra la API real del nodo correspondiente (GTM/GA4/BigQuery
+únicamente — GrowthBook y Ads quedan fuera de este verificador porque su
+creación ya es manual) y actualiza el flag solo si la respuesta real lo
+confirma — nunca marcar `true` porque el humano dijo que sí. Mismo
+principio que ya rige `checklist-fase3`: medir contra la fuente real, no
+inventar el resultado.
+
+**No diseñado todavía, a propósito:** el gate de salida de Fase 5
+(`fase_actual = 'activo'`) depende de piezas que Proceso_GENERAL marca
+como gates humanos irreducibles (GrowthBook, Ads) — no tiene sentido fijar
+su criterio exacto antes de que exista aunque sea un sitio real
+atravesando Fase 4, que todavía no pasó.
