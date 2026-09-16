@@ -6,13 +6,18 @@
 > **cómo** se produce hoy (o por qué sigue sin decidirse), y el **gate** de
 > salida si aplica.
 >
-> Esto sigue siendo diseño del sistema, no un tracker de proyecto — la
-> mayoría de las fases no tienen nada construido. Pero desde el 2026-08-10
-> esto dejó de ser 100% cierto para Fase 0 y Fase 1: **Capital Window es un
-> sitio real avanzando por gates reales**, no solo evidencia puntual (ver
-> Base 2) — `encuadre` → `investigacion` → `spec`, cada flip corrido de
-> verdad con `cli sitio gate-faseN --confirmar`, nunca automático. Fases 2
-> en adelante siguen sin gate ni automatización.
+> Esto sigue siendo diseño del sistema, no un tracker de proyecto — Fase 5
+> y los sistemas transversales (Pagos, Comunicación aparte de Estarter)
+> siguen sin nada construido. Pero desde el 2026-08-10 esto dejó de ser
+> cierto para Fase 0 a Fase 4: **hay sitios reales avanzando por gates
+> reales** (Capital Window, Makeover, Big Apple Test), no solo evidencia
+> puntual (ver Base 2) — `encuadre` → `investigacion` → `spec` →
+> `construccion` → `deploy`, cada flip corrido de verdad con `cli sitio
+> gate-faseN --confirmar` (Fase 3 además con autodescubrimiento desatendido
+> real corriendo cada hora, ver Base 6). Que este párrafo haya seguido
+> hablando solo de Fase 0/1 durante más de un mes mientras el resto
+> avanzaba es exactamente el tipo de cosa que esta auditoría busca — no
+> asumas esta sección al día sin cruzarla contra la fase que te interesa.
 >
 > El proceso define seis fases secuenciales (0 a 5) — más los **sistemas
 > transversales** que se suman cuando un sitio los necesita, no cuando toca
@@ -140,27 +145,41 @@ Corregido con `db/migrations/20260810_keywords_rol_nullable.sql`.
 auto-asigna, sin importar qué proveedor de datos se use *(Base 4)*. Este
 comando tampoco lo infiere — solo mueve a la tabla una decisión ya tomada.
 
-**Hipótesis, la tercera pieza del "Qué" que faltaba:** `cli investigacion
-crear-hipotesis` — mismo principio que `rol`: `enunciado`/`criterio_exito`
-son juicio humano, el comando valida y guarda, nunca inventa contenido.
-Exige además `--dato-verificado` no vacío (columna nullable en el schema,
-pero restricción de la plataforma — extensión de "cero datos inventados",
-Base 3, a hipótesis: una sin un dato real que la motive es una opinión, no
-algo falsificable). Primera hipótesis real creada 2026-08-10, para Capital
+**Hipótesis, la tercera pieza del "Qué" que faltaba — vigente hasta el
+2026-09-08, ver nota debajo:** `cli investigacion crear-hipotesis` — mismo
+principio que `rol`: `enunciado`/`criterio_exito` son juicio humano, el
+comando valida y guarda, nunca inventa contenido. Exige además
+`--dato-verificado` no vacío (columna nullable en el schema, pero
+restricción de la plataforma — extensión de "cero datos inventados", Base
+3, a hipótesis: una sin un dato real que la motive es una opinión, no algo
+falsificable). Única hipótesis real creada, 2026-08-10, para Capital
 Window: separar una página B2B dedicada al pilar (en vez de la página
 combinada actual) genera más leads calificados sin canibalizar el tráfico
 residencial de mayor volumen — anclada en el hallazgo real de `jbgwc.co.uk`
 separando esas dos páginas. `horizonte: largo_90_150d`, `criterio_exito`
 verificable (≥10 leads, ≥70% calificando como comercial real).
 
-**Gate de salida (definido y confirmado 2026-08-10):** `cli sitio
-gate-fase1 <id>` — ≥1 keyword con `rol='pilar'` para el sitio Y ≥1 fila en
-`hipotesis`. Sin `--confirmar` solo verifica; con `--confirmar` hace el
-flip a `fase_actual = 'spec'` solo si pasa y el sitio está en
-`'investigacion'` — mismo patrón que Fase 0 (nunca efecto colateral de
-crear una fila). Condición anclada al propio "Qué" de esta fase (reportes
-→ `keywords` con rol + hipótesis falsificables), no inventada para la
-ocasión.
+**Sacado del proceso el 2026-09-08**
+(`db/migrations/20260908_hipotesis_vaciar_deprecar.sql`) — ya no se crean
+hipótesis nuevas. Alcance acotado a propósito: la tabla `hipotesis` y el
+comando de arriba quedan deprecados, sin dropear (la fila de Capital
+Window se vació, pero su contenido no se pierde — queda completo en el
+párrafo de arriba). Efecto en cascada, documentado en el mismo cambio:
+Fase 2 pierde "experimentos a validar" como entregable (era el paso que
+traducía una hipótesis en experimento concreto — sin hipótesis no queda
+qué traducir, ver Fase 2 más abajo) y el gate de esta fase cambia de
+condición, justo abajo.
+
+**Gate de salida — condición actual desde el 2026-09-08, ya no pide
+hipótesis:** `cli sitio gate-fase1 <id>` — ≥1 keyword con `rol='pilar'` Y
+≥1 keyword clasificada como `secundaria` o `long_tail` para el sitio.
+(Condición original, definida y confirmada 2026-08-10: pilar + ≥1 fila en
+`hipotesis` — retirada el mismo día que hipótesis salió del proceso,
+arriba.) Sin `--confirmar` solo verifica; con `--confirmar` hace el flip a
+`fase_actual = 'spec'` solo si pasa y el sitio está en `'investigacion'` —
+mismo patrón que Fase 0 (nunca efecto colateral de crear una fila). La
+condición nueva ancla lo mismo que la vieja: que hubo clasificación real
+de la investigación, no una fila suelta.
 
 **Corrido de verdad para Capital Window, primera vez de punta a punta:**
 `gate-fase0 --confirmar` nunca se había corrido con `--confirmar` en
@@ -177,12 +196,18 @@ ya cargadas. Corregido en el orden correcto: `gate-fase0 --confirmar`
 
 **Capital Window está acá de verdad** (`fase_actual = 'spec'` desde
 2026-08-10) — primer sitio real que llega a esta fase por el mecanismo, no
-por evidencia puntual. Eso no cambia nada de lo de abajo: esta fase sigue
-sin gate ni automatización, sin importar quién esté "en" ella.
+por evidencia puntual. El diseño en sí (spec.md) sigue siendo conversación
+humano + agente sin automatizar, y así debería seguir *(Base 4)* — pero a
+diferencia de cuando se escribió esta nota, la fase sí tiene gate desde el
+2026-08-18 (ver más abajo): "sin automatización" describe el contenido del
+spec, no el mecanismo de salida.
 
-**Qué:** cuatro entregables — estructura del sitio, contenido (dada la
-estructura + estrategia SEO/GEO), experimentos a validar, taxonomía de
-eventos.
+**Qué:** tres entregables — estructura del sitio, contenido (dada la
+estructura + estrategia SEO/GEO), taxonomía de eventos. (Eran cuatro:
+"experimentos a validar" salió del proceso el 2026-09-08 junto con
+hipótesis — ver Fase 1 — porque dejó de haber una hipótesis que traducir
+en experimento concreto. Detalle en `db/scripts/fase2_formato_spec.md`
+§3.)
 
 **Cómo:** conversación humano + agente, sin automatizar — es la fase de
 mayor juicio de las tres primeras, y así debería seguir *(Base 4)*. La
@@ -191,16 +216,23 @@ del que se generan 4 cosas (tipos del helper `pushDataLayerEvent`, variables
 DLV de GTM, dimensiones de GA4, queries de assertion en BigQuery) — todavía
 no construido como tal *(Base 5)*.
 
-**Rastreo mecánico de los 4 entregables (2026-08-14).** `cli sitio
-marcar-entregable-fase2 <sitioId> <entregable>` marca uno de los 4 como
-hecho en `sitios.estado_gates` (jsonb, columna que ya existía sin usarse —
+**Rastreo mecánico de los entregables (2026-08-14, eran 4 en ese momento,
+son 3 desde el 2026-09-08 — ver "Qué" arriba).** `cli sitio
+marcar-entregable-fase2 <sitioId> <entregable>` marca uno como hecho en
+`sitios.estado_gates` (jsonb, columna que ya existía sin usarse —
 confirmado `{}` en la fila real antes de este cambio, no una columna nueva
 inventada para la ocasión). **Marca el flag, no valida el contenido** —
 mismo principio que `promover-keyword` con `rol`: el comando es mecánico,
 decidir si el entregable está de verdad bien hecho sigue siendo juicio
-humano *(Base 4)*. Sin gate de salida definido todavía para Fase 2 (a
-diferencia de Fase 0 y 1) — este rastreo es insumo para uno futuro, no
-lo reemplaza.
+humano *(Base 4)*.
+
+**Gate de salida — construido el 2026-08-18, ya no "sin definir todavía":**
+`cli sitio gate-fase2 <id>` — misma forma que Fase 0/1: condición = los 3
+entregables de `estado_gates.fase2` en `true` (no se inventó un criterio
+nuevo, se mecanizó el que ya existía como flags sueltos). Sin `--confirmar`
+solo lee; con `--confirmar` flipea `spec` → `construccion`. Tiene botón en
+el dashboard además del comando de CLI (Server Action que reusa
+`ejecutarGateFase2` sin reimplementar la lógica, ver CONTEXT.md §12).
 
 **Candidato evaluado para dirección visual, empaquetado como skill, sin
 integrar a un spec.md real:** hoy ningún entregable de spec.md ni capa
@@ -231,9 +263,11 @@ para comportamiento de scroll y los gotchas del ensamblaje, en
 que Fase 1 ya identifica, no una galería de inspiración aparte.
 
 **Dónde vive esta sección dentro de spec.md: resuelto (2026-08-18).** Ver
-`db/scripts/fase2_formato_spec.md` — completa (no reemplaza) los cuatro
+`db/scripts/fase2_formato_spec.md` — completa (no reemplaza) los
 entregables ya definidos en `Proceso_GENERAL_de_Lanzamiento_Sitios.md`
-(Fase 2), agregando dónde vive dirección visual y tres disciplinas nuevas,
+(Fase 2; eran cuatro cuando se escribió esto, son tres desde el
+2026-09-08 — ver "Qué" arriba), agregando dónde vive dirección visual y
+tres disciplinas nuevas,
 a partir de analizar el único spec real que llegó a producción
 (`capital-window/SPEC.md`) contra el código que produjo.
 Hallazgo del análisis: ~32 de 60 commits de esa construcción resolvieron
@@ -280,11 +314,30 @@ robots+sitemap, JSON-LD válido, 404 reales, imágenes optimizadas, taxonomía
 de eventos cableada con el helper, dominio canónico único, Search Console
 conectado desde el día 1.
 
-**Cómo:** nada construido todavía. Candidato encontrado, sin código traído:
-`parse_html.py` de `claude-seo` (ver Base 7) extrae título, canonical,
-robots, H1-H3, JSON-LD, Open Graph — el mismo parseo serviría de base para
-un checker de este checklist antes de publicar, no solo para el monitoreo
-continuo de Base 7.
+**Cómo: construida y probada de punta a punta contra un sitio real — es
+hoy la fase más automatizada del sistema, no la que dice "nada
+construido todavía".** `cli/src/lib/checklistFase3.ts` implementa los 10
+ítems literales de `Proceso_GENERAL_de_Lanzamiento_Sitios.md` contra una
+URL en vivo: 8 se verifican solos (SSR, canonical, OG/Twitter, robots +
+sitemap, JSON-LD, 404 real, imágenes, un solo dominio canónico) y 2 quedan
+`itemManual` a propósito, sin forma de confirmarlos contra una URL
+(taxonomía de eventos cableada — exige leer código fuente, no HTML
+servido; Search Console — tiene su propio entregable gateable en Fase 4).
+Reusa el diseño de qué extraer de un HTML de `claude-seo` (candidato ya
+citado en Base 7), reimplementado en TypeScript — no se trajo el código
+Python (Base 8). `cli sitio gate-fase3` mecaniza el mismo checklist como
+condición de salida (`checklistFase3Resultado.pasaTodo`) y flipea
+`construccion` → `deploy`.
+
+Más allá del checklist, la construcción misma corre desatendida: cron de
+GitHub Actions cada hora con dos agentes de IA en paralelo (OpenCode/
+DeepSeek y Codex/ChatGPT, ver `agente_preferido`, CONTEXT.md §15) que
+autodescubren sitios en `fase_actual = 'construccion'` directo en
+Supabase, clonan, arman el repo del sitio y abren PR — nunca mergean ni
+deployan solos (Base 6). Probado de punta a punta contra Makeover: repo
+propio creado, tokens visuales reales extraídos de la referencia, PR
+abierto, detenido en el gate humano — 13 min 36 s, sin supervisión
+(CONTEXT.md §15).
 
 ---
 
@@ -427,7 +480,14 @@ registro de cliente queda detrás de un gate humano. Los 11 gates humanos
 del proceso no son "lo que no se pudo automatizar" — son el borde del radio
 de explosión de lo desatendido.
 
-Sin tocar — no hay automatización real corriendo todavía.
+**Practicada desde el 2026-09-08/09** (Fase 1, 2 y 3): cron de GitHub
+Actions corriendo cada hora sin supervisión, autodescubriendo trabajo
+directo en Supabase. El radio de explosión se mantuvo angosto tal como
+pide esta base: lo desatendido escribe Supabase (estado, bitácora) y abre
+PRs en GitHub — nunca mergea, nunca deploya, nunca toca dinero ni una
+campaña. Ningún gate humano de los 11 quedó saltado; todos siguen
+exigiendo `--confirmar` explícito. Detalle en CONTEXT.md §15,
+`runner/SETUP.md` para cómo se corre.
 
 ### Base 7 — El silencio es alarmante, no tranquilizador
 
@@ -450,12 +510,13 @@ OAuth completo — extraer solo la función (~25 líneas), no el archivo.
 | Sustrato | Responsabilidad |
 |---|---|
 | Supabase | Estado y configuración |
-| CLI (no existe todavía) | Toda la lógica: mecánica + assertions |
+| CLI (`cli/`, construido desde 2026-08-10) | Toda la lógica: mecánica + assertions |
 | GitHub Actions | Disparo por tiempo |
 | n8n | Disparo por evento — nunca lógica de negocio |
 | Agente | Juicio: triage, narrativa, redacción |
 
-**Practicada tres veces:** se creó `sitios-web-platform` (cumpliendo el §0
+**Practicada tres veces (más la más obvia — el propio CLI, ver la fila de
+arriba y CONTEXT.md §10):** se creó `sitios-web-platform` (cumpliendo el §0
 de `CONTEXT.md`, nunca ejecutado antes) en vez de seguir todo en el chat;
 se evaluaron OpenSEO y `claude-seo` como candidatos con piezas extraíbles,
 no como cajas negras a instalar completas; y se evaluó y **descartó**
@@ -497,20 +558,35 @@ pendiente a prerequisito.
   copy + imágenes) ya graduado a permanente (ver Fase 2 y
   `db/scripts/fase2_direccion_visual.md`) — dónde vive dentro de spec.md
   ya está resuelto (`db/scripts/fase2_formato_spec.md`, 2026-08-18).
-  **Actualizado 2026-08-18:** los 4 entregables de Capital Window tienen
-  contenido borrador guardado (documentado retroactivamente contra el
-  sitio real en producción, no inventado — `guardar-contenido-fase2`), pero
-  **ninguno confirmado como terminado todavía** (`estado_gates.fase2` sigue
-  en 0/4 — Base 4, es juicio humano, no un olvido). El borrador dejó 4
-  preguntas reales sin resolver, señaladas para que alguien decida, no
-  resueltas en silencio: (1) `page_area` en el código real dice `'london'`,
-  el spec original pide explícitamente `'chelsea'`; (2) la taxonomía real
-  de eventos (`generate_lead`/`contact_click`/`segment_select`) no comparte
-  ningún nombre con el contrato mínimo de `Proceso_GENERAL`; (3) faltan la
-  tabla comparativa y el respaldo legal que Fase 2 pide — sin decidir si es
+  **Actualizado 2026-09-16 (era 2026-08-18):** los 3 entregables vigentes
+  de Fase 2 (ya no 4, ver Fase 2 arriba) tienen contenido borrador guardado
+  (documentado retroactivamente contra el sitio real en producción, no
+  inventado — `guardar-contenido-fase2`) y **hoy están marcados como
+  terminados** (`estado_gates.fase2` = 3/3, confirmado contra la base real
+  el 2026-09-16) — cambió desde el 0/4 original de esta nota en algún punto
+  entre el 2026-08-18 y hoy, probablemente vía los botones "Marcar hecho"
+  del dashboard (CONTEXT.md §17). **Consecuencia real, no accionada
+  todavía:** con los 3 flags en `true`, `gate-fase2` pasaría hoy para
+  Capital Window, pero nadie corrió `--confirmar` — sigue en
+  `fase_actual = 'spec'`. No es un bug: confirmar el gate es juicio humano
+  a propósito (Base 4), y Capital Window además está bloqueado por
+  decisión explícita del usuario desde agosto (falta `referencia_url`) —
+  se deja anotado para que quien lo lea decida, no para flipearlo solo por
+  quedar documentado acá.
+
+  Las 4 preguntas reales que el borrador dejó sin resolver siguen abiertas
+  — marcar el entregable como "terminado" no las resolvió, es un flag
+  mecánico, no una revisión de contenido (Base 4): (1) `page_area` en el
+  código real dice `'london'`, el spec original pide explícitamente
+  `'chelsea'`; (2) la taxonomía real de eventos
+  (`generate_lead`/`contact_click`/`segment_select`) no comparte ningún
+  nombre con el contrato mínimo de `Proceso_GENERAL`; (3) faltan la tabla
+  comparativa y el respaldo legal que Fase 2 pide — sin decidir si es
   omisión a propósito del vertical o un hueco real; (4) la hipótesis real
   de Fase 1 (página B2B dedicada) no se implementó tal cual, el sitio real
-  es una versión más tibia sin experimento montado para medirla.
+  es una versión más tibia sin experimento montado para medirla — y desde
+  el 2026-09-08 ya no hay un registro formal de "hipótesis" vigente contra
+  el cual volver a chequear esto (ver Fase 1).
 - **`leads`: dual-write vs. migración.** Dirección acordada: Supabase, con
   dual-write desde Sheets como paso intermedio. Tabla no creada.
 - ~~**RLS.**~~ **CERRADO el 2026-08-10.** La hipótesis ("activarlo sin

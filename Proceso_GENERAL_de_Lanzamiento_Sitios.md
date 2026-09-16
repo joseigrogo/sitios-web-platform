@@ -24,7 +24,7 @@ De cero a sitio medible: el mismo estándar para cualquier propiedad nueva de la
 
 - **Un sitio, un segmento.** Cada propiedad ataca un tipo de cliente distinto, con oferta y mensaje distintos. No son copias entre sí.
 - **Cero intuición, cero datos inventados.** Toda demanda de búsqueda se verifica (Semrush, database co) antes de construir. Sin dato real, la idea se descarta o se documenta como descarte consciente.
-- **Todo es una hipótesis falsificable.** Sitio, página, ángulo: se propone, se ejecuta al mínimo costo medible, se mide contra un criterio fijado antes de ejecutar, y se decide sin apego.
+- **Todo es una hipótesis falsificable.** Sitio, página, ángulo: se propone, se ejecuta al mínimo costo medible, se mide contra un criterio fijado antes de ejecutar, y se decide sin apego. *(El artefacto formal `hipótesis` de Fase 1 — tabla + comando dedicados — salió del proceso el 2026-09-08; esta regla queda como principio, no como una fila que se cree en Supabase. Ver Fase 2 §3.)*
 - **Identificadores nunca se comparten.** Cada dominio tiene su propio contenedor GTM, su propia propiedad GA4, su propio proyecto GrowthBook y su propia taxonomía de eventos.
 
 > **Formato obligatorio de hipótesis**
@@ -52,7 +52,7 @@ Antes de escribir una sola línea de copy: se define, con datos reales, si la de
 >
 > Más una lista de **descartes conscientes**: ideas sin volumen real, documentadas y no construidas — nunca silenciadas.
 >
-> Y las **hipótesis falsificables**, cada una con su criterio de éxito fijado antes de ejecutar. Son la razón de ser del experimento que se montará más adelante.
+> Y las **hipótesis falsificables**, cada una con su criterio de éxito fijado antes de ejecutar. Son la razón de ser del experimento que se montará más adelante. *(Desde el 2026-09-08 esto ya no se registra como artefacto formal de Fase 1 — ver Fase 2 §3 — pero el criterio de éxito fijado antes de ejecutar sigue aplicando al experimento mismo, más adelante.)*
 
 ---
 
