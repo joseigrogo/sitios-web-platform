@@ -798,6 +798,22 @@ Sigue sin resolver que el proceso tarda hasta el timeout del job en
 terminar aun después de que el error ya se conoce (no es fatal, solo lento
 para fallar) — mejora posible a futuro, no bloqueante.
 
+**Opción anotada para el futuro, no adoptada todavía:** si el problema de
+"los dos backends sin cupo a la vez" se repite, existe
+[OmniRoute](https://github.com/diegosouzapw/OmniRoute) (MIT,
+auto-alojado) — un gateway con fallback automático entre proveedores
+cuando uno se queda sin cupo, compatible con OpenCode y Codex. Revisado
+el 2026-09-16: el enfoque encaja con el problema real de este proyecto,
+pero el repo es muy joven (creado 2026-02) con un volumen de PRs
+(13.800+ en 7 meses) que sugiere desarrollo mayormente por agentes de IA
+a una escala que probablemente supera la revisión humana por línea —
+razonable para desconfiar de meterle credenciales de producción sin
+antes probarlo aislado (carpeta descartable, sin Docker disponible en
+esta máquina, cero secretos reales) y revisar el código de manejo de
+credenciales a mano. **Decisión del usuario: no se prueba ahora** — queda
+acá como referencia para si en el futuro no aparece otra solución al
+problema de cupos simultáneos agotados.
+
 ## 16. Fase 4 construida; Fase 5 sigue en diseño (2026-09-15)
 
 Decisión del usuario: pensar cómo seguirían Fase 4 y 5 antes de construir
