@@ -10,8 +10,9 @@
 > y los sistemas transversales (Pagos, Comunicación aparte de Estarter)
 > siguen sin nada construido. Pero desde el 2026-08-10 esto dejó de ser
 > cierto para Fase 0 a Fase 4: **hay sitios reales avanzando por gates
-> reales** (Capital Window, Makeover, Big Apple Test), no solo evidencia
-> puntual (ver Base 2) — `encuadre` → `investigacion` → `spec` →
+> reales** (Makeover, Big Apple Test — Capital Window fue el primero, salió
+> del sistema el 2026-09-16, ver Parte 4), no solo evidencia puntual (ver
+> Base 2) — `encuadre` → `investigacion` → `spec` →
 > `construccion` → `deploy`, cada flip corrido de verdad con `cli sitio
 > gate-faseN --confirmar` (Fase 3 además con autodescubrimiento desatendido
 > real corriendo cada hora, ver Base 6). Que este párrafo haya seguido
@@ -187,20 +188,22 @@ serio — solo se había verificado en modo lectura durante una demo — así
 que `fase_actual` seguía en `'encuadre'` pese a tener 44 keywords reales
 ya cargadas. Corregido en el orden correcto: `gate-fase0 --confirmar`
 (`encuadre` → `investigacion`), después `gate-fase1 --confirmar`
-(`investigacion` → `spec`). Capital Window es hoy el primer sitio real en
-`fase_actual = 'spec'`.
+(`investigacion` → `spec`). Capital Window fue el primer sitio real en
+`fase_actual = 'spec'` — salió del sistema el 2026-09-16 (ver Parte 4),
+pero esta corrida sigue siendo la prueba real de que el mecanismo de gates
+funciona de punta a punta, no un dato caduco a borrar.
 
 ---
 
 ### FASE 2 · Diseño del layout (spec.md)
 
-**Capital Window está acá de verdad** (`fase_actual = 'spec'` desde
-2026-08-10) — primer sitio real que llega a esta fase por el mecanismo, no
-por evidencia puntual. El diseño en sí (spec.md) sigue siendo conversación
-humano + agente sin automatizar, y así debería seguir *(Base 4)* — pero a
-diferencia de cuando se escribió esta nota, la fase sí tiene gate desde el
-2026-08-18 (ver más abajo): "sin automatización" describe el contenido del
-spec, no el mecanismo de salida.
+**Capital Window llegó acá de verdad** (`fase_actual = 'spec'` desde
+2026-08-10 hasta que salió del sistema el 2026-09-16, ver Parte 4) —
+primer sitio real que llegó a esta fase por el mecanismo, no por evidencia
+puntual. El diseño en sí (spec.md) sigue siendo conversación humano +
+agente sin automatizar, y así debería seguir *(Base 4)* — pero la fase sí
+tiene gate desde el 2026-08-18 (ver más abajo): "sin automatización"
+describe el contenido del spec, no el mecanismo de salida.
 
 **Qué:** tres entregables — estructura del sitio, contenido (dada la
 estructura + estrategia SEO/GEO), taxonomía de eventos. (Eran cuatro:
@@ -558,35 +561,17 @@ pendiente a prerequisito.
   copy + imágenes) ya graduado a permanente (ver Fase 2 y
   `db/scripts/fase2_direccion_visual.md`) — dónde vive dentro de spec.md
   ya está resuelto (`db/scripts/fase2_formato_spec.md`, 2026-08-18).
-  **Actualizado 2026-09-16 (era 2026-08-18):** los 3 entregables vigentes
-  de Fase 2 (ya no 4, ver Fase 2 arriba) tienen contenido borrador guardado
-  (documentado retroactivamente contra el sitio real en producción, no
-  inventado — `guardar-contenido-fase2`) y **hoy están marcados como
-  terminados** (`estado_gates.fase2` = 3/3, confirmado contra la base real
-  el 2026-09-16) — cambió desde el 0/4 original de esta nota en algún punto
-  entre el 2026-08-18 y hoy, probablemente vía los botones "Marcar hecho"
-  del dashboard (CONTEXT.md §17). **Consecuencia real, no accionada
-  todavía:** con los 3 flags en `true`, `gate-fase2` pasaría hoy para
-  Capital Window, pero nadie corrió `--confirmar` — sigue en
-  `fase_actual = 'spec'`. No es un bug: confirmar el gate es juicio humano
-  a propósito (Base 4), y Capital Window además está bloqueado por
-  decisión explícita del usuario desde agosto (falta `referencia_url`) —
-  se deja anotado para que quien lo lea decida, no para flipearlo solo por
-  quedar documentado acá.
-
-  Las 4 preguntas reales que el borrador dejó sin resolver siguen abiertas
-  — marcar el entregable como "terminado" no las resolvió, es un flag
-  mecánico, no una revisión de contenido (Base 4): (1) `page_area` en el
-  código real dice `'london'`, el spec original pide explícitamente
-  `'chelsea'`; (2) la taxonomía real de eventos
-  (`generate_lead`/`contact_click`/`segment_select`) no comparte ningún
-  nombre con el contrato mínimo de `Proceso_GENERAL`; (3) faltan la tabla
-  comparativa y el respaldo legal que Fase 2 pide — sin decidir si es
-  omisión a propósito del vertical o un hueco real; (4) la hipótesis real
-  de Fase 1 (página B2B dedicada) no se implementó tal cual, el sitio real
-  es una versión más tibia sin experimento montado para medirla — y desde
-  el 2026-09-08 ya no hay un registro formal de "hipótesis" vigente contra
-  el cual volver a chequear esto (ver Fase 1).
+  **Historial cerrado el 2026-09-16, cuando Capital Window salió del
+  sistema (ver más abajo):** en su último estado real, los 3 entregables
+  vigentes de Fase 2 estaban marcados `true` en `estado_gates.fase2` (3/3,
+  confirmado contra la base antes de borrar), pero `gate-fase2` nunca se
+  confirmó — quedó en `fase_actual = 'spec'` hasta el final. El borrador
+  había dejado 4 preguntas reales sin resolver (contradicción `page_area`
+  `'london'` vs. `'chelsea'`; taxonomía real sin overlap de nombres con el
+  contrato mínimo; faltaban tabla comparativa y respaldo legal; la
+  hipótesis B2B de Fase 1 nunca se implementó tal cual) — quedan sin
+  resolver porque el cliente ya no está, no porque se hayan resuelto en
+  silencio. Detalle completo en el backup, ver más abajo.
 - **`leads`: dual-write vs. migración.** Dirección acordada: Supabase, con
   dual-write desde Sheets como paso intermedio. Tabla no creada.
 - ~~**RLS.**~~ **CERRADO el 2026-08-10.** La hipótesis ("activarlo sin
@@ -620,3 +605,14 @@ pendiente a prerequisito.
 - **Estarter salió de este proyecto de Supabase** (cuenta personal) el
   2026-08-05. Backup de sus 5 filas guardado fuera del repo. Si retoma
   automatización, necesita su propio proyecto — no este.
+- **Capital Window Cleaning salió de este proyecto de Supabase el
+  2026-09-16**, por decisión explícita del usuario. Era el primer cliente
+  real del sistema (2026-08-05) y el único que llegó a probar Fase 0-2 de
+  punta a punta con datos reales — ver las menciones a lo largo de este
+  documento, que quedan como registro histórico de esa prueba, no como
+  estado actual. Borradas 44 filas de `keywords`, 1 de `sitios`
+  (`72d40079-4ed3-41bc-aecf-a5806a9d70ef`) y 1 de `clientes`
+  (`3b9e5f1e-b820-4b3c-a62a-dab7bc5ec6cb`), en ese orden. Sin repo de
+  GitHub ni proyecto de Vercel que limpiar (nunca pasó de Fase 2/`spec`).
+  Backup completo (las 3 tablas, JSON) guardado fuera del repo, mismo
+  criterio que Estarter.
