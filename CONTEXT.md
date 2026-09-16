@@ -6,49 +6,45 @@
 > no es un documento aparte del código, vive en el mismo repo y en el mismo
 > historial de commits.
 
-## Estado pendiente — leer antes de seguir (actualizado el 2026-09-14)
+## Estado pendiente — leer antes de seguir (actualizado el 2026-09-16)
 
-**Leer §14 primero: la ejecución ya no vive en claude.ai.** Las 3 fases
-corren en GitHub Actions con OpenCode + DeepSeek, y las 3 rutinas de
-claude.ai están apagadas. Cualquier cosa en este archivo que hable de "la
-rutina" y sus limitaciones de sandbox (sin service key, sin egress, sin
-navegador) describe el entorno **viejo** — sigue siendo cierta solo como
-modo degradado, no como el camino normal.
+**Leer primero, en orden: §15 → §16 → §17.** Son las tres secciones que
+más cambiaron en los últimos dos días y las que más probablemente
+contradicen algo que este archivo decía antes. Resumen de una línea cada
+una, con qué está realmente resuelto:
 
-**Ya no aplica** el aviso de trabajo sin commitear del 2026-08-19: está
-todo en el historial. Y los entregables de Fase 2 son **3**, no 4 —
-`experimentos` salió del gate.
+- **§15 — Dos agentes, no uno.** Codex CLI oficial (suscripción ChatGPT
+  Plus/Pro) probado de punta a punta, funciona igual o mejor que
+  OpenCode+DeepSeek (Makeover: 8/8 checklist vs 7/8). `agente_preferido`
+  por sitio, default `codex`, el cron dispara los dos backends en
+  paralelo cada hora. **Riesgo real, ya observado dos veces:** los dos
+  backends se quedaron sin cupo el mismo día (2026-09-15) — el "plan B"
+  no sirve si el plan B también está agotado. El cuelgue de 45 min de
+  DeepSeek que parecía un bug **no era un cuelgue** — era exactamente
+  este límite de cupo, silenciado por `opencode run --format default`;
+  corregido con `--print-logs --log-level ERROR`.
+- **§16 — Fase 4 construida, ya no es diseño.** `checklist-fase4`,
+  `marcar-entregable-fase4`, `gate-fase4`. Y el gap que motivó mirar Fase 4
+  de entrada: faltaba `gate-fase3` (nada pasaba `fase_actual` de
+  `construccion` a `deploy`) — ya existe, probado con Makeover real.
+- **§17 — El norte es SaaS, no una herramienta interna.** Pedido de
+  gerencia: pensar el producto como si cualquier cliente lo tuviera que
+  usar solo, sin terminal ni SQL. Hay una lista de 6 brechas reales
+  encontradas revisando la propia sesión de trabajo; la primera (marcar
+  entregables desde el dashboard) ya se cerró. **Multi-tenant (login por
+  cliente) es la decisión más grande de esa lista — pedida por gerencia,
+  pausada a propósito, todavía sin resolver.**
 
-**Ya verificado, no solo escrito:** el checklist automático de Fase 3
-(7/8 contra una preview real de Vercel), las bitácoras de las 3 fases, y la
-reproducción cercana de la referencia (8 `MediaSlot` con aspect-ratio real
-confirmados en el HTML servido) — probado el 2026-09-09/14 contra una
-reconstrucción genuina de Makeover. Ver "Fase 3, probada end-to-end" en §14.
+**§11 (Dashboard) estuvo mal 5 semanas sin que nadie lo notara:** decía
+"solo lectura, no dispara acciones" mientras se agregaban 15 acciones de
+escritura reales encima, sin que la descripción de arriba se corrigiera
+nunca. Ya corregido (2026-09-16) — sirve de recordatorio de por qué esta
+sección de "leer primero" existe: un doc vivo que nadie vuelve a mirar
+completo deja de ser confiable en las partes que no se tocan seguido.
 
-**Dos bugs encontrados el 2026-09-14** revisando 5 días de corridas sin
-supervisión (ambos corregidos): el guardarraíl `verificar-avance.mjs` daba
-falso positivo en Fase 2 por no distinguir "saltea un sitio bloqueado a
-propósito" de "se cayó en silencio"; y la base rechazaba
-`construccion_estado = 'bloqueado: <motivo>'` pese a que el instructivo de
-Fase 3 lo pide, por un `CHECK` que solo aceptaba 3 valores fijos. Ver
-"Pendiente al cierre" en §14.
-
-**Gap arquitectónico: detectado, con aviso — todavía sin corrida real que
-lo ejercite.** Si `fase3_construccion_instrucciones.md` cambia después de
-que un sitio ya quedó `terminada`, nada lo notaba (pasó con Makeover;
-se resolvió a mano el 2026-09-09: cerrar PR + borrar rama + resetear
-estado). Ahora la rutina guarda `construccion_instructivo_hash` (sha256 del
-instructivo, no un commit de git — el checkout de Actions es superficial)
-al terminar, y un chequeo aparte
-(`runner/verificar-instructivo-vigente.mjs`, corre junto a Fase 3 cada
-hora) compara ese hash contra el vigente y dejar una nota visible en el
-dashboard si difieren (`construccion_instructivo_alerta`). **Decisión
-deliberada:** nunca reconstruye sola — la rama/PR viejos del build anterior
-siguen siendo del humano para limpiar a mano antes de reintentar, igual que
-con Makeover (Base 6). Migraciones:
-`20260914_sitios_construccion_instructivo_version.sql` +
-`..._commit_a_hash.sql`. Sin probar todavía contra un cambio real de
-instructivo — recién escrito el 2026-09-14.
+**Sigue siendo cierto, sin cambios:** claude.ai apagado (§14), Fase 2 con
+3 entregables no 4, Fase 5 sin construir (el modelo de datos ya existe,
+`ids_recursos`, ver §16).
 
 ## 0. Instrucción para Claude Code al leer este archivo por primera vez
 
@@ -425,14 +421,23 @@ de un import de *valor* (no tipo) cruzando la frontera del alias.
 
 ## 11. Dashboard — qué es, cómo correrlo, qué falta
 
-**Qué es:** `dashboard/` — Next.js 16 (App Router), primer frontend real del
-sistema. Solo lectura hoy: muestra cliente + sitio, `fase_actual` con check
-en las fases pasadas y "avance general" (X de 7 fases), keywords por rol +
-descartes, hipótesis, y progreso real de entregables para la fase actual
-(hoy: Spec/Fase 2, único con tracking definido). **No dispara acciones** —
-los gates y el resto de la escritura siguen siendo el CLI, invocado por el
-agente. Arquitectura completa y el porqué de cada decisión: §10 más arriba
-(comandos) y las entradas fechadas 2026-08-10/14 de esta sección.
+**Corregido el 2026-09-16 — esta sección decía "solo lectura, no dispara
+acciones" desde el 2026-08-14, pero eso dejó de ser cierto el 2026-08-18
+(ver ítem 3 de "lo que falta", más abajo en esta misma sección, nunca
+contradicho arriba). Quedó así, sin nadie notarlo, mientras se agregaban
+12 acciones de escritura más encima.**
+
+**Qué es:** `dashboard/` — Next.js 16 (App Router). Muestra cliente + sitio,
+`fase_actual`, keywords por rol + descartes, y progreso real de entregables
+de Fase 2 y 4. **Ya dispara acciones reales** — 15 Server Actions en
+`dashboard/app/actions.ts`, todas reusando la función núcleo del CLI
+correspondiente (Base 8, nunca reimplementan la condición): alta de
+cliente/sitio, gate-fase0/1/2/3/4, marcar entregable de Fase 2/4, guardar
+`referencia_url`, elegir `agente_preferido`, solicitar investigación/
+construcción, correr checklist de Fase 3/4. Arquitectura completa y el
+porqué de cada decisión: §10 más arriba (comandos) y las entradas fechadas
+2026-08-10/14 de esta sección (el patrón de reuso, no la lista de acciones
+— esa quedó vieja apenas se escribió).
 
 **Cómo correrlo (no persiste entre sesiones — hay que arrancarlo cada vez):**
 ```
@@ -450,14 +455,20 @@ projects" (`team_pOdLeEoVOVfQqYUlpF8JH0l2`). El build de producción
 único bloqueante es el permiso de la cuenta de Vercel conectada a este
 chat. Para retomar: revisar el rol en ese team, o reconectar el integrador
 con más permisos, o deployar en una cuenta personal fuera del team — ver
-también §7.
+también §7. **Matiz encontrado el 2026-09-15:** ese mismo team sí aloja
+deploys reales sin problema por la vía normal de Vercel (push → GitHub App
+de Vercel → build) — así quedó online el repo de Makeover. El 403 es
+específico de crear un proyecto *nuevo* por esta vía de API/MCP, no del
+team en general.
 
-**Lo que falta, en orden de lo ya conversado:**
-1. Resolver el permiso de Vercel y deployar de verdad (§7).
-2. ~~Definir el Gate de salida de Fase 2~~ **Hecho (2026-08-18)** — ver §12.
-3. ~~Si se decide sumar acciones de escritura al dashboard...~~ **Hecho
-   (2026-08-18)** — ver §12. Confirmado: sí reusa la función núcleo del CLI
-   (`ejecutarGateFase2`) desde un Server Action, no la reimplementa.
+**Lo que falta, real y vigente (no la lista vieja de 2026-08-14):**
+1. Resolver el permiso de Vercel y deployar el dashboard de verdad —
+   sigue siendo el bloqueante real para que alguien más lo use sin
+   depender de correrlo local (§7, y CONTEXT.md §17 sobre el norte SaaS).
+2. Login real por usuario/cliente en vez de una sola contraseña compartida
+   — pedido de gerencia, ver §17, decisión pausada a propósito.
+3. El resto de la lista de "hacks todavía sin botón" vive en §17, no acá
+   — no duplicar.
 
 ---
 
