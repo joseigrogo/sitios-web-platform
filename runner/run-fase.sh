@@ -71,8 +71,20 @@ echo "--- modelos disponibles (prueba de auth) ---"
 opencode models 2>&1 | head -30 || true
 echo "::endgroup::"
 
+# --print-logs + --log-level ERROR: sin esto, un error real de la llamada
+# al modelo (ej. "Monthly usage limit reached") queda TOTALMENTE
+# silenciado en --format default -- el proceso solo muestra el encabezado
+# ("> build · <modelo>") y se queda así hasta el timeout del job, sin decir
+# por qué. Indistinguible de un cuelgue real desde el log. Encontrado el
+# 2026-09-16 reproduciendo a mano el cuelgue de 45 min de Big Apple Test
+# (2026-09-15): con --log-level DEBUG apareció el error real (límite
+# mensual de OpenCode Go agotado) que --format default nunca imprimía.
+# ERROR (no DEBUG) para no inundar el log con ruido de arranque -- solo lo
+# que de verdad hace fallar la llamada.
 exec opencode run "$PROMPT" \
   --model "$MODEL" \
   --auto \
   --dir "$REPO_ROOT" \
-  --format default
+  --format default \
+  --print-logs \
+  --log-level ERROR

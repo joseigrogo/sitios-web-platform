@@ -764,13 +764,39 @@ Capital Window Cleaning (cliente real con sitio propio ya en producción,
 `capital-window-cleaning.com`, no debe usarse como referencia de un
 competidor ni tocarse por estas pruebas).
 
-**Hallazgo real, sin arreglar:** en la corrida de vuelta a OpenCode
-(Big Apple Test, Fase 2), DeepSeek se colgó **45 minutos sin ninguna
-llamada a herramienta ni salida visible** — un solo `> build ·
-deepseek-v4-flash` y silencio total hasta el timeout del job.
-`verificar-avance.mjs` lo agarró bien (rojo real, no verde falso), pero la
-causa del cuelgue en sí (¿instalando Chromium? ¿esperando red?) queda sin
-diagnosticar — no hay ni un log intermedio para saber qué estaba haciendo.
+**Hallazgo real del 2026-09-15, diagnosticado y corregido al día
+siguiente:** en la corrida de vuelta a OpenCode (Big Apple Test, Fase 2),
+DeepSeek se "colgó" **45 minutos sin ninguna llamada a herramienta ni
+salida visible** — un solo `> build · deepseek-v4-flash` y silencio total
+hasta el timeout del job. `verificar-avance.mjs` lo agarró bien (rojo real,
+no verde falso), pero la causa quedó sin diagnosticar ese día.
+
+**No era un cuelgue.** Reproducido a mano el 2026-09-16 (mismo síntoma,
+día distinto, hasta con un prompt trivial sin ninguna herramienta
+involucrada — descarta Chromium, MCP y la tarea de Fase 2 como causa).
+Con `--log-level DEBUG` (`run-fase.sh` no pasaba ni `--print-logs` ni
+`--log-level`) apareció el error real, que `--format default` nunca
+imprime:
+
+```
+AI_APICallError: Monthly usage limit reached. Resets in 23hr 31min.
+```
+
+**OpenCode Go tiene un límite de uso mensual, y seguía agotado 24h
+después** — mismo día, mismo síntoma en cualquier modelo del gateway
+(probado con `deepseek-v4-flash` y `glm-5.3`, no es específico de
+DeepSeek). Coincide en el tiempo con el límite de Codex/ChatGPT Plus-Pro
+del 2026-09-15 (§15): **los dos backends configurados estuvieron sin cupo
+a la vez** — el "plan B" (`agente_preferido='opencode'` cuando Codex se
+queda sin cupo) no sirve si el plan B también está agotado.
+
+**Corregido:** `run-fase.sh` ahora corre con `--print-logs --log-level
+ERROR` — sin esto, cualquier error de la llamada al modelo queda invisible
+en el log de Actions, indistinguible de un cuelgue real. Con la flag, el
+log va a decir "sin cupo" (o la causa real que sea) en vez de silencio.
+Sigue sin resolver que el proceso tarda hasta el timeout del job en
+terminar aun después de que el error ya se conoce (no es fatal, solo lento
+para fallar) — mejora posible a futuro, no bloqueante.
 
 ## 16. Fase 4 construida; Fase 5 sigue en diseño (2026-09-15)
 
