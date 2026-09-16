@@ -22,7 +22,12 @@ export default async function LoginPage({
           required
           className="w-full rounded border border-neutral-700 bg-neutral-950 px-3 py-2 text-neutral-100 outline-none focus:border-neutral-500"
         />
-        {error && <p className="text-sm text-red-400">Contraseña incorrecta.</p>}
+        {error === "bloqueado" && (
+          <p className="text-sm text-red-400">
+            Demasiados intentos. Esperá 15 minutos antes de volver a intentar.
+          </p>
+        )}
+        {error === "1" && <p className="text-sm text-red-400">Contraseña incorrecta.</p>}
         <button
           type="submit"
           className="w-full rounded bg-neutral-100 px-3 py-2 font-medium text-neutral-900 hover:bg-white"
