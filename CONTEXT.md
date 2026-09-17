@@ -8,8 +8,8 @@
 
 ## Estado pendiente — leer antes de seguir (actualizado el 2026-09-16)
 
-**Leer primero, en orden: §15 → §16 → §17.** Son las tres secciones que
-más cambiaron en los últimos dos días y las que más probablemente
+**Leer primero, en orden: §15 → §16 → §17 → §18.** Son las cuatro
+secciones que más cambiaron últimamente y las que más probablemente
 contradicen algo que este archivo decía antes. Resumen de una línea cada
 una, con qué está realmente resuelto:
 
@@ -34,6 +34,11 @@ una, con qué está realmente resuelto:
   entregables desde el dashboard) ya se cerró. **Multi-tenant (login por
   cliente) es la decisión más grande de esa lista — pedida por gerencia,
   pausada a propósito, todavía sin resolver.**
+- **§18 — El dashboard quedó desplegado de verdad.**
+  `https://sitios-web-dashboard.vercel.app`, ya no solo local. Root
+  Directory + install command eran el bloqueante real, no un permiso.
+  Con esto público, la contraseña única compartida (§17, punto 2) deja de
+  ser una decisión a futuro y pasa a ser la única barrera de acceso hoy.
 
 **§11 (Dashboard) estuvo mal 5 semanas sin que nadie lo notara:** decía
 "solo lectura, no dispara acciones" mientras se agregaban 15 acciones de
@@ -226,11 +231,11 @@ del usuario, no una deriva silenciosa — ver §10.
 - **Leads en Sheets vs. Supabase.** Para calcular CPL real por sitio hay que
   cruzar leads con costo de Ads — un join que en Sheets duele. Dirección:
   migrar a Supabase; paso intermedio sano es dual-write.
-- **Permiso de Vercel para deployar el dashboard** (2026-08-14). La cuenta
-  conectada a este chat no puede crear proyectos nuevos en el team "Jose's
-  projects" (`403`, ver §11) — bloquea publicar `dashboard/`, que hoy solo
-  corre local. No es una decisión de diseño, es un permiso a resolver del
-  lado de Vercel.
+- ~~**Permiso de Vercel para deployar el dashboard.**~~ **RESUELTO el
+  2026-09-16 — ver §18.** No era un permiso: el 403 original (2026-08-14)
+  era específico de crear proyectos nuevos vía la herramienta MCP; por
+  CLI directo funcionó. Lo que sí bloqueaba de verdad era Root Directory +
+  install command, ambos arreglados en §18.
 
 ---
 
@@ -462,11 +467,13 @@ específico de crear un proyecto *nuevo* por esta vía de API/MCP, no del
 team en general.
 
 **Lo que falta, real y vigente (no la lista vieja de 2026-08-14):**
-1. Resolver el permiso de Vercel y deployar el dashboard de verdad —
-   sigue siendo el bloqueante real para que alguien más lo use sin
-   depender de correrlo local (§7, y CONTEXT.md §17 sobre el norte SaaS).
+1. ~~Resolver el permiso de Vercel y deployar el dashboard de verdad~~ —
+   **hecho el 2026-09-16, ver §18.** Ya corre en
+   `https://sitios-web-dashboard.vercel.app`, no solo local.
 2. Login real por usuario/cliente en vez de una sola contraseña compartida
-   — pedido de gerencia, ver §17, decisión pausada a propósito.
+   — pedido de gerencia, ver §17, decisión pausada a propósito. Ahora que
+   el dashboard es públicamente alcanzable (§18), esto pasó de "importante
+   a futuro" a la única barrera de acceso real del sistema.
 3. El resto de la lista de "hacks todavía sin botón" vive en §17, no acá
    — no duplicar.
 
@@ -987,3 +994,48 @@ para los gates (Server Action que reusa la función núcleo del CLI), sin
 dependencias nuevas (nada de GitHub API, nada de OAuth) y cierra una
 brecha completa, no parcial. Los puntos 2-6 quedan en esta lista para
 retomar en orden, no decidido todavía cuál sigue.
+
+---
+
+## 18. El dashboard quedó desplegado de verdad (2026-09-16)
+
+**Ya no corre solo local.** URL de producción:
+`https://sitios-web-dashboard.vercel.app` — proyecto
+`joseigrogo22/sitios-web-dashboard`, conectado al repo de GitHub. El
+bloqueante que §7 y §11 venían arrastrando desde 2026-08-14 ("resolver el
+permiso de Vercel") queda cerrado — no era un permiso, dos cosas
+distintas rompían el build:
+
+1. **Root Directory.** El proyecto se creó apuntando a `dashboard/` como
+   raíz — correcto para Next.js, pero por default Vercel solo sube esa
+   carpeta al hacer un deploy por CLI, y `dashboard/app/actions.ts` /
+   `lib/estado-sistema.ts` importan de `@cli/lib/*` (`../cli/src/*`, fuera
+   de esa carpeta). Se resolvió activando **"Include files outside the
+   root directory"** en Settings → Build and Deployment — ese toggle
+   **solo existe en la interfaz web, no hay flag de CLI ni de
+   `vercel.json` para esto.**
+2. **`cli/node_modules` no existe en el entorno de build.** Resuelto el
+   punto 1, el build seguía fallando: `@cli/lib/supabaseClient.ts` importa
+   `@supabase/supabase-js`, `checklistFase3.ts` importa
+   `node-html-parser` — paquetes que sí existen en `cli/node_modules`
+   (por eso nunca se notó local), pero el Install Command de Vercel solo
+   corre `npm install` en el Root Directory (`dashboard/`). Node busca
+   `node_modules` subiendo desde el archivo que importa, nunca en una
+   carpeta hermana — `cli/` y `dashboard/` lo son. `dashboard/vercel.json`
+   agrega `installCommand: "npm install && npm install --prefix ../cli"`
+   para que ambas carpetas queden instaladas en el build.
+
+**Verificado de punta a punta, no solo "el build pasó":** login real
+(POST multipart con el `$ACTION_ID` de la Server Action — un POST
+url-encoded simple no alcanza, Next.js lo ignora silenciosamente y
+re-sirve la página de login sin ejecutar la acción), cookie de sesión
+seteada, y el dashboard autenticado carga sitios reales desde Supabase
+(Makeover, Big Apple Test — sin Capital Window, que salió del sistema el
+mismo día, ver `BASES_DEL_SISTEMA.md` Parte 4).
+
+**Lo que sigue sin resolver, ahora que el bloqueante de deploy cayó:**
+login por contraseña única compartida (§17, multi-tenant pausado a
+propósito) sigue siendo la única barrera de acceso — con lockout de 5
+intentos/15 min agregado el mismo día, pero sin cuentas por cliente
+todavía. `DASHBOARD_PASSWORD`/`SESSION_SECRET` generados random y
+cargados directo en Vercel (nunca pasaron por un archivo del repo).
