@@ -801,25 +801,31 @@ function FormularioNuevoSitio({ cliente }: { cliente: Cliente }) {
   );
 }
 
-function FormularioAltaCliente() {
+function FormularioAltaCliente({ error }: { error?: string }) {
   return (
-    <details className="rounded-lg border border-neutral-800 p-5">
+    <details className="rounded-lg border border-neutral-800 p-5" open={Boolean(error)}>
       <summary className="cursor-pointer text-sm font-medium text-neutral-300">+ Alta de cliente nuevo (Fase 0)</summary>
       <p className="mt-2 text-xs text-neutral-500">
         Para un negocio que todavía no existe en el sistema — crea el cliente y su primer sitio juntos.
       </p>
+      {error && (
+        <p className="mt-2 rounded border border-red-900/60 bg-red-950/30 p-2 text-xs text-red-400">
+          No se pudo crear: {error}
+        </p>
+      )}
       <form action={altaCliente} className="mt-4 space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <input name="clienteSlug" placeholder="slug del cliente (único)" required className={CAMPO} />
-          <input name="clienteNombre" placeholder="Nombre del negocio" className={CAMPO} />
-          <input name="clienteVertical" placeholder="Vertical" className={CAMPO} />
+          <input name="clienteNombre" placeholder="Nombre del negocio" required className={CAMPO} />
+          <input name="clienteVertical" placeholder="Vertical" required className={CAMPO} />
           <select name="clienteModelo" defaultValue="unico" className={CAMPO}>
-            <option value="unico">unico</option>
-            <option value="red">red</option>
+            <option value="unico">único (un solo sitio para este negocio)</option>
+            <option value="red">red (varios sitios del mismo negocio)</option>
           </select>
           <input
             name="clienteRespaldoLegal"
             placeholder='Respaldo legal (o "Ninguno -- confirmado sin X vigente")'
+            required
             className={`col-span-2 ${CAMPO}`}
           />
           <label className="flex items-center gap-2 text-xs text-neutral-400">
@@ -947,7 +953,7 @@ function DetalleSitio({ cliente, estadoSitio }: { cliente: Cliente; estadoSitio:
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ sitioId?: string }>;
+  searchParams: Promise<{ sitioId?: string; errorAlta?: string }>;
 }) {
   // Defensa en profundidad -- el proxy ya filtra esto, pero los docs de
   // Next 16 son explícitos: cada Server Function/página tiene que verificar
@@ -958,7 +964,7 @@ export default async function DashboardPage({
   }
 
   const estado = await cargarEstadoSistema();
-  const { sitioId } = await searchParams;
+  const { sitioId, errorAlta } = await searchParams;
 
   // Plano en vez de agrupado por cliente -- el selector elige un sitio
   // directamente (Base: la mayoría de las acciones ya giran en torno a
@@ -973,7 +979,7 @@ export default async function DashboardPage({
         {seleccionado && <SelectorSitios todos={todos} actualId={seleccionado.estadoSitio.sitio.id} />}
       </div>
 
-      <FormularioAltaCliente />
+      <FormularioAltaCliente error={errorAlta} />
 
       {!seleccionado ? (
         <p className="text-neutral-400">Sin clientes todavía — creá el primero arriba.</p>

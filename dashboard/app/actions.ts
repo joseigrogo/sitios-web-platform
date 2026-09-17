@@ -18,6 +18,24 @@ import { crearSitiosRepoSupabase } from "@cli/lib/sitiosRepo";
 import { crearSupabaseClient } from "@cli/lib/supabaseClient";
 import { COOKIE_NAME, sesionValida } from "@/lib/auth";
 
+// ejecutarClienteAlta tira ValidationError (clase local en clienteAlta.ts,
+// mismo gotcha Turbopack que el resto de lib/ -- duck-typing, no instanceof)
+// cuando falta un campo obligatorio. Sin este catch, un campo vacío tumbaba
+// la Server Action entera y Next mostraba una página en blanco con un
+// triángulo de error, sin decir qué pasó -- encontrado en producción con un
+// usuario real (Andrés) probando el formulario, 2026-09-16.
+function mensajeDeErrorAlta(err: unknown): string {
+  if (
+    typeof err === "object" &&
+    err !== null &&
+    (err as { name?: unknown }).name === "ValidationError" &&
+    Array.isArray((err as { errores?: unknown }).errores)
+  ) {
+    return (err as { errores: string[] }).errores.join(" · ");
+  }
+  return "error inesperado -- revisar con quien mantiene el sistema.";
+}
+
 // Reusa la función núcleo del CLI (ejecutarGateFase2) en vez de reimplementar
 // la condición del gate acá -- ya acordado así en CONTEXT.md §11 ("si se
 // suman acciones de escritura al dashboard: reusar las funciones núcleo del
@@ -266,26 +284,31 @@ export async function altaCliente(formData: FormData) {
     sitios: crearSitiosRepoSupabase(supabase),
   };
 
-  const resultado = await ejecutarClienteAlta(
-    {
-      cliente: {
-        nombre: String(formData.get("clienteNombre") ?? "").trim(),
-        slug: String(formData.get("clienteSlug") ?? "").trim(),
-        vertical: String(formData.get("clienteVertical") ?? "").trim(),
-        modelo: String(formData.get("clienteModelo") ?? ""),
-        marcaOculta: formData.get("clienteMarcaOculta") === "on",
-        crossLinkingExcepcion: formData.get("clienteCrossLinkingExcepcion") === "on",
-        respaldoLegalTipo: String(formData.get("clienteRespaldoLegal") ?? "").trim(),
+  let resultado: Awaited<ReturnType<typeof ejecutarClienteAlta>>;
+  try {
+    resultado = await ejecutarClienteAlta(
+      {
+        cliente: {
+          nombre: String(formData.get("clienteNombre") ?? "").trim(),
+          slug: String(formData.get("clienteSlug") ?? "").trim(),
+          vertical: String(formData.get("clienteVertical") ?? "").trim(),
+          modelo: String(formData.get("clienteModelo") ?? ""),
+          marcaOculta: formData.get("clienteMarcaOculta") === "on",
+          crossLinkingExcepcion: formData.get("clienteCrossLinkingExcepcion") === "on",
+          respaldoLegalTipo: String(formData.get("clienteRespaldoLegal") ?? "").trim(),
+        },
+        sitio: {
+          nombreMarca: String(formData.get("sitioNombreMarca") ?? "").trim(),
+          arquetipo: String(formData.get("sitioArquetipo") ?? "").trim(),
+          segmento: String(formData.get("sitioSegmento") ?? "").trim(),
+          dominio: dominio || null,
+        },
       },
-      sitio: {
-        nombreMarca: String(formData.get("sitioNombreMarca") ?? "").trim(),
-        arquetipo: String(formData.get("sitioArquetipo") ?? "").trim(),
-        segmento: String(formData.get("sitioSegmento") ?? "").trim(),
-        dominio: dominio || null,
-      },
-    },
-    repos
-  );
+      repos
+    );
+  } catch (err) {
+    redirect(`/?errorAlta=${encodeURIComponent(mensajeDeErrorAlta(err))}`);
+  }
 
   revalidatePath("/");
   redirect(`/?sitioId=${resultado.sitio.id}`);
@@ -314,22 +337,27 @@ export async function crearSitioParaCliente(formData: FormData) {
     sitios: crearSitiosRepoSupabase(supabase),
   };
 
-  const resultado = await ejecutarClienteAlta(
-    {
-      cliente: {
-        slug: clienteSlug,
-        marcaOculta: false,
-        crossLinkingExcepcion: false,
+  let resultado: Awaited<ReturnType<typeof ejecutarClienteAlta>>;
+  try {
+    resultado = await ejecutarClienteAlta(
+      {
+        cliente: {
+          slug: clienteSlug,
+          marcaOculta: false,
+          crossLinkingExcepcion: false,
+        },
+        sitio: {
+          nombreMarca: String(formData.get("sitioNombreMarca") ?? "").trim(),
+          arquetipo: String(formData.get("sitioArquetipo") ?? "").trim(),
+          segmento: String(formData.get("sitioSegmento") ?? "").trim(),
+          dominio: String(formData.get("sitioDominio") ?? "").trim() || null,
+        },
       },
-      sitio: {
-        nombreMarca: String(formData.get("sitioNombreMarca") ?? "").trim(),
-        arquetipo: String(formData.get("sitioArquetipo") ?? "").trim(),
-        segmento: String(formData.get("sitioSegmento") ?? "").trim(),
-        dominio: String(formData.get("sitioDominio") ?? "").trim() || null,
-      },
-    },
-    repos
-  );
+      repos
+    );
+  } catch (err) {
+    redirect(`/?errorAlta=${encodeURIComponent(mensajeDeErrorAlta(err))}`);
+  }
 
   revalidatePath("/");
   redirect(`/?sitioId=${resultado.sitio.id}`);
