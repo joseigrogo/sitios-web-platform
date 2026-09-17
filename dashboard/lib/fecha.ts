@@ -41,3 +41,13 @@ export function bitacoraEnHoraBogota(linea: string): string {
   if (Number.isNaN(d.getTime())) return linea;
   return FECHA_HORA.format(d) + linea.slice(m[1].length);
 }
+
+// La primera línea de una bitácora es el timestamp de arranque ("arranque:
+// sitio tomado, en_curso" -- ver instructivos en db/scripts/). De ahí sale
+// cuánto lleva corriendo la rutina, para el cronómetro del dashboard.
+export function timestampDeLinea(linea: string): Date | null {
+  const m = linea.match(ISO_AL_INICIO);
+  if (!m) return null;
+  const d = new Date(m[1]);
+  return Number.isNaN(d.getTime()) ? null : d;
+}

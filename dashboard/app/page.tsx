@@ -20,7 +20,8 @@ import {
 } from "./actions";
 import { COOKIE_NAME, sesionValida } from "@/lib/auth";
 import { AutoRefresh } from "./auto-refresh";
-import { bitacoraEnHoraBogota } from "@/lib/fecha";
+import { Cronometro } from "./cronometro";
+import { bitacoraEnHoraBogota, timestampDeLinea } from "@/lib/fecha";
 import { cargarEstadoSistema, type EstadoSitio } from "@/lib/estado-sistema";
 
 const FASES: { valor: FaseActual; etiqueta: string }[] = [
@@ -349,16 +350,21 @@ function ProgresoFaseActual({
 // va?"; el resto queda a un click. Si la rutina todavía no escribió nada, no
 // inventamos progreso: lo decimos.
 function Bitacora({ reporte, sinSenal }: { reporte: string | null; sinSenal: string }) {
-  const lineas = (reporte ?? "")
+  const lineasCrudas = (reporte ?? "")
     .split("\n")
     .map((l) => l.trim())
-    .filter(Boolean)
-    // Las rutinas escriben ISO; la persona que mira lee hora de Bogotá.
-    .map(bitacoraEnHoraBogota);
+    .filter(Boolean);
 
-  if (lineas.length === 0) {
+  if (lineasCrudas.length === 0) {
     return <p className="text-xs text-neutral-400">{sinSenal}</p>;
   }
+
+  // La primera línea es el "arranque" (ver instructivos) -- de ahí sale
+  // cuánto lleva corriendo. Si por lo que sea no trae timestamp reconocible,
+  // no mostramos el cronómetro en vez de inventar una hora de inicio.
+  const inicio = timestampDeLinea(lineasCrudas[0]);
+  // Las rutinas escriben ISO; la persona que mira lee hora de Bogotá.
+  const lineas = lineasCrudas.map(bitacoraEnHoraBogota);
 
   const ultima = lineas[lineas.length - 1];
   const anteriores = lineas.slice(0, -1);
@@ -369,6 +375,7 @@ function Bitacora({ reporte, sinSenal }: { reporte: string | null; sinSenal: str
         <span className="text-neutral-500">En curso — </span>
         {ultima}
       </p>
+      {inicio && <Cronometro desde={inicio.toISOString()} />}
       {anteriores.length > 0 && (
         <details>
           <summary className="cursor-pointer text-xs text-neutral-500 hover:text-neutral-300">
