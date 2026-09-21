@@ -11,10 +11,19 @@ name: Fases automáticas (OpenCode + Codex)
 # agente_preferido dentro de cada instructivo); el que no tiene sitios
 # asignados no-opea, mismo principio que "cero pendientes no es anomalía".
 #
-# EXCEPCIÓN VIGENTE (desde 2026-09-21): Codex queda pausado del cron --
-# la cuenta ChatGPT agotó su cupo de uso el 2026-09-18 y no se recupera
-# sola. Solo corre hoy vía workflow_dispatch manual (backend: ambos o
-# codex). Ver el comentario junto a "Instalar Codex CLI" para revertir.
+# EXCEPCIÓN VIGENTE (desde 2026-09-21): los DOS backends quedan pausados
+# del cron. Codex porque la cuenta ChatGPT agotó su cupo el 2026-09-18 y
+# no se recupera sola (el propio chequeo por hora -- "¿hay algo
+# pendiente?" -- cuesta ~41,200 tokens incluso sin encontrar nada, ~1M
+# tokens/día con las 3 fases; eso fue lo que agotó el cupo, no trabajo
+# real). OpenCode se pausa por el mismo motivo de diseño (mismo costo fijo
+# por hora, otra suscripción) aunque no esté agotado todavía -- no tiene
+# sentido dejarlo corriendo solo mientras no haya ningún sitio en cola.
+# Los dos siguen andando vía workflow_dispatch manual (backend: ambos,
+# opencode o codex). Ver los comentarios junto a "Instalar OpenCode" e
+# "Instalar Codex CLI" para revertir cuando haga falta -- o mejor, antes
+# de reactivar el cron sin más: agregar un chequeo barato (sin LLM) que
+# solo prenda al agente si hay trabajo real, para no repetir esto.
 
 on:
   schedule:
@@ -56,12 +65,16 @@ jobs:
         with:
           node-version: "22"
 
+      # PAUSADO en el cron desde el 2026-09-21 -- ver nota de cabecera del
+      # archivo. Se saca el fallback `== ''` de las 4 condiciones de
+      # OpenCode (igual que se hizo con Codex) para que el cron deje de
+      # correrlo solo cada hora sin trabajo pendiente.
       - name: Instalar OpenCode
-        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode'
+        if: github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode'
         run: npm i -g opencode-ai
 
       - name: Auth de OpenCode (Zen / "OpenCode Go")
-        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode'
+        if: github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode'
         env:
           OPENCODE_AUTH_JSON: ${{ secrets.OPENCODE_AUTH_JSON }}
         run: |
@@ -120,8 +133,9 @@ jobs:
           '
 
       # --- OpenCode / DeepSeek: solo sitios con agente_preferido='opencode' ---
+      # Pausado del cron desde el 2026-09-21 -- ver nota de cabecera.
       - name: Correr Fase ${{ matrix.fase }} (OpenCode)
-        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode'
+        if: github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode'
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -146,7 +160,7 @@ jobs:
       # exitoso. Compara el estado de los sitios pendientes de ESTE agente
       # contra el snapshot de antes y falla si no toco ninguno de los suyos.
       - name: Verificar que OpenCode avanzo
-        if: always() && (github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode')
+        if: always() && (github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'opencode')
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
