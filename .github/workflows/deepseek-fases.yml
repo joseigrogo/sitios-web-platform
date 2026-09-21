@@ -10,6 +10,11 @@ name: Fases automáticas (OpenCode + Codex)
 # cada hora -- cada uno autodescubre y solo toca lo suyo (filtro
 # agente_preferido dentro de cada instructivo); el que no tiene sitios
 # asignados no-opea, mismo principio que "cero pendientes no es anomalía".
+#
+# EXCEPCIÓN VIGENTE (desde 2026-09-21): Codex queda pausado del cron --
+# la cuenta ChatGPT agotó su cupo de uso el 2026-09-18 y no se recupera
+# sola. Solo corre hoy vía workflow_dispatch manual (backend: ambos o
+# codex). Ver el comentario junto a "Instalar Codex CLI" para revertir.
 
 on:
   schedule:
@@ -83,12 +88,22 @@ jobs:
       # 2026-09-14 que OpenCode NO puede usar ese token (rechazado por
       # OpenAI para cualquier modelo, es un límite del cliente, no del
       # slug), así que esto corre con el cliente oficial en vez de OpenCode.
+      #
+      # PAUSADO en el cron desde el 2026-09-21: la cuenta ChatGPT lleva
+      # agotado el cupo de uso desde el 2026-09-18 ~21:43 (16 corridas
+      # seguidas fallando en los primeros 2s con "You've hit your usage
+      # limit"). Se saca el fallback `== ''` (el que dispara en schedule)
+      # para que el cron deje de intentarlo solo -- workflow_dispatch con
+      # `backend: ambos` o `backend: codex` sigue andando para probar a
+      # mano si ya se liberó el cupo. Revertir agregando de nuevo
+      # `github.event.inputs.backend == '' ||` a las 4 condiciones de
+      # Codex de este archivo cuando se confirme que ya tiene cupo.
       - name: Instalar Codex CLI
-        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex'
+        if: github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex'
         run: npm i -g @openai/codex
 
       - name: Auth de Codex (suscripción ChatGPT Plus/Pro)
-        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex'
+        if: github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex'
         env:
           CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
         run: |
@@ -138,8 +153,10 @@ jobs:
         run: node runner/verificar-avance.mjs ${{ matrix.fase }} opencode despues /tmp/avance-opencode.json
 
       # --- Codex / ChatGPT Plus-Pro: solo sitios con agente_preferido='codex' ---
+      # Pausado del cron desde el 2026-09-21 -- ver nota junto a "Instalar
+      # Codex CLI" arriba.
       - name: Correr Fase ${{ matrix.fase }} (Codex / ChatGPT Plus-Pro)
-        if: github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex'
+        if: github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex'
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -157,7 +174,7 @@ jobs:
           bash runner/run-fase-codex.sh ${{ matrix.fase }}
 
       - name: Verificar que Codex avanzo
-        if: always() && (github.event.inputs.backend == '' || github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex')
+        if: always() && (github.event.inputs.backend == 'ambos' || github.event.inputs.backend == 'codex')
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
